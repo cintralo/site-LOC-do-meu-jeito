@@ -42,7 +42,10 @@
   --r-sm:8px; --r-md:16px; --r-lg:26px; --r-full:999px;
   --ease:cubic-bezier(.2,.8,.2,1);
   --ease-out:cubic-bezier(.22,1,.36,1);
+  --sh-2:0 24px 50px -24px rgba(23,23,19,.32);
+  --sh-3:0 40px 90px -30px rgba(23,23,19,.45);
   --glow-amber:0 0 60px rgba(231,169,74,.45);
+  --grad-border:linear-gradient(135deg,rgba(185,106,74,.5),rgba(142,156,117,.75),rgba(231,169,74,.85));
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -307,16 +310,21 @@ body.menu-open .navlinks{
    ========================================================================== */
 .cred{position:relative;background:var(--bone);color:var(--ink);overflow:hidden;isolation:isolate}
 .cred>.wrap{position:relative;z-index:2}
-.cred .amb-grid{
+/* .on-light — as camadas .amb nascem calibradas para fundo escuro (o hero);
+   sobre papel/osso elas precisam inverter o traço e esfriar o brilho. */
+.on-light .amb-grid{
   background:linear-gradient(90deg,transparent 49.9%,rgba(23,23,19,.05) 50%,transparent 50.1%),
              linear-gradient(0deg,transparent 49.9%,rgba(23,23,19,.04) 50%,transparent 50.1%);
   background-size:120px 120px
 }
-.cred .amb-glow{
-  filter:blur(90px);opacity:.5;
+.on-light .amb-glow{
+  filter:blur(90px);opacity:.3;
   background:radial-gradient(40% 60% at 78% 40%,rgba(231,169,74,.5),transparent 70%),
              radial-gradient(34% 50% at 8% 70%,rgba(142,156,117,.35),transparent 70%)
 }
+.on-light .amb-beam{mix-blend-mode:overlay;opacity:.45}
+.on-light .amb-halo{border-color:var(--line);opacity:.5}
+.on-light .amb-halo:before{border-color:var(--line)}
 
 /* — linha 1: identidade + fatos — */
 .cred-main{
@@ -502,6 +510,79 @@ body.menu-open .navlinks{
 .btn--outline:hover{border-color:var(--bone);background:rgba(237,233,223,.08)}
 
 /* ==========================================================================
+   DOBRA 04 · CAMINHOS
+   Casca .ds sobre papel — respiro claro depois da dobra escura. Os cartões
+   derivam de .plan (borda, raio --r-lg, elevação no hover, borda em
+   --grad-border) e fecham com o .round-cta circular do echo. Deliberadamente
+   não repetem a grade de divisórias da dobra 03.
+   ========================================================================== */
+.ds.paper{background:var(--paper);color:var(--ink)}
+.ds.paper .section-tag{color:var(--smoke)}
+.ds.paper .ds-head h2 em{color:var(--ember)}
+.ds-head p{max-width:34ch;color:var(--smoke);line-height:1.7;font-size:15px;padding-bottom:6px}
+
+.paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,1.5vw,22px)}
+.path{
+  position:relative;display:flex;flex-direction:column;isolation:isolate;overflow:hidden;
+  border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:clamp(24px,2.1vw,32px);background:rgba(255,255,255,.45);
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease),border-color .5s var(--ease)
+}
+.path:hover{
+  transform:translateY(-6px);box-shadow:var(--sh-3);border-color:transparent;
+  /* borda em gradiente pela técnica do sistema: duas camadas de background,
+     uma recortada no padding-box e a outra no border-box */
+  background-image:linear-gradient(#fdfbf6,#fdfbf6),var(--grad-border);
+  background-origin:border-box;background-clip:padding-box,border-box
+}
+.path:focus-visible{outline:2px solid var(--amber);outline-offset:4px}
+
+/* numeral-fantasma, mesmo recurso do .hero-word */
+.path-no{
+  position:absolute;z-index:-1;right:-.03em;top:-.2em;pointer-events:none;
+  font-family:var(--display);font-weight:600;line-height:.72;letter-spacing:-.09em;
+  font-size:clamp(104px,8.6vw,150px);
+  color:transparent;-webkit-text-stroke:1px rgba(23,23,19,.1);
+  transition:.6s var(--ease)
+}
+.path:hover .path-no{-webkit-text-stroke-color:rgba(231,169,74,.62);transform:translateY(7px)}
+
+.path h3{
+  font-family:var(--display);font-weight:600;letter-spacing:-.045em;line-height:1.04;
+  font-size:clamp(23px,1.94vw,30px);margin:0 0 16px;
+  /* duas linhas reservadas: os três parágrafos começam na mesma altura,
+     mesmo com títulos de comprimentos diferentes */
+  min-height:2.08em
+}
+.path p{font-size:14px;line-height:1.68;color:var(--smoke);flex:1}
+
+.path-go{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  margin-top:clamp(24px,2.4vw,32px);padding-top:20px;border-top:1px solid var(--line)
+}
+.path-go span{font-size:13.5px;font-weight:500;line-height:1.32;max-width:19ch}
+/* .round-cta do echo, reduzido: gira -18° e inverte no hover do cartão */
+.round-cta{
+  width:52px;aspect-ratio:1;border-radius:50%;border:1px solid var(--ink);flex:none;
+  display:grid;place-items:center;transition:.35s var(--ease)
+}
+.round-cta svg{width:18px;height:18px}
+.path:hover .round-cta{background:var(--ink);color:var(--amber);transform:rotate(-18deg)}
+
+/* — convergência: as três jornadas caem no mesmo processo — */
+.paths-join{margin-top:0;color:var(--fog)}
+.paths-join svg{display:block;width:100%;height:clamp(52px,4.6vw,74px)}
+.join-mark{display:flex;justify-content:center;margin-top:-1px}
+.join-mark a{
+  display:inline-flex;align-items:center;gap:10px;padding:11px 20px;background:var(--paper);
+  border:1px solid var(--line);border-radius:var(--r-full);
+  font:9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--smoke);
+  transition:.35s var(--ease)
+}
+.join-mark a:hover{border-color:var(--ink);color:var(--ink);transform:translateY(-2px)}
+.join-mark i{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 12px var(--amber);animation:breathe 2.4s ease-in-out infinite;flex:none}
+
+/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width:1180px){
@@ -516,6 +597,14 @@ body.menu-open .navlinks{
   .cards .card:nth-child(2n){border-right:0}
   .cards .card:nth-child(-n+2){border-bottom:1px solid var(--line-light)}
   .cards .card{min-height:clamp(300px,34vw,360px)}
+  /* três jornadas empilham: a convergência perde o sentido sem as colunas */
+  .paths{grid-template-columns:1fr;gap:14px}
+  /* empilhados, os títulos não precisam mais reservar a segunda linha */
+  .path h3{min-height:0}
+  .path p{max-width:58ch}
+  .path-no{font-size:112px}
+  .paths-join svg{display:none}
+  .join-mark{margin-top:26px}
   /* card largo: o glifo passa a compartilhar o eixo esquerdo do texto,
      em vez de flutuar no meio de uma caixa que ficou muito ampla */
   .glyph{justify-content:flex-start}
@@ -706,7 +795,7 @@ body.menu-open .navlinks{
 <!-- ==========================================================
      DOBRA 02 · BARRA DE CREDIBILIDADE
      ========================================================== -->
-<section class="cred" id="credibilidade" aria-label="Registro profissional e tecnologia">
+<section class="cred on-light" id="credibilidade" aria-label="Registro profissional e tecnologia">
   <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i></div>
 
   <div class="wrap">
@@ -823,7 +912,82 @@ body.menu-open .navlinks{
   </div>
 </section>
 
-<!-- próximas dobras entram aqui: #tratamentos, #protocolo, #quiz, #sobre, #duvidas, #agendar -->
+<!-- ==========================================================
+     DOBRA 04 · CAMINHOS
+     ========================================================== -->
+<section class="ds paper on-light" id="tratamentos">
+  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i><i class="amb-beam"></i><i class="amb-halo"></i></div>
+  <div class="wrap">
+
+    <div class="ds-head">
+      <div class="reveal">
+        <div class="section-tag mono">04 / Caminhos</div>
+        <h2>Por onde <em>começar</em></h2>
+      </div>
+      <p class="reveal" data-d="1">Três jornadas diferentes, o mesmo processo de avaliação.</p>
+    </div>
+
+    <div class="paths">
+
+      <!-- TODO: apontar para a página dedicada de cirurgia refrativa -->
+      <a class="path reveal" href="#refrativa">
+        <span aria-hidden="true" class="path-no">01</span>
+        <h3>Cirurgia Refrativa</h3>
+        <p>Miopia, hipermetropia e astigmatismo. Correção a laser sem uso de lâmina, com perfil de tratamento definido a partir da sua córnea — ou lentes fácicas (ICL) para graus elevados e córneas que não permitem laser.</p>
+        <span class="path-go">
+          <span>Conhecer a cirurgia refrativa</span>
+          <span aria-hidden="true" class="round-cta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+          </span>
+        </span>
+      </a>
+
+      <!-- TODO: apontar para a página dedicada de presbiopia -->
+      <a class="path reveal" data-d="1" href="#presbiopia">
+        <span aria-hidden="true" class="path-no">02</span>
+        <h3>Presbiopia e Independência Visual</h3>
+        <p>Para quem passou dos 40 e quer reduzir a dependência dos óculos em todas as distâncias. Avaliamos as estratégias possíveis para o seu perfil, incluindo lentes de foco estendido e monovisão.</p>
+        <span class="path-go">
+          <span>Conhecer as opções para presbiopia</span>
+          <span aria-hidden="true" class="round-cta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+          </span>
+        </span>
+      </a>
+
+      <!-- TODO: apontar para a página dedicada de catarata -->
+      <a class="path reveal" data-d="2" href="#catarata">
+        <span aria-hidden="true" class="path-no">03</span>
+        <h3>Cirurgia de Catarata</h3>
+        <p>A catarata é o momento em que você escolhe como quer enxergar pelos próximos anos. A troca do cristalino permite corrigir grau e astigmatismo no mesmo procedimento, com as etapas de corte realizadas por laser de femtossegundo.</p>
+        <span class="path-go">
+          <span>Conhecer a cirurgia de catarata</span>
+          <span aria-hidden="true" class="round-cta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+          </span>
+        </span>
+      </a>
+
+    </div>
+
+    <!-- as três hastes caem no mesmo ponto: o processo de avaliação -->
+    <div class="paths-join reveal" data-d="2">
+      <svg viewBox="0 0 1200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
+          <path d="M200 0 C200 58 600 42 600 100"/>
+          <path d="M600 0 L600 100"/>
+          <path d="M1000 0 C1000 58 600 42 600 100"/>
+        </g>
+      </svg>
+      <div class="join-mark">
+        <a href="#protocolo"><i aria-hidden="true"></i> Protocolo VISUS</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- próximas dobras entram aqui: #protocolo, #quiz, #sobre, #duvidas, #agendar -->
 
 </main>
 
