@@ -395,6 +395,113 @@ body.menu-open .navlinks{
 @keyframes tick{to{transform:translateX(-50%)}}
 
 /* ==========================================================================
+   DOBRA 03 · O QUE TE TROUXE ATÉ AQUI
+   Casca .ds do sistema em variante on-dark, com a grade .cards estendida
+   para quatro colunas. Cada card carrega um .glyph — a mesma linguagem de
+   figuras geométricas de traço fino do LUMEN/01, aqui desenhada para
+   descrever a queixa em vez de decorar.
+   ========================================================================== */
+.ds{position:relative;padding-block:clamp(84px,10vw,150px);overflow:hidden;isolation:isolate}
+.ds>.wrap{position:relative;z-index:2}
+.ds.on-dark{background:var(--ink);color:var(--bone)}
+.ds-head{display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap;margin-bottom:clamp(38px,5.4vw,68px)}
+.ds-head h2{
+  font-family:var(--display);font-weight:500;
+  font-size:clamp(38px,5vw,78px);line-height:.92;letter-spacing:-.058em;
+  margin:22px 0 0;max-width:16ch
+}
+.ds-head h2 em{
+  font-style:italic;font-family:var(--serif);font-weight:500;
+  color:var(--amber);letter-spacing:-.015em;font-size:1.06em;
+  /* a locução em serifa é uma unidade visual: quebrar no meio dela
+     deixaria um "se" órfão no fim da linha */
+  white-space:nowrap
+}
+.section-tag{display:flex;align-items:center;gap:12px;color:var(--dust)}
+.section-tag:before{content:"";width:26px;height:1px;background:currentColor;flex:none}
+
+/* — grade de cards — */
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--bone)}
+.cards .card{
+  min-height:clamp(340px,30vw,410px);padding:24px 22px 28px;
+  border-right:1px solid var(--line-light);display:flex;flex-direction:column;
+  transition:background .45s var(--ease);position:relative;overflow:hidden
+}
+.cards .card:last-child{border-right:0}
+.cards .card:hover{background:rgba(237,233,223,.06)}
+.cards .card:after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--amber);
+  transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)
+}
+.cards .card:hover:after{transform:scaleX(1)}
+.card-no{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dust)}
+.cards .card h3{
+  font-family:var(--display);font-weight:500;letter-spacing:-.042em;line-height:1.06;
+  font-size:clamp(20px,1.72vw,26px);margin:auto 0 12px
+}
+.cards .card p{font-size:13.5px;line-height:1.62;color:var(--dust)}
+
+/* — glifos: traço de 1px, currentColor, âmbar só no elemento que carrega o sentido — */
+.glyph{height:clamp(128px,11vw,158px);display:flex;align-items:center;justify-content:center;position:relative;margin-top:26px}
+.glyph i{display:block;transition:.55s var(--ease);will-change:transform}
+
+/* 01 · duas lentes que se afastam — a correção que não cabe mais */
+.g-lens i{width:clamp(58px,4.7vw,70px);aspect-ratio:1;border-radius:50%;border:1px solid currentColor;opacity:.85}
+.g-lens i:first-child{margin-right:-18px}
+.g-lens i:last-child{box-shadow:inset 0 0 0 1px rgba(231,169,74,.5)}
+.card:hover .g-lens i:first-child{transform:translateX(-24px) rotate(-13deg);opacity:.3}
+.card:hover .g-lens i:last-child{transform:translateX(24px) rotate(13deg);opacity:.3}
+
+/* 02 · a régua que precisa crescer — o braço que ficou curto */
+.g-reach{gap:14px}
+.g-reach i:first-child{width:clamp(74px,6.4vw,96px);height:1px;background:currentColor;position:relative;opacity:.7}
+.g-reach i:first-child:before{content:"";position:absolute;left:0;top:-9px;width:1px;height:19px;background:currentColor}
+.g-reach i:last-child{
+  width:20px;aspect-ratio:1;border-radius:50%;border:1px solid var(--amber);flex:none;
+  box-shadow:0 0 20px rgba(231,169,74,.4)
+}
+.card:hover .g-reach i:first-child{width:clamp(108px,9vw,136px)}
+
+/* Glifos 03 e 04 são camadas sobrepostas, não itens lado a lado: uma única
+   célula de grade mantém os dois concêntricos qualquer que seja o alinhamento
+   do conjunto (posicionamento absoluto perdia o centro ao alinhar à esquerda). */
+.g-glare,.g-irreg{display:grid;grid-template-columns:max-content;justify-content:center}
+.g-glare>i,.g-irreg>i{grid-area:1/1;place-self:center}
+
+/* 03 · o farol que espalha — ofuscamento e halo */
+.g-glare i:first-child{
+  width:44px;aspect-ratio:1;border-radius:50%;background:var(--amber);
+  box-shadow:0 0 44px rgba(231,169,74,.75);filter:blur(1px)
+}
+/* o halo cresce para dentro, nunca para fora: o anel mais largo é o próprio
+   elemento, e os menores são insets — assim nada transborda a célula e o
+   conjunto sobrevive ao alinhamento à esquerda das telas estreitas */
+.g-glare i:last-child{
+  width:clamp(112px,9.8vw,140px);aspect-ratio:1;border-radius:50%;
+  border:1px solid currentColor;opacity:.34;position:relative
+}
+.g-glare i:last-child:before,.g-glare i:last-child:after{
+  content:"";position:absolute;border-radius:50%;border:1px solid currentColor
+}
+.g-glare i:last-child:before{inset:17%;opacity:.9}
+.g-glare i:last-child:after{inset:35%;opacity:.7}
+.card:hover .g-glare i:first-child{filter:blur(5px);transform:scale(1.14)}
+.card:hover .g-glare i:last-child{transform:scale(1.14);opacity:.7}
+
+/* 04 · o eixo fora de esquadro — o olho que não é o padrão */
+.g-irreg i:first-child{width:clamp(78px,6.6vw,96px);aspect-ratio:1;border-radius:50%;border:1px solid currentColor;opacity:.4}
+.g-irreg i:last-child{
+  width:clamp(86px,7.4vw,108px);height:clamp(54px,4.6vw,66px);
+  border-radius:50%;border:1px solid var(--amber);transform:rotate(-26deg)
+}
+.card:hover .g-irreg i:last-child{transform:rotate(26deg) scaleX(.9)}
+
+/* — rodapé da dobra — */
+.sit-foot{display:flex;justify-content:flex-end;padding-top:clamp(24px,3vw,36px)}
+.btn--outline{background:transparent;border-color:var(--line-light);color:var(--bone)}
+.btn--outline:hover{border-color:var(--bone);background:rgba(237,233,223,.08)}
+
+/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width:1180px){
@@ -403,6 +510,16 @@ body.menu-open .navlinks{
   .cred-main{grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,36px) clamp(24px,4vw,48px)}
   .cred-id{grid-column:1/-1}
   .cred-main>.cred-fact:nth-child(2){border-left:0;padding-left:0}
+  /* quatro colunas viram duas: a grade passa a ter linha, então as divisórias
+     mudam de eixo — sem borda à direita nos pares, com borda embaixo em cima */
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cards .card:nth-child(2n){border-right:0}
+  .cards .card:nth-child(-n+2){border-bottom:1px solid var(--line-light)}
+  .cards .card{min-height:clamp(300px,34vw,360px)}
+  /* card largo: o glifo passa a compartilhar o eixo esquerdo do texto,
+     em vez de flutuar no meio de uma caixa que ficou muito ampla */
+  .glyph{justify-content:flex-start}
+  .cards .card h3{font-size:clamp(21px,2.4vw,27px)}
 }
 @media (max-width:900px){
   .navlinks{display:none}
@@ -438,6 +555,13 @@ body.menu-open .navlinks{
   .hero-proof{gap:7px 18px;font-size:9px;letter-spacing:.12em}
   .hero-proof svg{width:13px;height:13px}
   .hero-eyebrow{font-size:9px;letter-spacing:.12em;gap:10px}
+  .cards{grid-template-columns:1fr}
+  .cards .card{border-right:0;border-bottom:1px solid var(--line-light);min-height:auto;padding:22px 0 26px}
+  .cards .card:last-child{border-bottom:0}
+  .glyph{height:120px;margin-top:20px}
+  .cards .card h3{margin-top:24px;font-size:22px}
+  .sit-foot{justify-content:stretch}
+  .sit-foot .btn{width:100%}
   .cred-main{grid-template-columns:1fr;gap:26px;padding-block:30px}
   .cred-main>.cred-fact{border-left:0;padding-left:0}
   .cred-fact b{font-size:clamp(40px,13vw,54px)}
@@ -643,7 +767,63 @@ body.menu-open .navlinks{
   </div>
 </section>
 
-<!-- próximas dobras entram aqui: #situacoes, #tratamentos, #protocolo, #quiz, #sobre, #duvidas, #agendar -->
+<!-- ==========================================================
+     DOBRA 03 · O QUE TE TROUXE ATÉ AQUI
+     ========================================================== -->
+<section class="ds on-dark" id="situacoes">
+  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i><i class="amb-beam"></i><i class="amb-halo"></i></div>
+  <div class="wrap">
+
+    <div class="ds-head">
+      <div class="reveal">
+        <div class="section-tag mono">03 / O que te trouxe até aqui</div>
+        <h2>Você provavelmente <em>se reconhece</em> em uma destas situações.</h2>
+      </div>
+    </div>
+
+    <div class="cards reveal" data-d="1">
+
+      <article class="card">
+        <span class="card-no">01 / Refrativa</span>
+        <div aria-hidden="true" class="glyph g-lens"><i></i><i></i></div>
+        <h3>Sua rotina não cabe mais no óculos.</h3>
+        <p>Treino, viagem, tela o dia inteiro, lente de contato que arde no fim do dia. Você já pensou em cirurgia, mas nunca soube se poderia fazer.</p>
+      </article>
+
+      <article class="card">
+        <span class="card-no">02 / Presbiopia</span>
+        <div aria-hidden="true" class="glyph g-reach"><i></i><i></i></div>
+        <h3>O braço ficou curto.</h3>
+        <p>Você afasta o celular para ler, tem um óculos para cada distância e percebe que trocar de óculos virou parte do dia.</p>
+      </article>
+
+      <article class="card">
+        <span class="card-no">03 / Catarata</span>
+        <div aria-hidden="true" class="glyph g-glare"><i></i><i></i></div>
+        <h3>As cores perderam força e a noite ficou difícil.</h3>
+        <p>Dirigir depois do escurecer incomoda, o farol espalha, e trocar o grau já não resolve como antes.</p>
+      </article>
+
+      <article class="card">
+        <span class="card-no">04 / Grau alto</span>
+        <div aria-hidden="true" class="glyph g-irreg"><i></i><i></i></div>
+        <h3>Já te disseram que seu caso é complexo.</h3>
+        <p>Grau elevado, córnea fina ou astigmatismo irregular não significam “não dá”. Significam que a solução precisa ser outra.</p>
+      </article>
+
+    </div>
+
+    <div class="sit-foot reveal" data-d="2">
+      <a class="btn btn--outline" href="#quiz">
+        Descobrir se sou candidato
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- próximas dobras entram aqui: #tratamentos, #protocolo, #quiz, #sobre, #duvidas, #agendar -->
 
 </main>
 
