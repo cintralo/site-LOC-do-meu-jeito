@@ -100,6 +100,16 @@ h1,h2,p,figure{margin:0}
 .rise{opacity:0;transform:translateY(26px);filter:blur(9px);
   animation:riseIn .95s var(--ease-out) forwards;animation-delay:var(--d,0s)}
 
+/* .reveal — surgimento no scroll, com desfoque progressivo.
+   O estado oculto só existe sob .js: sem JavaScript nada é escondido, porque
+   não haveria quem devolvesse a visibilidade. */
+.js .reveal{opacity:0;transform:translateY(26px);filter:blur(9px);
+  transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease)}
+.js .reveal.on{opacity:1;transform:none;filter:blur(0)}
+.js .reveal[data-d="1"]{transition-delay:.09s}
+.js .reveal[data-d="2"]{transition-delay:.18s}
+.js .reveal[data-d="3"]{transition-delay:.27s}
+
 /* ==========================================================================
    NAV
    ========================================================================== */
@@ -290,11 +300,109 @@ body.menu-open .navlinks{
 .hero-scroll i{display:block;width:1px;height:26px;background:linear-gradient(transparent,var(--amber));transform-origin:top;animation:scrollHint 2.6s ease-in-out infinite}
 
 /* ==========================================================================
+   DOBRA 02 · BARRA DE CREDIBILIDADE
+   Faixa clara logo abaixo do hero — corte seco do escuro para o osso.
+   Texto curto, sem adjetivos: identidade registrada, dois fatos medidos e
+   o parque tecnológico em ticker infinito (@keyframes tick do sistema).
+   ========================================================================== */
+.cred{position:relative;background:var(--bone);color:var(--ink);overflow:hidden;isolation:isolate}
+.cred>.wrap{position:relative;z-index:2}
+.cred .amb-grid{
+  background:linear-gradient(90deg,transparent 49.9%,rgba(23,23,19,.05) 50%,transparent 50.1%),
+             linear-gradient(0deg,transparent 49.9%,rgba(23,23,19,.04) 50%,transparent 50.1%);
+  background-size:120px 120px
+}
+.cred .amb-glow{
+  filter:blur(90px);opacity:.5;
+  background:radial-gradient(40% 60% at 78% 40%,rgba(231,169,74,.5),transparent 70%),
+             radial-gradient(34% 50% at 8% 70%,rgba(142,156,117,.35),transparent 70%)
+}
+
+/* — linha 1: identidade + fatos — */
+.cred-main{
+  display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,.68fr) minmax(0,1fr);
+  gap:clamp(20px,3vw,44px);align-items:end;
+  padding-block:clamp(30px,3.6vw,50px)
+}
+.cred-id{display:flex;align-items:center;gap:clamp(14px,1.6vw,22px)}
+/* selo: o mesmo disco-íris da marca, em versão placa */
+.cred-seal{
+  width:clamp(44px,4vw,56px);aspect-ratio:1;border:1px solid var(--ink);border-radius:50%;
+  position:relative;flex:none;transition:transform .7s var(--ease)
+}
+.cred-seal:before{content:"";position:absolute;left:50%;top:50%;width:9px;height:9px;border-radius:50%;
+  background:var(--amber);transform:translate(-50%,-50%);box-shadow:0 0 16px rgba(231,169,74,.9)}
+.cred-seal:after{content:"";position:absolute;left:50%;top:-5px;width:1px;height:13px;background:var(--ink)}
+.cred:hover .cred-seal{transform:rotate(180deg)}
+.cred-id h2{
+  font-family:var(--display);font-weight:600;letter-spacing:-.045em;line-height:1.02;
+  font-size:clamp(21px,2.35vw,33px)
+}
+.cred-regs{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:11px}
+.reg{
+  display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:var(--r-full);
+  font:9px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+  border:1px solid var(--line);color:var(--smoke);transition:.3s var(--ease)
+}
+.reg:hover{transform:translateY(-2px);border-color:rgba(23,23,19,.4);color:var(--ink)}
+.reg--amber{background:rgba(231,169,74,.2);border-color:rgba(231,169,74,.5);color:#7a5310}
+
+/* — fatos — */
+.cred-fact{border-left:1px solid var(--line);padding-left:clamp(18px,2.4vw,38px)}
+.cred-fact b{
+  display:block;font-family:var(--display);font-weight:500;
+  font-size:clamp(44px,5vw,74px);line-height:.78;letter-spacing:-.08em
+}
+/* o fato qualitativo herda a serifa itálica que o H1 usa para o registro humano */
+.cred-fact--soft b{
+  font-family:var(--serif);font-style:italic;font-weight:500;letter-spacing:-.02em;
+  font-size:clamp(38px,4.4vw,62px);line-height:.9;color:var(--ember)
+}
+.cred-fact span{
+  display:block;margin-top:12px;font:9px/1.6 var(--mono);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--smoke);white-space:nowrap
+}
+/* os dois fatos partem da mesma linha de base, apesar das caixas diferentes */
+.cred-fact--soft b{padding-bottom:.06em}
+
+/* — linha 2: ticker de tecnologia — */
+.cred-tech{display:flex;align-items:stretch;border-top:1px solid var(--line)}
+.cred-tech-label{
+  display:flex;align-items:center;gap:10px;flex:none;padding:16px clamp(18px,2.4vw,32px) 16px 0;
+  border-right:1px solid var(--line);
+  font:9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--smoke);white-space:nowrap
+}
+.cred-tech-label svg{width:14px;height:14px;color:var(--amber);flex:none}
+.ticker{
+  position:relative;flex:1;min-width:0;overflow:hidden;display:flex;align-items:center;
+  /* a esquerda precisa de um esvaecimento largo: é onde as palavras saem
+     pela metade, e um corte curto faria o fragmento parecer defeito */
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 11%,#000 93%,transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 11%,#000 93%,transparent 100%)
+}
+.ticker-track{display:flex;width:max-content;animation:tick 34s linear infinite;will-change:transform}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker-track>span{
+  display:flex;align-items:center;gap:clamp(20px,2.6vw,38px);padding-right:clamp(20px,2.6vw,38px);
+  font:11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--smoke);white-space:nowrap
+}
+.ticker-track i{color:var(--amber);opacity:.85;flex:none}
+/* .cross — primitiva de cruz do sistema, usada como separador */
+.cross{width:9px;height:9px;position:relative;display:inline-block}
+.cross:before,.cross:after{content:"";position:absolute;background:currentColor;left:50%;top:50%;transform:translate(-50%,-50%)}
+.cross:before{width:9px;height:1px}
+.cross:after{width:1px;height:9px}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width:1180px){
   .visus-card{display:none}
   .hero-figure{width:64%}
+  .cred-main{grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,36px) clamp(24px,4vw,48px)}
+  .cred-id{grid-column:1/-1}
+  .cred-main>.cred-fact:nth-child(2){border-left:0;padding-left:0}
 }
 @media (max-width:900px){
   .navlinks{display:none}
@@ -315,6 +423,12 @@ body.menu-open .navlinks{
   .hero-lamp{opacity:.6}
   .hero-scroll{display:none}
   .hero-foot .wrap{padding-block:15px}
+  /* a etiqueta do ticker sai da linha e vira cabeçalho da faixa */
+  .cred-tech{flex-direction:column;align-items:stretch}
+  .cred-tech-label{border-right:0;padding:14px 0 12px}
+  .ticker{padding-bottom:16px;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 90%,transparent 100%);
+            mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 90%,transparent 100%)}
 }
 @media (max-width:640px){
   .hero-actions{gap:10px;margin-top:clamp(24px,3.4vh,34px)}
@@ -324,6 +438,12 @@ body.menu-open .navlinks{
   .hero-proof{gap:7px 18px;font-size:9px;letter-spacing:.12em}
   .hero-proof svg{width:13px;height:13px}
   .hero-eyebrow{font-size:9px;letter-spacing:.12em;gap:10px}
+  .cred-main{grid-template-columns:1fr;gap:26px;padding-block:30px}
+  .cred-main>.cred-fact{border-left:0;padding-left:0}
+  .cred-fact b{font-size:clamp(40px,13vw,54px)}
+  .cred-fact--soft b{font-size:clamp(32px,10.5vw,44px)}
+  .cred-fact span{margin-top:9px}
+  .ticker-track>span{font-size:10px;gap:20px;padding-right:20px}
 }
 /* celulares curtos (iPhone SE/8 e similares): a dobra inteira precisa caber
    sem empurrar a faixa de prova para fora da tela */
@@ -437,10 +557,9 @@ body.menu-open .navlinks{
   <div class="hero-foot">
     <div class="wrap">
       <div class="hero-proof rise" style="--d:1.3s">
-        <!-- TODO: substituir pelo CRM/RQE reais antes de publicar -->
         <span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7.5 3.2v5.1c0 4.3-3 8.2-7.5 9.5-4.5-1.3-7.5-5.2-7.5-9.5V6.2L12 3Z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg>
-          Cirurgião oftalmologista
+          CRM-DF 28.484 · RQE 23.502
         </span>
         <span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
@@ -460,7 +579,71 @@ body.menu-open .navlinks{
 
 </section>
 
-<!-- próximas dobras entram aqui: #protocolo, #quiz, #tratamentos, #sobre, #duvidas, #agendar -->
+<!-- ==========================================================
+     DOBRA 02 · BARRA DE CREDIBILIDADE
+     ========================================================== -->
+<section class="cred" id="credibilidade" aria-label="Registro profissional e tecnologia">
+  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i></div>
+
+  <div class="wrap">
+
+    <div class="cred-main">
+
+      <div class="cred-id reveal">
+        <span aria-hidden="true" class="cred-seal"></span>
+        <div>
+          <h2>Dr. Lucas Oliveira Cintra</h2>
+          <div class="cred-regs">
+            <span class="reg reg--amber">CRM-DF 28.484</span>
+            <span class="reg">RQE 23.502</span>
+            <span class="reg">Oftalmologia</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cred-fact reveal" data-d="1">
+        <b>06</b>
+        <span>anos de atuação</span>
+      </div>
+
+      <div class="cred-fact cred-fact--soft reveal" data-d="2">
+        <b>Centenas</b>
+        <span>de procedimentos realizados</span>
+      </div>
+
+    </div>
+
+    <div class="cred-tech reveal" data-d="3">
+      <p class="cred-tech-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1m0-12.8-2.1 2.1m-8.6 8.6-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/></svg>
+        Tecnologia disponível
+      </p>
+      <div class="ticker">
+        <div class="ticker-track">
+          <span>
+            Pentacam <i aria-hidden="true" class="cross"></i>
+            IOLMaster 700 <i aria-hidden="true" class="cross"></i>
+            OCT <i aria-hidden="true" class="cross"></i>
+            Verion <i aria-hidden="true" class="cross"></i>
+            WaveLight EX500 <i aria-hidden="true" class="cross"></i>
+            Laser de femtossegundo <i aria-hidden="true" class="cross"></i>
+          </span>
+          <span aria-hidden="true">
+            Pentacam <i class="cross"></i>
+            IOLMaster 700 <i class="cross"></i>
+            OCT <i class="cross"></i>
+            Verion <i class="cross"></i>
+            WaveLight EX500 <i class="cross"></i>
+            Laser de femtossegundo <i class="cross"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- próximas dobras entram aqui: #situacoes, #tratamentos, #protocolo, #quiz, #sobre, #duvidas, #agendar -->
 
 </main>
 
@@ -470,6 +653,15 @@ body.menu-open .navlinks{
    ========================================================================== */
 const reduced = matchMedia('(prefers-reduced-motion:reduce)').matches;
 const body = document.body;
+
+/* Só a partir daqui o CSS pode esconder o que depende de scroll. */
+document.documentElement.classList.add('js');
+
+/* --- observer de .reveal --- */
+const io = new IntersectionObserver(entries => entries.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+}), { threshold: .18, rootMargin: '0px 0px -8% 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
 /* --- header com estado .scrolled --- */
 const nav = document.getElementById('nav');
