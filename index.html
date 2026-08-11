@@ -193,11 +193,17 @@ body.menu-open .navlinks{
   background:linear-gradient(0deg,#11110f 0%,rgba(17,17,15,.72) 12%,transparent 40%),
              linear-gradient(180deg,rgba(17,17,15,.72) 0%,transparent 24%)
 }
-/* luz de exame: halo quente que acompanha o ponteiro */
+/* luz de exame: halo quente que acompanha o ponteiro.
+   É um disco de tamanho fixo movido só por transform — nada de interpolar
+   gradiente a cada frame, que era o que fazia o efeito engasgar.
+   left/top dão o ponto de repouso; o JS escreve apenas o deslocamento. */
 .hero-lamp{
-  position:absolute;z-index:4;inset:-10%;pointer-events:none;mix-blend-mode:screen;
-  background:radial-gradient(circle at var(--lx) var(--ly),rgba(255,231,181,.5) 0,rgba(238,185,95,.22) 16%,rgba(231,169,74,.07) 32%,transparent 56%);
-  transition:background .6s var(--ease)
+  position:absolute;z-index:4;left:56%;top:32%;width:min(115%,1000px);aspect-ratio:1;border-radius:50%;
+  pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(circle closest-side,
+    rgba(255,231,181,.46) 0%,rgba(238,185,95,.2) 24%,rgba(231,169,74,.06) 46%,transparent 70%);
+  transform:translate3d(var(--px,0px),var(--py,0px),0) translate(-50%,-50%);
+  will-change:transform
 }
 
 /* — grade principal — */
@@ -293,16 +299,18 @@ body.menu-open .navlinks{
 @media (max-width:900px){
   .navlinks{display:none}
   .menubtn{display:block}
+  /* No celular o retrato deixa de ser fundo e vira faixa: ocupa o topo com
+     brilho quase pleno e só então se dissolve no escuro onde o texto começa. */
   .hero-figure{
-    width:100%;
-    -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 46%,transparent 82%);
-            mask-image:linear-gradient(180deg,#000 0%,#000 46%,transparent 82%)
+    width:100%;bottom:auto;height:min(52svh,480px);
+    -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 54%,rgba(0,0,0,.34) 80%,transparent 100%);
+            mask-image:linear-gradient(180deg,#000 0%,#000 54%,rgba(0,0,0,.34) 80%,transparent 100%)
   }
-  .hero-figure img{object-position:56% 22%;filter:saturate(.82) contrast(1.04) brightness(.72)}
-  .hero-figure:before{background:linear-gradient(90deg,rgba(17,17,15,.86) 0%,rgba(17,17,15,.5) 46%,rgba(17,17,15,.62) 100%)}
-  .hero-figure:after{background:linear-gradient(0deg,#11110f 4%,rgba(17,17,15,.86) 30%,rgba(17,17,15,.22) 62%),
-                                linear-gradient(180deg,rgba(17,17,15,.8) 0%,transparent 22%)}
-  .hero-grid{align-items:flex-end;padding-block:clamp(112px,20vh,200px) clamp(24px,4vh,44px)}
+  .hero-figure img{object-position:56% 16%;filter:saturate(.95) contrast(1.03) brightness(.94)}
+  /* só o véu de topo, para a nav continuar legível sobre a foto clara */
+  .hero-figure:before{background:linear-gradient(180deg,rgba(17,17,15,.66) 0%,rgba(17,17,15,.14) 20%,transparent 42%)}
+  .hero-figure:after{background:linear-gradient(0deg,#11110f 0%,rgba(17,17,15,.72) 26%,rgba(17,17,15,.16) 52%,transparent 68%)}
+  .hero-grid{align-items:flex-end;padding-block:clamp(140px,33svh,310px) clamp(22px,3.4vh,40px)}
   .hero h1{font-size:clamp(38px,9.4vw,62px);filter:drop-shadow(0 3px 12px rgba(0,0,0,.55))}
   .hero-lamp{opacity:.6}
   .hero-scroll{display:none}
@@ -315,6 +323,18 @@ body.menu-open .navlinks{
   .hero-foot .wrap{padding-block:13px}
   .hero-proof{gap:7px 18px;font-size:9px;letter-spacing:.12em}
   .hero-proof svg{width:13px;height:13px}
+  .hero-eyebrow{font-size:9px;letter-spacing:.12em;gap:10px}
+}
+/* celulares curtos (iPhone SE/8 e similares): a dobra inteira precisa caber
+   sem empurrar a faixa de prova para fora da tela */
+@media (max-width:900px) and (max-height:730px){
+  .hero-figure{height:min(48svh,360px)}
+  .hero-grid{padding-block:clamp(118px,29svh,240px) 18px}
+  .hero h1{font-size:clamp(30px,7.8vw,44px)}
+  .hero-sub{font-size:14px;margin-top:16px;line-height:1.55}
+  .hero-actions{margin-top:20px;gap:9px}
+  .hero-actions .btn{padding-block:14px;font-size:13.5px}
+  .hero-proof span:nth-child(3){display:none}
 }
 @media (prefers-reduced-motion:reduce){
   *,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
@@ -487,18 +507,41 @@ if (!reduced) {
   });
 }
 
-/* --- luz de exame que segue o ponteiro sobre o retrato --- */
+/* --- luz de exame que segue o ponteiro sobre o retrato ---
+   O halo vive dentro do retrato, então o ponteiro é medido contra o retângulo
+   DO RETRATO — não o da dobra inteira. O que se escreve é só o deslocamento em
+   relação ao ponto de repouso (left:56% / top:32%), aplicado por transform e
+   suavizado por interpolação a cada quadro. */
 const hero = document.querySelector('.hero');
-const resetLamp = () => ['--lx', '--ly'].forEach(v => hero.style.removeProperty(v));
-hero.addEventListener('pointermove', e => {
-  if (reduced || innerWidth < 901 || e.pointerType === 'touch') return;
-  const r = hero.getBoundingClientRect();
-  const x = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
-  const y = Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
-  hero.style.setProperty('--lx', (x * 100).toFixed(1) + '%');
-  hero.style.setProperty('--ly', (y * 92).toFixed(1) + '%');
-});
-hero.addEventListener('pointerleave', resetLamp);
+const lamp = document.querySelector('.hero-lamp');
+const figure = document.querySelector('.hero-figure');
+
+if (!reduced) {
+  const ANCHOR_X = .56, ANCHOR_Y = .32, EASE = .12;
+  let tx = 0, ty = 0, cx = 0, cy = 0, running = false, idle = 0;
+
+  const frame = () => {
+    cx += (tx - cx) * EASE;
+    cy += (ty - cy) * EASE;
+    lamp.style.setProperty('--px', cx.toFixed(1) + 'px');
+    lamp.style.setProperty('--py', cy.toFixed(1) + 'px');
+    /* para o loop quando o halo já chegou e o ponteiro parou */
+    if (Math.abs(tx - cx) < .4 && Math.abs(ty - cy) < .4 && ++idle > 12) { running = false; return; }
+    requestAnimationFrame(frame);
+  };
+  const start = () => { idle = 0; if (!running) { running = true; requestAnimationFrame(frame); } };
+
+  hero.addEventListener('pointermove', e => {
+    if (e.pointerType === 'touch' || innerWidth < 901) return;
+    const r = figure.getBoundingClientRect();
+    if (!r.width) return;
+    tx = (e.clientX - r.left) - r.width * ANCHOR_X;
+    ty = (e.clientY - r.top) - r.height * ANCHOR_Y;
+    start();
+  }, { passive: true });
+
+  hero.addEventListener('pointerleave', () => { tx = 0; ty = 0; start(); });
+}
 
 /* --- parallax leve do retrato e da palavra-fantasma --- */
 if (!reduced) {
