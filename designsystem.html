@@ -1,0 +1,2238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta content="#171713" name="theme-color"/>
+<title>LUMEN/01 — Sistema de Design de Luz Ambiente</title>
+<meta content="LUMEN/01 é um sistema de design editorial e cinético: tipografia, cor, componentes, ícones e animações documentados em uma única página viva." name="description"/>
+
+<!-- ============================================================
+     FONTES — estratégia de carregamento
+     preconnect + folhas css2 do Google Fonts capturadas localmente,
+     todas com font-display:swap e .woff2 servidos do disco.
+     • DM Sans .......... 400/500/600/700  (--sans)   [echo-intelligence]
+     • Space Mono ....... 400/700          (--mono)   [echo-intelligence]
+     • Space Grotesk .... 400→900          (--display)[north-form-creative]
+     • Cormorant Garamond 400/500/600 +it  (--serif)  [aura-ai-landing-29]
+     • Inter ............ 400→900          (fallback) [north-form-creative]
+     • Archivo .......... 400→800          (fallback) [northtrail-adventure]
+     • Caveat ........... 400→700          (--script) [northtrail-adventure]
+     ============================================================ -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin/>
+<link href="echo-intelligence/assets/d2313d3e3acf928c_css2.css" rel="stylesheet"/>
+<link href="north-form-creative/assets/8ed62c3882136ed4_css2.css" rel="stylesheet"/>
+<link href="aura-ai-landing-29/assets/c291b8ec8e599972_css2.css" rel="stylesheet"/>
+<link href="northtrail-adventure-59/assets/8eb610601416d89b_css2.css" rel="stylesheet"/>
+
+<!-- ============================================================
+     JS de head — precisam existir antes do markup
+     • GSAP + ScrollTrigger .... motor de todas as timelines de scroll [echo]
+     • IconifyPreload (solar) .. 24 ícones solar:* sem requisição de rede [aura]
+     • <iconify-icon> .......... web component que renderiza os solar:*  [aura]
+     • Lucide .................. converte [data-lucide] em SVG inline    [northtrail]
+     ============================================================ -->
+<script src="echo-intelligence/assets/28033e449a31ebcc_gsap.min.js"></script>
+<script src="echo-intelligence/assets/ad33c2df9ada8a66_ScrollTrigger.min.js"></script>
+<script src="aura-ai-landing-29/assets/js/icons-solar.js"></script>
+<script>
+/* Extensão local do IconifyPreload: 12 ícones solar:*-linear que o sistema usa
+   e que não vinham no pacote original. Mesmo traço (1.5, round) e caixa 24×24,
+   para que a página continue sem nenhuma requisição de rede. */
+(function(){
+  var s=(window.IconifyPreload||[]).find(function(c){return c.prefix==='solar'});
+  if(!s)return;
+  var g=function(d,extra){return '<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'+d+'</g>'+(extra||'')};
+  var add={
+    'magic-stick-3-linear':g('<path d="m3 21l10-10"/><path d="m13 11l3-3l-3-3l-3 3z"/><path d="M18 4v3m1.5-1.5h-3M18.5 14v3m1.5-1.5h-3M6.5 3v2M7.5 4h-2"/>'),
+    'asterisk-linear':g('<path d="M12 5v14M6 8.5l12 7M18 8.5l-12 7"/>'),
+    'add-circle-linear':g('<circle cx="12" cy="12" r="9.25"/><path d="M15 12H9m3-3v6"/>'),
+    'magnifer-linear':g('<circle cx="11" cy="11" r="7.25"/><path d="m20 20l-3.8-3.8"/>'),
+    'maximize-square-linear':g('<path d="M15 3.75h5.25V9M9 20.25H3.75V15M20.25 3.75L14 10M3.75 20.25L10 14"/>'),
+    'copy-linear':g('<rect x="8.25" y="8.25" width="12.5" height="12.5" rx="3"/><path d="M16 8.25V6a2.75 2.75 0 0 0-2.75-2.75h-7A2.75 2.75 0 0 0 3.5 6v7A2.75 2.75 0 0 0 6.25 15.75H8.5"/>'),
+    'letter-linear':g('<rect x="2.75" y="4.75" width="18.5" height="14.5" rx="3"/><path d="m3.5 8.25l7 4.6a2.75 2.75 0 0 0 3 0l7-4.6"/>'),
+    'arrow-right-up-linear':g('<path d="M7 17L17 7M8.5 6.75H17.25V15.5"/>'),
+    'bookmark-linear':g('<path d="M6.25 20.5V6.5A2.75 2.75 0 0 1 9 3.75h6a2.75 2.75 0 0 1 2.75 2.75v14l-5.75-3.35z"/>'),
+    'heart-linear':g('<path d="M12 20.4c-.6 0-8.4-4.7-8.4-10.2c0-3.6 2.5-5.7 5-5.7c1.6 0 2.8.8 3.4 1.8c.6-1 1.8-1.8 3.4-1.8c2.5 0 5 2.1 5 5.7c0 5.5-7.8 10.2-8.4 10.2Z"/>'),
+    'close-circle-linear':g('<circle cx="12" cy="12" r="9.25"/><path d="m14.5 9.5l-5 5m0-5l5 5"/>'),
+    'info-circle-linear':g('<circle cx="12" cy="12" r="9.25"/><path d="M12 16.75V11.5"/>','<circle cx="12" cy="8.25" r=".9" fill="currentColor"/>')
+  };
+  for(var k in add) s.icons[k]={body:add[k]};
+})();
+</script>
+<script src="aura-ai-landing-29/assets/758d94838db0cafd_iconify-icon.min.js"></script>
+<script src="northtrail-adventure-59/assets/8550d4d51d4046fa_lucide.min.js"></script>
+
+<style>
+/* ==========================================================================
+   LUMEN/01 — TOKENS
+   Base estética: echo-intelligence (paper/ink/amber, fading, cinética)
+   Enxertos:      aura (verdes + serif + btn-lift/grad-border)
+                  north-form (display grotesk + ember + line-mask)
+                  northtrail (rust + script + micro-interações)
+   ========================================================================== */
+:root{
+  /* — neutros (echo) — */
+  --paper:#f6f3eb;   --bone:#ede9df;   --ink:#171713;   --fog:#a5a197;
+  --ash:#0a0a09;     --char:#11110f;   --smoke:#656159; --dust:#969289;
+  --line:rgba(23,23,19,.17);
+  --line-light:rgba(237,233,223,.22);
+
+  /* — acentos — */
+  --amber:#e7a94a;   /* primário   — echo   */
+  --ember:#c24f20;   /* secundário — north/form */
+  --moss:#3b4b34;    /* terciário  — aura   */
+  --sage:#8e9c75;    /* decorativo — aura   */
+  --clay:#b96a4a;    /* decorativo — aura   */
+  --rust:#ea580c;    /* ação       — northtrail */
+
+  /* — feedback — */
+  --ok:#5c7d4f; --warn:#e7a94a; --err:#b3402a; --info:#6b7f8e;
+
+  /* — gradientes de sistema — */
+  --grad-dawn:linear-gradient(118deg,#e7a94a 0%,#c24f20 58%,#7a2d12 100%);
+  --grad-field:linear-gradient(140deg,#3b4b34 0%,#8e9c75 55%,#e7a94a 100%);
+  --grad-ink:linear-gradient(165deg,#2a3322 0%,#20251a 55%,#11110f 100%);
+  --grad-glass:linear-gradient(140deg,rgba(255,253,248,.42),rgba(255,253,248,.06));
+  --grad-border:linear-gradient(135deg,rgba(185,106,74,.5),rgba(142,156,117,.75),rgba(231,169,74,.85));
+
+  /* — tipografia — */
+  --sans:'DM Sans','Inter',system-ui,sans-serif;
+  --mono:'Space Mono',ui-monospace,monospace;
+  --display:'Space Grotesk','Archivo',sans-serif;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --script:'Caveat',cursive;
+
+  /* — ritmo e forma — */
+  --pad:clamp(20px,4vw,64px);
+  --r-sm:8px; --r-md:16px; --r-lg:26px; --r-full:999px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --sh-1:0 10px 24px -14px rgba(23,23,19,.35);
+  --sh-2:0 24px 50px -24px rgba(23,23,19,.32);
+  --sh-3:0 40px 90px -30px rgba(23,23,19,.45);
+  --glow-amber:0 0 60px rgba(231,169,74,.45);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased
+}
+body.menu-open,body.is-loading,body.modal-open{overflow:hidden}
+::selection{background:var(--amber);color:var(--ink)}
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+img{display:block;width:100%}
+h1,h2,h3,h4,h5,h6,p,figure,blockquote{margin:0}
+hr{border:0;border-top:1px solid var(--line);margin:0}
+
+/* ==========================================================================
+   PRIMITIVAS DE LAYOUT
+   .wrap (echo) · .container/.grid12/.display/.line-mask/.cross (north-form)
+   .eyebrow (north-form) · .mono (echo) · .script (northtrail)
+   ========================================================================== */
+.wrap{width:min(1440px,100%);margin:auto;padding-inline:var(--pad)}
+.container{width:100%;padding-inline:var(--pad)}
+.grid12{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(12px,1.5vw,24px)}
+.mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.16em;font-size:10px}
+.display{font-family:var(--display);font-weight:600;letter-spacing:-.065em;line-height:.88}
+.serif{font-family:var(--serif);font-weight:500;letter-spacing:-.01em}
+.script{font-family:var(--script);font-weight:600;letter-spacing:0}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.16em;font-weight:600}
+.line-mask{overflow:hidden}
+.line-mask>span{display:block}
+.cross{width:14px;height:14px;position:relative;display:inline-block}
+.cross:before,.cross:after{content:"";position:absolute;background:currentColor;left:50%;top:50%;transform:translate(-50%,-50%)}
+.cross:before{width:14px;height:1px}
+.cross:after{width:1px;height:14px}
+.section-tag{display:flex;align-items:center;gap:12px}
+.section-tag:before{content:"";width:26px;height:1px;background:currentColor}
+.muted{color:var(--smoke)}
+.on-dark .muted,.dark .muted{color:var(--dust)}
+.dark{background:var(--ink);color:var(--bone)}
+.paper{background:var(--paper);color:var(--ink)}
+
+/* ==========================================================================
+   OVERLAYS GLOBAIS
+   .noise (echo+north-form) · .scroll-progress (echo) · .cursor-orb (echo)
+   .preloader (north-form) · .cursor-label (north-form)
+   ========================================================================== */
+.noise{
+  position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.055;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E")
+}
+.scroll-progress{position:fixed;z-index:88;left:0;right:0;top:0;height:2px;pointer-events:none}
+.scroll-progress i{display:block;width:100%;height:100%;background:var(--amber);transform:scaleX(0);transform-origin:left;box-shadow:0 0 18px rgba(231,169,74,.9)}
+.cursor-orb{
+  position:fixed;z-index:89;width:14px;height:14px;border:1px solid rgba(231,169,74,.85);
+  border-radius:50%;pointer-events:none;mix-blend-mode:difference;
+  transform:translate(-50%,-50%);opacity:0;transition:opacity .3s,width .3s,height .3s
+}
+.cursor-orb.wide{width:46px;height:46px;background:rgba(231,169,74,.12)}
+.preloader{
+  position:fixed;inset:0;z-index:1000;background:var(--ink);color:var(--bone);
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  font-family:var(--display);font-weight:600;letter-spacing:-.05em;font-size:clamp(38px,7vw,110px)
+}
+.preloader i{width:12px;height:12px;border-radius:50%;background:var(--amber);box-shadow:var(--glow-amber);animation:breathe 1.4s ease-in-out infinite}
+
+/* ==========================================================================
+   FUNDOS ANIMADOS — .amb (usado em TODAS as dobras)
+   camadas: grade que desliza · duas auroras radiais · feixe de varredura
+   ========================================================================== */
+.amb{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.amb>i{position:absolute;display:block}
+.amb-grid{
+  inset:-2px;
+  background:linear-gradient(90deg,transparent 49.9%,rgba(23,23,19,.055) 50%,transparent 50.1%),
+             linear-gradient(0deg,transparent 49.9%,rgba(23,23,19,.045) 50%,transparent 50.1%);
+  background-size:120px 120px;animation:gridPan 34s linear infinite
+}
+.amb-glow{
+  inset:-25%;filter:blur(70px);opacity:.55;
+  background:radial-gradient(38% 42% at 22% 30%,rgba(231,169,74,.55),transparent 70%),
+             radial-gradient(34% 40% at 78% 72%,rgba(142,156,117,.5),transparent 70%);
+  animation:auroraDrift 26s ease-in-out infinite alternate
+}
+.amb-beam{
+  inset:-30% -10%;
+  background:linear-gradient(104deg,transparent 38%,rgba(255,231,181,.5) 50%,transparent 62%);
+  mix-blend-mode:overlay;opacity:.5;animation:scanline 13s ease-in-out infinite
+}
+.amb-halo{
+  inset:auto -10% -30% auto;width:min(52vw,700px);aspect-ratio:1;border-radius:50%;
+  border:1px solid var(--line);animation:orbitSpin 44s linear infinite
+}
+.amb-halo:before,.amb-halo:after{content:"";position:absolute;inset:14%;border:1px solid var(--line);border-radius:50%}
+.amb-halo:after{inset:34%;border-color:rgba(231,169,74,.5);box-shadow:0 0 60px rgba(231,169,74,.12)}
+/* variação escura */
+.on-dark .amb-grid{background:linear-gradient(90deg,transparent 49.9%,rgba(237,233,223,.07) 50%,transparent 50.1%),linear-gradient(0deg,transparent 49.9%,rgba(237,233,223,.05) 50%,transparent 50.1%);background-size:120px 120px}
+.on-dark .amb-glow{opacity:.42;background:radial-gradient(38% 42% at 18% 26%,rgba(231,169,74,.6),transparent 70%),radial-gradient(36% 42% at 80% 74%,rgba(194,79,32,.45),transparent 70%)}
+.on-dark .amb-beam{mix-blend-mode:screen;opacity:.24}
+.on-dark .amb-halo{border-color:var(--line-light)}
+.on-dark .amb-halo:before{border-color:var(--line-light)}
+
+/* ==========================================================================
+   ANIMAÇÕES — biblioteca de keyframes
+   ========================================================================== */
+@keyframes pulse{70%{box-shadow:0 0 0 12px transparent}}
+@keyframes tick{to{transform:translateX(-50%)}}
+@keyframes wordIn{to{opacity:1;filter:blur(0);transform:translateY(0)}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes gridPan{to{background-position:120px 120px,120px 120px}}
+@keyframes auroraDrift{
+  0%{transform:translate3d(-4%,-2%,0) scale(1)}
+  50%{transform:translate3d(5%,4%,0) scale(1.14)}
+  100%{transform:translate3d(-2%,3%,0) scale(1.04)}
+}
+@keyframes scanline{0%,100%{transform:translateX(-42%)}50%{transform:translateX(42%)}}
+@keyframes orbitSpin{to{transform:rotate(360deg)}}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.65}50%{transform:scale(1.35);opacity:1}}
+@keyframes sheen{0%{transform:translateX(-120%) skewX(-18deg)}60%,100%{transform:translateX(220%) skewX(-18deg)}}
+@keyframes ringOut{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2.1);opacity:0}}
+@keyframes barRise{from{transform:scaleY(.15)}to{transform:scaleY(1)}}
+@keyframes caretBlink{50%{opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* .pulse (echo) — ponto vivo */
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 0 rgba(231,169,74,.55);animation:pulse 2.5s infinite}
+/* .reveal (echo) — surgimento no scroll, com desfoque progressivo (aura) */
+.reveal{opacity:0;transform:translateY(28px);filter:blur(10px);
+  transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease)}
+.reveal.on{opacity:1;transform:none;filter:blur(0)}
+.reveal[data-d="1"]{transition-delay:.09s}
+.reveal[data-d="2"]{transition-delay:.18s}
+.reveal[data-d="3"]{transition-delay:.27s}
+.reveal[data-d="4"]{transition-delay:.36s}
+/* .w-anim (aura) — revelação palavra a palavra */
+.w-anim{display:inline-block;opacity:0;filter:blur(8px);transform:translateY(16px);animation:wordIn .8s var(--ease-out) forwards}
+/* .float-slow (aura) */
+.float-slow{animation:floatY 5s ease-in-out infinite}
+/* .btn-lift (aura) */
+.btn-lift{transition:transform .35s var(--ease-out),box-shadow .35s ease,background-color .3s ease,color .3s ease,border-color .3s ease;will-change:transform}
+.btn-lift:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 16px 32px -14px rgba(23,23,19,.45)}
+.btn-lift:active{transform:translateY(0) scale(.96);box-shadow:0 6px 14px -8px rgba(23,23,19,.35)}
+/* .grad-border (aura) */
+.grad-border{border:1px solid transparent!important;
+  background-image:linear-gradient(var(--bone),var(--bone)),var(--grad-border)!important;
+  background-origin:border-box!important;background-clip:padding-box,border-box!important}
+.parallax{will-change:transform}
+
+/* ==========================================================================
+   NAV — .nav/.navin/.brand/.brandmark/.navlinks/.reserve/.menubtn (echo)
+   ========================================================================== */
+.nav{
+  position:fixed;z-index:70;top:0;left:0;right:0;height:72px;display:flex;align-items:center;
+  border-bottom:1px solid rgba(255,255,255,.16);color:#fff;transition:.45s var(--ease);
+  background:linear-gradient(to bottom,rgba(0,0,0,.42),transparent)
+}
+.nav.scrolled{height:62px;color:var(--ink);background:rgba(246,243,235,.82);backdrop-filter:blur(18px);border-color:var(--line)}
+.navin{width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:600;letter-spacing:-.03em}
+.brandmark{width:29px;height:29px;border:1px solid currentColor;border-radius:50%;position:relative;transition:transform .6s var(--ease)}
+.brand:hover .brandmark{transform:rotate(180deg)}
+.brandmark:before{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:var(--amber);left:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 0 14px var(--amber)}
+.brandmark:after{content:"";position:absolute;width:1px;height:12px;background:currentColor;left:50%;top:-5px}
+.navlinks{display:flex;align-items:center;gap:28px;font-size:12px}
+.navlinks a{opacity:.72;transition:.25s;position:relative;padding:2px 0}
+.navlinks a:after{content:"";position:absolute;left:0;bottom:-2px;height:1px;width:0;background:var(--amber);transition:width .35s var(--ease)}
+.navlinks a:hover{opacity:1}
+.navlinks a:hover:after{width:100%}
+.reserve{display:inline-flex;align-items:center;gap:10px;padding:11px 17px;border:1px solid currentColor;border-radius:var(--r-full)!important;opacity:1!important}
+.reserve:after{display:none}
+.reserve i{width:6px;height:6px;background:var(--amber);border-radius:50%;box-shadow:0 0 10px var(--amber);animation:breathe 2.4s ease-in-out infinite}
+.menubtn{display:none;width:42px;height:42px;border:1px solid currentColor;border-radius:50%;background:none}
+.menubtn span,.menubtn:after{content:"";display:block;width:15px;height:1px;background:currentColor;margin:4px auto;transition:.3s}
+body.menu-open .navlinks{display:flex;position:fixed;inset:72px 0 auto;flex-direction:column;gap:22px;padding:34px var(--pad) 44px;background:rgba(17,17,15,.96);backdrop-filter:blur(18px);color:var(--bone);font-size:18px}
+
+/* ==========================================================================
+   HERO — todas as classes de echo/assets/css/hero.css + enxertos
+   ========================================================================== */
+.hero{
+  --lx:72%;--ly:38%;--scene-glow:.46;--beam-opacity:.12;--night-opacity:.04;
+  --scene-bright:1.04;--scene-sat:1;--cast-opacity:.34;--cast-x:-38px;--cast-y:18px;
+  --title-x:7px;--title-y:9px;--title-shadow:.18;--title-glow:0px;
+  height:100svh;min-height:700px;position:relative;overflow:hidden;background:#7d796f
+}
+.hero[data-light="focus"]{--lx:58%;--ly:30%;--scene-glow:.68;--beam-opacity:.24;--night-opacity:0;--scene-bright:1.12;--scene-sat:1.06;--cast-opacity:.46;--cast-x:-68px;--cast-y:26px;--title-x:3px;--title-y:4px;--title-shadow:.14;--title-glow:26px}
+.hero[data-light="off"]{--scene-glow:0;--beam-opacity:0;--night-opacity:.58;--scene-bright:.58;--scene-sat:.58;--cast-opacity:.08;--cast-x:-12px;--cast-y:8px;--title-x:17px;--title-y:21px;--title-shadow:.48;--title-glow:0px}
+.hero-media{position:absolute;inset:0}
+.hero-media img{height:100%;object-fit:cover;object-position:center;filter:brightness(var(--scene-bright)) saturate(var(--scene-sat));transition:filter .85s var(--ease)}
+.hero-media:after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(19,18,15,.78) 0%,rgba(19,18,15,.35) 44%,rgba(19,18,15,.05) 72%),linear-gradient(0deg,rgba(18,17,14,.58),transparent 42%)}
+.hero-light,.hero-night,.hero-beam,.hero-cast{position:absolute;z-index:1;pointer-events:none;transition:opacity .85s var(--ease),transform .85s var(--ease)}
+.hero-light{inset:-10%;mix-blend-mode:screen;opacity:var(--scene-glow);
+  background:radial-gradient(circle at var(--lx) var(--ly),rgba(255,231,181,.92) 0,rgba(238,185,95,.42) 19%,rgba(231,169,74,.12) 35%,transparent 58%)}
+.hero-night{inset:0;opacity:var(--night-opacity);background:radial-gradient(circle at 68% 62%,rgba(5,5,4,.28),rgba(5,5,4,.88))}
+.hero-beam{inset:-12%;clip-path:polygon(58% 0,83% 0,70% 100%,24% 100%);mix-blend-mode:screen;opacity:var(--beam-opacity);
+  background:linear-gradient(118deg,transparent 10%,rgba(255,225,169,.28) 48%,rgba(231,169,74,.05) 80%)}
+.hero-cast{right:6%;bottom:9%;width:44%;height:15%;border-radius:50%;background:rgba(9,8,6,.82);filter:blur(28px);opacity:var(--cast-opacity);transform:translate(var(--cast-x),var(--cast-y)) rotate(-7deg);transform-origin:right center}
+/* palavra-fantasma de fundo (premise-word do echo + hero-word do north/form) */
+.hero-word{
+  position:absolute;z-index:1;left:-.04em;bottom:-.2em;pointer-events:none;white-space:nowrap;
+  font-family:var(--display);font-size:clamp(180px,34vw,560px);font-weight:600;line-height:.72;letter-spacing:-.12em;
+  color:transparent;-webkit-text-stroke:1px rgba(246,243,235,.11)
+}
+.hero-copy{position:absolute;z-index:3;left:var(--pad);bottom:clamp(42px,8vh,92px);color:#f4f0e6;width:min(980px,calc(100vw - 40px))}
+.hero-copy .eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:24px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:400}
+.hero h1{font-size:clamp(50px,7.2vw,120px);line-height:.82;letter-spacing:-.075em;font-weight:500;width:max-content;max-width:none;
+  filter:drop-shadow(var(--title-x) var(--title-y) 0 rgba(0,0,0,var(--title-shadow)));transition:filter .8s}
+.hero h1>.hero-line{display:block;overflow:hidden;white-space:nowrap;perspective:900px;padding:0 .06em .08em 0}
+.hero h1>.accent{color:var(--amber);margin-left:clamp(22px,5.5vw,88px);text-shadow:0 0 var(--title-glow) rgba(231,169,74,.75)}
+.hero h1>.outline{color:transparent;-webkit-text-stroke:1px rgba(244,240,230,.72);margin-left:clamp(10px,2.4vw,40px)}
+.hero-char{display:inline-block;transform-origin:50% 100%;will-change:transform,opacity}
+.hero-bottom{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-top:28px;max-width:840px;flex-wrap:wrap}
+.hero-bottom p{font-size:clamp(15px,1.3vw,19px);line-height:1.55;max-width:34ch;color:rgba(244,240,230,.8)}
+.hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.hero-cta{display:inline-flex;align-items:center;gap:18px;white-space:nowrap;border-bottom:1px solid currentColor;padding:10px 0;font-size:13px}
+.hero-cta b{font-size:22px;font-weight:400;transition:.3s}
+.hero-cta:hover b{transform:translateX(6px)}
+.hero-data{position:absolute;z-index:4;right:var(--pad);top:104px;color:#f4f0e6;display:grid;grid-template-columns:repeat(2,auto);gap:7px 32px;text-align:right;opacity:.74}
+/* console de luz (echo) */
+.light-console{position:absolute;z-index:6;right:var(--pad);top:196px;width:236px;padding:12px;border:1px solid rgba(255,255,255,.24);background:rgba(16,15,12,.32);backdrop-filter:blur(14px);color:#f4f0e6;border-radius:var(--r-md)}
+.light-console-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.light-console-top span:last-child{color:var(--amber)}
+.light-scenes{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.light-scenes button{border:1px solid rgba(255,255,255,.2);border-radius:var(--r-full);background:transparent;color:rgba(255,255,255,.64);padding:8px 4px;font:8px var(--mono);letter-spacing:.1em;text-transform:uppercase;transition:.3s}
+.light-scenes button:hover,.light-scenes button.active{background:var(--amber);border-color:var(--amber);color:var(--ink)}
+/* painel de tokens flutuante (vidro — aura) */
+.hero-panel{
+  position:absolute;z-index:6;right:var(--pad);top:330px;width:236px;padding:14px;border-radius:var(--r-md);
+  background:rgba(255,253,248,.16);backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,.34);
+  color:#f4f0e6;box-shadow:0 30px 70px -30px rgba(0,0,0,.6)
+}
+.hero-panel .mono{opacity:.62;display:block;margin-bottom:10px}
+.hero-panel ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-family:var(--mono);font-size:9px;letter-spacing:.08em}
+.hero-panel li{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.hero-panel b{width:22px;height:10px;border-radius:2px;display:block}
+.hero-bars{display:flex;align-items:flex-end;gap:4px;height:34px;margin-top:12px}
+.hero-bars i{flex:1;background:rgba(244,240,230,.32);transform-origin:bottom;animation:barRise 1.8s var(--ease) infinite alternate}
+.hero-bars i:nth-child(2){animation-delay:.18s;background:rgba(231,169,74,.65)}
+.hero-bars i:nth-child(3){animation-delay:.36s}
+.hero-bars i:nth-child(4){animation-delay:.54s;background:var(--amber)}
+.hero-bars i:nth-child(5){animation-delay:.72s}
+.hero-bars i:nth-child(6){animation-delay:.9s;background:rgba(231,169,74,.4)}
+/* chips flutuantes sobre a foto */
+.hero-chip{
+  position:absolute;z-index:5;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:var(--r-full);
+  background:rgba(255,253,248,.2);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.38);
+  color:#f4f0e6;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap
+}
+.hero-chip iconify-icon{font-size:14px;color:var(--amber)}
+.hero-scroll{position:absolute;z-index:6;left:50%;bottom:26px;transform:translateX(-50%);display:grid;place-items:center;gap:8px;color:rgba(244,240,230,.6)}
+.hero-scroll i{display:block;width:1px;height:44px;background:linear-gradient(transparent,var(--amber));animation:breathe 2.6s ease-in-out infinite}
+
+/* As faixas de ticker/marquee que ficavam entre a hero e a Tipografia foram
+   removidas. O @keyframes tick permanece documentado no catálogo de animações. */
+
+/* ==========================================================================
+   SEÇÕES DE DOCUMENTAÇÃO — casca comum
+   ========================================================================== */
+.ds{position:relative;padding-block:clamp(90px,11vw,170px);overflow:hidden;isolation:isolate}
+.ds>.wrap{position:relative;z-index:2}
+.ds.on-dark{background:var(--ink);color:var(--bone)}
+.ds.bone{background:var(--bone)}
+.ds-head{display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap;margin-bottom:clamp(40px,6vw,74px)}
+.ds-head h2{font-size:clamp(44px,6.4vw,104px);font-weight:400;line-height:.86;letter-spacing:-.072em;margin:24px 0 0;max-width:12ch}
+.ds-head h2 em{font-style:normal;font-family:var(--serif);font-weight:500;color:var(--ember);letter-spacing:-.02em}
+.on-dark .ds-head h2 em{color:var(--amber)}
+.ds-head p{max-width:38ch;color:var(--smoke);line-height:1.7;font-size:15px}
+.on-dark .ds-head p{color:var(--dust)}
+.ds-sub{font-family:var(--display);font-weight:600;letter-spacing:-.04em;font-size:clamp(22px,2.4vw,32px);margin:0 0 20px}
+.ds-note{font-size:13px;line-height:1.65;color:var(--smoke);max-width:62ch}
+.on-dark .ds-note{color:var(--dust)}
+.ds-block{margin-top:clamp(52px,6vw,88px)}
+.ds-rule{height:1px;background:var(--line);margin:clamp(44px,5vw,72px) 0}
+.on-dark .ds-rule{background:var(--line-light)}
+.kbd{font:10px/1 var(--mono);letter-spacing:.1em;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:rgba(255,255,255,.4);white-space:nowrap}
+.on-dark .kbd{border-color:var(--line-light);background:rgba(255,255,255,.05)}
+code.tok{font:11px/1.5 var(--mono);letter-spacing:.02em;color:var(--ember);background:rgba(194,79,32,.08);padding:3px 7px;border-radius:5px;white-space:nowrap}
+.on-dark code.tok{color:var(--amber);background:rgba(231,169,74,.12)}
+
+/* — tabela de specs — */
+.spec-table{width:100%;border-collapse:collapse;font-size:13px}
+.spec-table th,.spec-table td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+.on-dark .spec-table th,.on-dark .spec-table td{border-color:var(--line-light)}
+.spec-table th{font:9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--smoke);border-bottom-color:currentColor;padding-bottom:12px}
+.on-dark .spec-table th{color:var(--dust)}
+.spec-table td:first-child{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ember);white-space:nowrap}
+.on-dark .spec-table td:first-child{color:var(--amber)}
+.spec-table tbody tr{transition:background .3s}
+.spec-table tbody tr:hover{background:rgba(231,169,74,.08)}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* ==========================================================================
+   TIPOGRAFIA — amostras
+   ========================================================================== */
+.type-row{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:28px;align-items:end;padding:26px 0;border-bottom:1px solid var(--line);transition:padding-left .4s var(--ease)}
+.type-row:hover{padding-left:12px}
+.type-row .meta{font:9px/1.7 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--smoke);text-align:right}
+.type-row .meta b{color:var(--ink);font-weight:400}
+.t-h1{font-family:var(--display);font-weight:600;font-size:clamp(56px,8.4vw,128px);line-height:.82;letter-spacing:-.075em}
+.t-h2{font-family:var(--sans);font-weight:400;font-size:clamp(44px,6.2vw,92px);line-height:.86;letter-spacing:-.07em}
+.t-h3{font-family:var(--display);font-weight:600;font-size:clamp(32px,3.8vw,56px);line-height:.94;letter-spacing:-.055em}
+.t-h4{font-family:var(--sans);font-weight:500;font-size:clamp(24px,2.4vw,34px);line-height:1.08;letter-spacing:-.04em}
+.t-h5{font-family:var(--sans);font-weight:600;font-size:20px;line-height:1.25;letter-spacing:-.02em}
+.t-h6{font-family:var(--mono);font-weight:700;font-size:13px;line-height:1.4;letter-spacing:.14em;text-transform:uppercase}
+.t-body-lg{font-size:19px;line-height:1.55;letter-spacing:-.011em;color:var(--smoke)}
+.t-body{font-size:16px;line-height:1.65;letter-spacing:0;color:var(--smoke)}
+.t-body-sm{font-size:14px;line-height:1.6;letter-spacing:.004em;color:var(--smoke)}
+.t-caption{font-size:12px;line-height:1.5;letter-spacing:.02em;color:var(--fog)}
+.t-label{font-family:var(--mono);font-size:10px;line-height:1.4;letter-spacing:.16em;text-transform:uppercase}
+.t-helper{font-size:12px;line-height:1.5;letter-spacing:.01em;color:var(--smoke);font-style:italic}
+.t-quote{font-family:var(--serif);font-weight:500;font-style:italic;font-size:clamp(28px,3.6vw,52px);line-height:1.14;letter-spacing:-.02em}
+.t-script{font-family:var(--script);font-weight:600;font-size:clamp(30px,3.6vw,50px);line-height:1;color:var(--ember)}
+.font-card{border:1px solid var(--line);border-radius:var(--r-md);padding:24px;background:rgba(255,255,255,.42);transition:.45s var(--ease);position:relative;overflow:hidden}
+.font-card:hover{transform:translateY(-4px);box-shadow:var(--sh-2);border-color:rgba(231,169,74,.6)}
+.font-card .glyphs{font-size:40px;letter-spacing:-.04em;line-height:1.1;margin:14px 0 18px;word-break:break-word}
+.font-card dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font:9px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--smoke)}
+.font-card dd{margin:0;color:var(--ink);text-align:right}
+.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+
+/* ==========================================================================
+   CORES
+   ========================================================================== */
+.sw{position:relative;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;background:var(--paper);transition:.45s var(--ease)}
+.on-dark .sw{border-color:var(--line-light);background:rgba(255,255,255,.03)}
+.sw:hover{transform:translateY(-5px);box-shadow:var(--sh-2)}
+/* box-shadow interno: garante que amostras escuras (ink) continuem lidas como
+   amostra quando a seção de fundo também é escura. */
+.sw-chip{height:132px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:14px;box-shadow:inset 0 0 0 1px rgba(237,233,223,.16)}
+.sw-chip:after{content:"";position:absolute;inset:0;background:linear-gradient(104deg,transparent 38%,rgba(255,255,255,.4) 50%,transparent 62%);transform:translateX(-120%) skewX(-18deg)}
+.sw:hover .sw-chip:after{animation:sheen 1.1s var(--ease) forwards}
+.sw-chip b{position:relative;font:9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;padding:5px 8px;border-radius:4px;background:rgba(255,255,255,.82);color:var(--ink)}
+.sw-body{padding:16px}
+.sw-body h4{font-size:16px;font-weight:600;letter-spacing:-.02em;margin-bottom:2px}
+.sw-role{font:9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ember);display:block;margin-bottom:12px}
+.on-dark .sw-role{color:var(--amber)}
+.sw-body dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0 0 12px;font:9px/1.5 var(--mono);letter-spacing:.06em;color:var(--smoke)}
+.on-dark .sw-body dl{color:var(--dust)}
+.sw-body dd{margin:0;text-align:right;color:var(--ink)}
+.on-dark .sw-body dd{color:var(--bone)}
+.sw-alpha{display:flex;height:26px;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.on-dark .sw-alpha{border-color:var(--line-light)}
+.sw-alpha i{flex:1;transition:flex .35s var(--ease)}
+.sw-alpha:hover i:hover{flex:2.2}
+.sw-use{font-size:12px;line-height:1.55;color:var(--smoke);margin-top:12px}
+.on-dark .sw-use{color:var(--dust)}
+.contrast-pill{display:inline-flex;align-items:center;gap:6px;font:9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:5px 9px;border-radius:var(--r-full);border:1px solid currentColor;margin-top:12px}
+.c-aaa{color:#3f6b36}.c-aa{color:#8a6416}.c-deco{color:#9a5238}
+.on-dark .c-aaa{color:#9dc48f}.on-dark .c-aa{color:var(--amber)}.on-dark .c-deco{color:#dd9877}
+.grad-strip{height:96px;border-radius:var(--r-md);border:1px solid var(--line);position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:14px}
+.grad-strip span{font:9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;background:rgba(255,255,255,.85);color:var(--ink);padding:5px 8px;border-radius:4px;position:relative;z-index:2}
+.grad-strip:before{content:"";position:absolute;inset:0;background:inherit;filter:blur(0);transition:transform .8s var(--ease)}
+.grad-strip:hover{transform:scale(1.015)}
+
+/* ==========================================================================
+   BOTÕES — sistema completo
+   ========================================================================== */
+.btn{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:13px 24px;border-radius:var(--r-full);border:1px solid transparent;
+  font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:.01em;line-height:1;
+  overflow:hidden;isolation:isolate;white-space:nowrap;
+  transition:transform .35s var(--ease-out),box-shadow .35s ease,background-color .3s ease,color .3s ease,border-color .3s ease
+}
+.btn:before{content:"";position:absolute;inset:0;z-index:-1;transform:translateX(-120%) skewX(-18deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent)}
+.btn:hover:before{animation:sheen .9s var(--ease) forwards}
+.btn:hover{transform:translateY(-2px) scale(1.03)}
+.btn:active{transform:translateY(0) scale(.96)}
+.btn:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+.btn iconify-icon{font-size:16px;transition:transform .35s var(--ease)}
+.btn:hover iconify-icon{transform:translateX(3px)}
+.btn--solid{background:var(--ink);color:var(--paper)}
+.btn--solid:hover{background:var(--moss);box-shadow:0 18px 34px -16px rgba(23,23,19,.7)}
+.btn--amber{background:var(--amber);color:var(--ink);box-shadow:0 0 0 0 rgba(231,169,74,.5)}
+.btn--amber:hover{background:#f2bc65;box-shadow:0 18px 40px -14px rgba(231,169,74,.85),0 0 60px rgba(231,169,74,.35)}
+.btn--ember{background:var(--ember);color:#fff}
+.btn--ember:hover{background:var(--rust);box-shadow:0 18px 40px -16px rgba(194,79,32,.75)}
+.btn--outline{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn--outline:hover{border-color:var(--ink);background:rgba(23,23,19,.05)}
+.on-dark .btn--outline{border-color:var(--line-light);color:var(--bone)}
+.on-dark .btn--outline:hover{border-color:var(--bone);background:rgba(237,233,223,.08)}
+.btn--ghost{background:rgba(23,23,19,.05);color:var(--ink)}
+.btn--ghost:hover{background:rgba(23,23,19,.1)}
+.btn--glass{background:rgba(255,253,248,.18);backdrop-filter:blur(16px);border-color:rgba(255,255,255,.4);color:var(--bone)}
+.btn--glass:hover{background:rgba(255,253,248,.3)}
+.btn--link{padding:8px 0;border-radius:0;border-bottom:1px solid currentColor;background:none}
+.btn--link:hover{transform:none;color:var(--ember)}
+.btn--link:before{display:none}
+.btn--sm{padding:9px 16px;font-size:11px;gap:7px}
+.btn--lg{padding:17px 32px;font-size:15px;gap:13px}
+.btn--icon{width:44px;height:44px;padding:0;border-radius:50%}
+.btn--icon.btn--sm{width:36px;height:36px}
+.btn[disabled],.btn.is-disabled{opacity:.4;pointer-events:none;filter:grayscale(.4)}
+.btn.is-loading{pointer-events:none;color:transparent}
+.btn.is-loading:after{content:"";position:absolute;width:15px;height:15px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;color:var(--paper);animation:spin .7s linear infinite}
+.btn--solid.is-loading:after{border-color:var(--paper);border-top-color:transparent}
+/* CTA circular (echo .round-cta) */
+.round-cta{width:124px;aspect-ratio:1;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;font-size:30px;transition:.35s var(--ease)}
+.round-cta:hover{background:var(--ink);color:var(--amber);transform:rotate(-18deg)}
+/* CTA composto (northtrail) */
+.cta-pill{display:inline-flex;align-items:center;gap:14px;border-radius:var(--r-full);background:var(--bone);color:var(--ink);padding:12px 12px 12px 26px;font-size:13px;font-weight:600;transition:.35s var(--ease)}
+.cta-pill span{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--bone);transition:.35s var(--ease)}
+.cta-pill:hover{background:var(--ember);color:#fff;transform:translateY(-3px);box-shadow:0 22px 44px -18px rgba(194,79,32,.7)}
+.cta-pill:hover span{background:#fff;color:var(--ember);transform:rotate(45deg)}
+/* pílula de filtro (northtrail) */
+.filter-pill{border-radius:var(--r-full);border:1px solid var(--line);background:transparent;padding:9px 17px;font:10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;transition:.3s}
+.filter-pill:hover{border-color:var(--ink)}
+.filter-pill.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.on-dark .filter-pill{border-color:var(--line-light)}
+.on-dark .filter-pill.active{background:var(--amber);color:var(--ink);border-color:var(--amber)}
+.btn-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* ==========================================================================
+   INPUTS
+   ========================================================================== */
+.form-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.field{display:grid;gap:8px;position:relative}
+.field>label{font:9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--smoke)}
+.on-dark .field>label{color:var(--dust)}
+.input,.select,.textarea{
+  width:100%;padding:14px 16px;border-radius:var(--r-sm);border:1px solid var(--line);
+  background:rgba(255,255,255,.55);color:var(--ink);font-size:14px;line-height:1.4;
+  transition:border-color .3s,box-shadow .3s,background .3s,transform .3s var(--ease)
+}
+.on-dark .input,.on-dark .select,.on-dark .textarea{background:rgba(255,255,255,.05);border-color:var(--line-light);color:var(--bone)}
+.input::placeholder,.textarea::placeholder{color:var(--fog)}
+.input:hover,.select:hover,.textarea:hover{border-color:rgba(23,23,19,.34)}
+.input:focus,.select:focus,.textarea:focus{
+  outline:none;border-color:var(--amber);background:rgba(255,255,255,.9);
+  box-shadow:0 0 0 4px rgba(231,169,74,.18),0 0 34px -12px rgba(231,169,74,.7);transform:translateY(-1px)
+}
+.on-dark .input:focus,.on-dark .select:focus,.on-dark .textarea:focus{background:rgba(255,255,255,.09)}
+.textarea{min-height:118px;resize:vertical}
+.select{appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23656159' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 16px center;padding-right:42px}
+.helper{font-size:12px;line-height:1.5;color:var(--smoke);font-style:italic}
+.field.is-error .input,.field.is-error .textarea{border-color:var(--err);box-shadow:0 0 0 4px rgba(179,64,42,.14)}
+.field.is-error .helper{color:var(--err);font-style:normal}
+.field.is-success .input{border-color:var(--ok);box-shadow:0 0 0 4px rgba(92,125,79,.16)}
+.field.is-success .helper{color:var(--ok);font-style:normal}
+.field .icon-in{position:absolute;right:14px;top:34px;font-size:16px;color:var(--fog);pointer-events:none;transition:.3s}
+.field:focus-within .icon-in{color:var(--amber);transform:scale(1.15)}
+/* input inline com botão (northtrail newsletter) */
+.input-inline{display:flex;border:1px solid var(--line);border-radius:var(--r-full);padding:5px;transition:border-color .3s,box-shadow .3s}
+.input-inline:focus-within{border-color:var(--amber);box-shadow:0 0 0 4px rgba(231,169,74,.16)}
+.input-inline input{flex:1;background:none;border:0;outline:none;padding:0 16px;font-size:13px;min-width:0}
+.on-dark .input-inline{border-color:var(--line-light)}
+/* switch */
+.switch{display:inline-flex;align-items:center;gap:12px;cursor:pointer;font-size:13px}
+.switch input{position:absolute;opacity:0;pointer-events:none}
+.switch i{width:46px;height:26px;border-radius:var(--r-full);background:rgba(23,23,19,.16);position:relative;transition:.35s var(--ease);flex:none}
+.switch i:after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:var(--paper);box-shadow:var(--sh-1);transition:.35s var(--ease)}
+.switch input:checked+i{background:var(--amber);box-shadow:0 0 26px rgba(231,169,74,.6)}
+.switch input:checked+i:after{transform:translateX(20px)}
+.switch input:focus-visible+i{outline:2px solid var(--amber);outline-offset:3px}
+.on-dark .switch i{background:rgba(237,233,223,.2)}
+/* checkbox / radio */
+.check{display:inline-flex;align-items:center;gap:11px;cursor:pointer;font-size:13px}
+.check input{position:absolute;opacity:0;pointer-events:none}
+.check i{width:20px;height:20px;border:1px solid var(--line);border-radius:5px;display:grid;place-items:center;transition:.3s var(--ease);flex:none}
+.check.radio i{border-radius:50%}
+.check i:after{content:"";width:9px;height:9px;border-radius:2px;background:var(--ink);transform:scale(0);transition:transform .3s var(--ease)}
+.check.radio i:after{border-radius:50%}
+.check input:checked+i{border-color:var(--amber);background:rgba(231,169,74,.16);box-shadow:0 0 20px rgba(231,169,74,.4)}
+.check input:checked+i:after{transform:scale(1);background:var(--amber)}
+.on-dark .check i{border-color:var(--line-light)}
+/* barra de progresso / slider fake */
+.range{width:100%;height:3px;border-radius:var(--r-full);background:rgba(23,23,19,.14);position:relative}
+.range i{position:absolute;inset:0 40% 0 0;background:var(--amber);border-radius:inherit;box-shadow:0 0 18px rgba(231,169,74,.7)}
+.range b{position:absolute;left:60%;top:50%;width:16px;height:16px;border-radius:50%;background:var(--paper);border:1px solid var(--amber);transform:translate(-50%,-50%);box-shadow:var(--sh-1)}
+
+/* ==========================================================================
+   BADGES / TAGS / TOOLTIPS
+   ========================================================================== */
+.badge{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:var(--r-full);
+  font:9px/1 var(--mono);letter-spacing:.13em;text-transform:uppercase;border:1px solid transparent;transition:.3s var(--ease)}
+.badge:hover{transform:translateY(-2px)}
+.badge--amber{background:rgba(231,169,74,.22);color:#7a5310;border-color:rgba(231,169,74,.5)}
+.badge--ink{background:var(--ink);color:var(--paper)}
+.badge--ok{background:rgba(92,125,79,.16);color:#3f6b36;border-color:rgba(92,125,79,.45)}
+.badge--warn{background:rgba(231,169,74,.16);color:#8a6416;border-color:rgba(231,169,74,.45)}
+.badge--err{background:rgba(179,64,42,.13);color:var(--err);border-color:rgba(179,64,42,.4)}
+.badge--info{background:rgba(107,127,142,.15);color:#4c5e6b;border-color:rgba(107,127,142,.4)}
+.badge--ghost{border-color:var(--line);color:var(--smoke)}
+.on-dark .badge--ghost{border-color:var(--line-light);color:var(--dust)}
+.badge--dot:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor;animation:pulse 2.5s infinite}
+.badge--count{min-width:20px;height:20px;padding:0 6px;justify-content:center;background:var(--ember);color:#fff;font-size:9px}
+/* tooltip */
+.tip{position:relative;display:inline-flex}
+.tip:after{
+  content:attr(data-tip);position:absolute;left:50%;bottom:calc(100% + 12px);transform:translate(-50%,6px) scale(.96);
+  background:var(--ink);color:var(--bone);padding:9px 13px;border-radius:var(--r-sm);
+  font:9px/1.5 var(--mono);letter-spacing:.11em;text-transform:uppercase;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:.3s var(--ease);box-shadow:var(--sh-2);z-index:20
+}
+.tip:before{
+  content:"";position:absolute;left:50%;bottom:calc(100% + 6px);width:8px;height:8px;background:var(--ink);
+  transform:translate(-50%,6px) rotate(45deg);opacity:0;transition:.3s var(--ease);z-index:19
+}
+.tip:hover:after,.tip:focus-within:after{opacity:1;transform:translate(-50%,0) scale(1)}
+.tip:hover:before,.tip:focus-within:before{opacity:1;transform:translate(-50%,0) rotate(45deg)}
+.tip--amber:after{background:var(--amber);color:var(--ink)}
+.tip--amber:before{background:var(--amber)}
+.tip--right:after{left:auto;right:0;transform:translate(0,6px) scale(.96)}
+.tip--right:hover:after{transform:translate(0,0) scale(1)}
+.tip--right:before{left:auto;right:18px;transform:translate(0,6px) rotate(45deg)}
+.tip--right:hover:before{transform:translate(0,0) rotate(45deg)}
+
+/* ==========================================================================
+   CARDS
+   ========================================================================== */
+/* .cards/.card/.glyph/.card-no — echo (modos) */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink)}
+.on-dark .cards{border-top-color:var(--bone)}
+.cards .card{min-height:420px;padding:25px 24px 30px;border-right:1px solid var(--line);display:flex;flex-direction:column;transition:.45s var(--ease);position:relative;overflow:hidden}
+.on-dark .cards .card{border-right-color:var(--line-light)}
+.cards .card:last-child{border-right:0}
+.cards .card:hover{background:var(--bone)}
+.on-dark .cards .card:hover{background:rgba(237,233,223,.06)}
+.cards .card:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--amber);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.cards .card:hover:after{transform:scaleX(1)}
+.card-no{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--smoke)}
+.glyph{height:180px;display:grid;place-items:center}
+.glyph i{display:block;border:1px solid currentColor;transition:.5s var(--ease)}
+.cards .card:nth-child(1) .glyph i{width:100px;height:100px;border-radius:50%;box-shadow:inset 0 0 0 22px var(--paper)}
+.cards .card:nth-child(2) .glyph i{width:110px;height:110px;border-radius:50% 50% 8% 50%;transform:rotate(45deg)}
+.cards .card:nth-child(3) .glyph i{width:3px;height:118px;background:var(--amber);border:0;box-shadow:0 0 26px var(--amber)}
+.cards .card:hover .glyph i{transform:rotate(135deg) scale(.9)}
+.cards .card:nth-child(1):hover .glyph i{transform:scale(.84)}
+.cards .card:nth-child(3):hover .glyph i{transform:scaleY(.45)}
+.cards .card h3{font-size:32px;font-weight:400;letter-spacing:-.05em;margin:auto 0 10px}
+.cards .card p{font-size:14px;color:var(--smoke);line-height:1.6;max-width:30ch}
+.on-dark .cards .card p{color:var(--dust)}
+/* card de mídia (aura/northtrail) */
+.media-card{position:relative;border-radius:var(--r-lg);overflow:hidden;background:var(--bone);border:1px solid var(--line);
+  box-shadow:var(--sh-2);transition:.5s var(--ease);display:flex;flex-direction:column}
+.media-card:hover{transform:translateY(-6px);box-shadow:var(--sh-3)}
+.media-card .shot{position:relative;overflow:hidden;aspect-ratio:16/10}
+.media-card .shot img{height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.media-card:hover .shot img{transform:scale(1.09)}
+.media-card .shot:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,23,19,0) 52%,rgba(23,23,19,.5) 100%)}
+.media-card .shot .badge{position:absolute;z-index:2;top:14px;left:14px}
+.media-card .wish{position:absolute;z-index:2;top:12px;right:12px;width:36px;height:36px;border-radius:50%;border:0;
+  background:rgba(255,253,248,.86);backdrop-filter:blur(8px);display:grid;place-items:center;color:var(--smoke);transition:.3s var(--ease)}
+.media-card .wish:hover{color:var(--ember);transform:scale(1.14)}
+.media-card .wish.is-on{color:var(--ember)}
+.media-card .quick{position:absolute;z-index:2;left:12px;right:12px;bottom:12px;transform:translateY(56px);opacity:0;transition:.5s var(--ease)}
+.media-card:hover .quick{transform:none;opacity:1}
+.media-card .body{padding:22px}
+.media-card h3{font-family:var(--display);font-weight:600;letter-spacing:-.04em;font-size:22px;margin-bottom:8px;transition:color .3s}
+.media-card:hover h3{color:var(--ember)}
+.media-card p{font-size:13px;line-height:1.6;color:var(--smoke)}
+/* card de vidro (aura) */
+.glass-card{border-radius:var(--r-lg);padding:24px;background:var(--grad-glass);backdrop-filter:blur(22px);
+  border:1px solid rgba(255,255,255,.5);box-shadow:0 40px 80px -30px rgba(23,23,19,.35);transition:.5s var(--ease)}
+.glass-card:hover{transform:translateY(-5px);border-color:rgba(231,169,74,.6)}
+.on-dark .glass-card{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
+/* .module (echo) — linha de lista */
+.module{display:grid;grid-template-columns:68px 1fr;gap:18px;padding:32px 0;border-bottom:1px solid var(--line-light);transition:.35s var(--ease)}
+.module:hover{padding-left:12px}
+.module .num{color:var(--amber);font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.module h3{font-size:clamp(24px,2.3vw,34px);font-weight:400;letter-spacing:-.04em;margin-bottom:10px}
+.module p{color:var(--dust);line-height:1.65;font-size:14px;max-width:52ch}
+/* .plan (north-form) */
+.plan{border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;display:flex;flex-direction:column;background:rgba(255,255,255,.4);
+  transition:.5s var(--ease);position:relative;overflow:hidden}
+.plan:hover{transform:translateY(-6px);box-shadow:var(--sh-3)}
+.plan small{font:9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ember)}
+.plan h3{font-family:var(--display);font-weight:600;letter-spacing:-.045em;font-size:26px;margin:14px 0 10px}
+.plan .price{font-size:44px;font-weight:400;letter-spacing:-.06em;line-height:1;margin-bottom:18px}
+.plan ul{list-style:none;margin:0 0 24px;padding:0;display:grid;gap:10px;font-size:13px;color:var(--smoke);flex:1}
+.plan li{display:flex;align-items:center;gap:9px}
+.plan li iconify-icon{color:var(--sage);font-size:16px}
+.plan.dark-card{background:var(--grad-ink);color:var(--bone);border-color:transparent;box-shadow:0 40px 80px -35px rgba(59,75,52,.7),0 0 0 1px rgba(142,156,117,.25)}
+.plan.dark-card ul{color:var(--dust)}
+.plan.dark-card .price,.plan.dark-card h3{color:var(--bone)}
+.plan-flag{position:absolute;top:18px;right:-38px;transform:rotate(38deg);background:var(--amber);color:var(--ink);
+  font:9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;padding:7px 44px}
+/* .archive-row (north-form) */
+.archive-list{border-top:1px solid var(--line)}
+.on-dark .archive-list{border-top-color:var(--line-light)}
+.archive-row{display:grid;grid-template-columns:90px 1fr 1fr auto;gap:20px;align-items:center;padding:22px 0;
+  border-bottom:1px solid var(--line);font-size:15px;transition:.4s var(--ease);cursor:pointer;position:relative}
+.on-dark .archive-row{border-bottom-color:var(--line-light)}
+.archive-row:hover{padding-left:16px;color:var(--ember)}
+.on-dark .archive-row:hover{color:var(--amber)}
+.archive-row>span:first-child{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--smoke)}
+.archive-thumb{width:64px;height:44px;border-radius:6px;overflow:hidden;opacity:0;transform:translateX(-10px);transition:.4s var(--ease)}
+.archive-row:hover .archive-thumb{opacity:1;transform:none}
+.archive-thumb img{height:100%;object-fit:cover}
+/* .metric (echo) */
+.metrics-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;grid-template-rows:repeat(2,246px);gap:12px}
+.metric{border:1px solid var(--line);padding:24px;display:flex;flex-direction:column;justify-content:space-between;
+  background:rgba(255,255,255,.3);position:relative;overflow:hidden;transition:.45s var(--ease)}
+.metric:hover{transform:translateY(-4px);box-shadow:var(--sh-2)}
+.metric:first-child{grid-row:1/3;background:var(--ink);color:var(--bone)}
+.metric.amber{background:var(--amber)}
+.metric-value{font-size:clamp(52px,7vw,104px);font-weight:400;line-height:.8;letter-spacing:-.08em}
+.metric:first-child .metric-value{font-size:clamp(80px,12vw,186px)}
+.metric small{font:9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.metric p{color:var(--smoke);line-height:1.5;max-width:27ch;font-size:13px}
+.metric:first-child p{color:var(--dust)}
+.metric-orbit{position:absolute;width:290px;aspect-ratio:1;border:1px solid rgba(237,233,223,.15);border-radius:50%;right:-120px;bottom:-120px;animation:orbitSpin 30s linear infinite}
+.metric-orbit:before{content:"";position:absolute;inset:25%;border-radius:50%;border:1px solid var(--amber)}
+
+/* ==========================================================================
+   NAVBARS DEMO
+   ========================================================================== */
+.demo-nav{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 20px;border-radius:var(--r-md);border:1px solid var(--line);transition:.4s var(--ease)}
+.demo-nav:hover{box-shadow:var(--sh-2)}
+.demo-nav .lk{display:flex;gap:22px;font-size:12px;color:var(--smoke)}
+.demo-nav .lk a{position:relative;padding:3px 0;transition:color .3s}
+.demo-nav .lk a:after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:currentColor;transition:width .35s var(--ease)}
+.demo-nav .lk a:hover{color:var(--ink)}
+.demo-nav .lk a:hover:after{width:100%}
+.demo-nav--glass{background:rgba(255,253,248,.5);backdrop-filter:blur(18px)}
+.demo-nav--pill{border-radius:var(--r-full);background:rgba(23,23,19,.04)}
+.demo-nav--dark{background:var(--ink);color:var(--bone);border-color:transparent}
+.demo-nav--dark .lk{color:var(--dust)}
+.demo-nav--dark .lk a:hover{color:var(--bone)}
+
+/* ==========================================================================
+   MODAL
+   ========================================================================== */
+.modal{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .4s var(--ease)}
+.modal.is-open{opacity:1;pointer-events:auto}
+.modal-backdrop{position:absolute;inset:0;background:rgba(10,10,9,.66);backdrop-filter:blur(10px)}
+.modal-card{position:relative;width:min(520px,100%);border-radius:var(--r-lg);background:var(--paper);border:1px solid var(--line);
+  padding:32px;box-shadow:0 60px 120px -40px rgba(0,0,0,.7);transform:translateY(24px) scale(.96);opacity:0;
+  transition:transform .5s var(--ease),opacity .5s var(--ease);overflow:hidden}
+.modal.is-open .modal-card{transform:none;opacity:1}
+.modal-card:before{content:"";position:absolute;inset:-40% -10% auto;height:70%;background:radial-gradient(50% 60% at 50% 0,rgba(231,169,74,.4),transparent 70%);filter:blur(40px);pointer-events:none}
+.modal-card h3{font-family:var(--display);font-weight:600;letter-spacing:-.05em;font-size:30px;margin:16px 0 12px;position:relative}
+.modal-card p{font-size:14px;line-height:1.65;color:var(--smoke);position:relative}
+.modal-close{position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);
+  background:none;display:grid;place-items:center;transition:.3s var(--ease);z-index:2}
+.modal-close:hover{background:var(--ink);color:var(--paper);transform:rotate(90deg)}
+.modal-actions{display:flex;gap:10px;margin-top:26px;position:relative}
+
+/* ==========================================================================
+   ÍCONES
+   ========================================================================== */
+.icon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
+.icon-cell{aspect-ratio:1;border:1px solid var(--line);border-radius:var(--r-md);display:grid;place-items:center;gap:10px;
+  align-content:center;transition:.4s var(--ease);position:relative;overflow:hidden;background:rgba(255,255,255,.34)}
+.on-dark .icon-cell{border-color:var(--line-light);background:rgba(255,255,255,.03)}
+.icon-cell:before{content:"";position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 40%,rgba(231,169,74,.28),transparent 70%);opacity:0;transition:opacity .4s}
+.icon-cell:hover{transform:translateY(-4px);border-color:rgba(231,169,74,.7);box-shadow:0 18px 40px -22px rgba(231,169,74,.9)}
+.icon-cell:hover:before{opacity:1}
+.icon-cell iconify-icon,.icon-cell i[data-lucide],.icon-cell svg{font-size:26px;width:26px;height:26px;position:relative;transition:transform .4s var(--ease)}
+.icon-cell:hover iconify-icon,.icon-cell:hover svg{transform:scale(1.18) rotate(-6deg)}
+.icon-cell span{font:8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--smoke);position:relative;text-align:center;padding:0 6px;word-break:break-word}
+.on-dark .icon-cell span{color:var(--dust)}
+.icon-sizes{display:flex;align-items:flex-end;gap:26px;flex-wrap:wrap}
+.icon-sizes div{display:grid;justify-items:center;gap:8px;font:9px/1 var(--mono);letter-spacing:.1em;color:var(--smoke)}
+
+/* ==========================================================================
+   SEÇÕES CINÉTICAS (demos de animação)
+   ========================================================================== */
+/* .field + canvas (echo) */
+section.field{height:100svh;min-height:680px;position:relative;overflow:hidden;background:var(--char);color:var(--bone);display:grid;place-items:center}
+section.field canvas{position:absolute;inset:0;width:100%;height:100%}
+.field-copy{position:relative;z-index:2;text-align:center;pointer-events:none;padding-inline:var(--pad)}
+.field-copy h2{font-size:clamp(52px,9.4vw,148px);font-weight:400;line-height:.79;letter-spacing:-.08em;margin:18px auto;max-width:9ch}
+.field-copy p{max-width:44ch;margin:30px auto 0;color:#aaa69c;line-height:1.65;font-size:14px}
+.field-corners{position:absolute;z-index:3;inset:30px var(--pad);pointer-events:none}
+.field-corners span{position:absolute}
+.field-corners span:nth-child(1){left:0;top:0}
+.field-corners span:nth-child(2){right:0;top:0;text-align:right}
+.field-corners span:nth-child(3){left:0;bottom:0}
+.field-corners span:nth-child(4){right:0;bottom:0;text-align:right}
+.live-dot:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--amber);margin-right:9px;box-shadow:0 0 12px var(--amber)}
+/* .kinetic (echo) */
+.kinetic{height:240vh;background:var(--ink);color:var(--bone);position:relative}
+.kinetic-stage{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center;perspective:1000px}
+.kinetic-meta{position:absolute;z-index:4;top:94px;left:var(--pad);right:var(--pad);display:flex;justify-content:space-between}
+.kinetic-words{position:relative;width:100%;height:70vh;transform-style:preserve-3d}
+.kinetic-word{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(84px,20vw,320px);font-weight:500;line-height:.72;
+  letter-spacing:-.09em;opacity:0;color:var(--bone);will-change:transform,opacity,filter;white-space:nowrap}
+.kinetic-word:first-child{opacity:1}
+.kinetic-word:nth-child(2){color:var(--amber)}
+.kinetic-word:nth-child(3){color:transparent;-webkit-text-stroke:1px rgba(237,233,223,.75)}
+.kinetic-beam{position:absolute;z-index:3;left:8vw;right:8vw;top:50%;height:1px;background:var(--amber);box-shadow:0 0 35px rgba(231,169,74,.85);transform:scaleX(.08)}
+.kinetic-caption{position:absolute;z-index:4;bottom:50px;left:var(--pad);right:var(--pad);display:flex;justify-content:space-between;
+  align-items:end;border-top:1px solid var(--line-light);padding-top:18px}
+.kinetic-caption p{max-width:42ch;color:var(--dust);font-size:14px;line-height:1.6}
+.kinetic-step{font-size:40px;font-weight:400;letter-spacing:-.05em}
+/* story sticky (northtrail) */
+.story{position:relative;background:var(--ash);color:var(--bone)}
+.story-grid{display:grid;grid-template-columns:1fr 1fr}
+.story-sticky{position:sticky;top:0;height:100svh;overflow:hidden}
+.story-img{position:absolute;inset:0;height:100%;object-fit:cover;opacity:0;transition:opacity 1s var(--ease)}
+.story-img[data-step="0"]{opacity:1}
+.story-sticky .veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,10,9,.6),rgba(10,10,9,.1) 50%,rgba(10,10,9,.92))}
+.story-counter{position:absolute;left:26px;bottom:24px;z-index:2;font-size:52px;font-weight:600;letter-spacing:-.06em;color:var(--amber);font-family:var(--display)}
+.story-step{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:80px var(--pad)}
+.story-step h3{font-size:clamp(34px,4.6vw,64px);font-weight:400;letter-spacing:-.06em;line-height:.94;margin:18px 0 20px}
+.story-step p{color:var(--dust);font-size:14px;line-height:1.7;max-width:42ch;margin-bottom:24px}
+.story-tags{display:flex;flex-wrap:wrap;gap:9px}
+/* faixa de demonstração de animação */
+.anim-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.anim-tile{border:1px solid var(--line);border-radius:var(--r-md);padding:20px;background:rgba(255,255,255,.34);
+  position:relative;overflow:hidden;min-height:200px;display:flex;flex-direction:column;justify-content:space-between;transition:.45s var(--ease)}
+.on-dark .anim-tile{border-color:var(--line-light);background:rgba(255,255,255,.035)}
+.anim-tile:hover{border-color:rgba(231,169,74,.65);transform:translateY(-4px)}
+.anim-tile .stagepad{height:96px;display:grid;place-items:center;position:relative;overflow:hidden;margin-bottom:16px}
+.anim-tile h4{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ember);margin-bottom:6px}
+.on-dark .anim-tile h4{color:var(--amber)}
+.anim-tile p{font-size:12px;line-height:1.55;color:var(--smoke)}
+.on-dark .anim-tile p{color:var(--dust)}
+.demo-ring{width:54px;height:54px;border-radius:50%;border:1px solid var(--amber);position:relative}
+.demo-ring:before,.demo-ring:after{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid var(--amber);animation:ringOut 2.6s var(--ease) infinite}
+.demo-ring:after{animation-delay:1.3s}
+.demo-bars{display:flex;align-items:flex-end;gap:5px;height:64px}
+.demo-bars i{width:9px;background:var(--amber);transform-origin:bottom;animation:barRise 1.3s var(--ease) infinite alternate;height:100%}
+.demo-bars i:nth-child(2){animation-delay:.15s;background:var(--ember)}
+.demo-bars i:nth-child(3){animation-delay:.3s}
+.demo-bars i:nth-child(4){animation-delay:.45s;background:var(--moss)}
+.demo-bars i:nth-child(5){animation-delay:.6s}
+.demo-square{width:56px;height:56px;border:1px solid currentColor;animation:orbitSpin 7s linear infinite}
+.demo-sheen{width:110px;height:38px;border-radius:var(--r-full);background:var(--ink);position:relative;overflow:hidden}
+.demo-sheen:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);animation:sheen 2.2s var(--ease) infinite}
+.demo-blur{font-family:var(--display);font-weight:600;font-size:26px;letter-spacing:-.05em;animation:wordIn 2.4s var(--ease-out) infinite alternate;opacity:0}
+.demo-caret{font-family:var(--mono);font-size:13px;letter-spacing:.1em}
+.demo-caret:after{content:"▍";animation:caretBlink 1.1s steps(1) infinite;color:var(--amber)}
+
+/* ==========================================================================
+   FAQ (aura) + FINAL + FOOTER
+   ========================================================================== */
+.faq-item{border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;background:rgba(255,255,255,.4);margin-bottom:10px;transition:.4s var(--ease)}
+.faq-item:hover{border-color:rgba(231,169,74,.6)}
+.faq-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px;text-align:left;background:none;border:0;font-size:15px;font-weight:500}
+.faq-icon{font-size:18px;color:var(--smoke);flex:none;transition:transform .35s var(--ease)}
+.faq-body{overflow:hidden;max-height:0;transition:max-height .45s var(--ease)}
+.faq-body p{padding:0 22px 20px;font-size:14px;line-height:1.7;color:var(--smoke)}
+.final{background:var(--amber);min-height:88vh;display:flex;flex-direction:column;justify-content:space-between;padding-block:35px;position:relative;overflow:hidden}
+.final-top{display:flex;justify-content:space-between}
+.final h2{font-size:clamp(62px,13vw,210px);font-weight:400;line-height:.76;letter-spacing:-.085em;margin:auto 0 0}
+.final h2 span{display:block;margin-left:11vw}
+.final-bottom{display:flex;justify-content:space-between;align-items:end;gap:30px;border-top:1px solid var(--ink);padding-top:23px;flex-wrap:wrap}
+.final-bottom p{max-width:34ch;line-height:1.55}
+footer.site{background:var(--ink);color:var(--bone);padding:36px 0;position:relative;overflow:hidden}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap;position:relative;z-index:2}
+.foot nav{display:flex;gap:26px;color:var(--dust);font-size:12px;flex-wrap:wrap}
+.foot nav a{transition:color .3s}
+.foot nav a:hover{color:var(--amber)}
+
+/* ==========================================================================
+   RESPONSIVO + PREFERÊNCIAS DE MOVIMENTO
+   ========================================================================== */
+@media (max-width:1100px){
+  .metrics-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .metric:first-child{grid-row:auto;min-height:280px}
+  .grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:900px){
+  .navlinks{display:none}
+  .menubtn{display:block}
+  .hero-data,.hero-panel{display:none}
+  .light-console{top:auto;bottom:clamp(42px,8vh,92px);right:var(--pad);width:200px}
+  .hero-copy{width:calc(100vw - 40px);bottom:clamp(150px,22vh,230px)}
+  .hero h1{font-size:clamp(42px,11vw,84px);width:auto;white-space:normal}
+  .hero h1>.hero-line{white-space:normal}
+  .cards{grid-template-columns:1fr}
+  .cards .card{border-right:0;border-bottom:1px solid var(--line);min-height:auto}
+  .grid-3,.grid-2,.form-row{grid-template-columns:1fr}
+  .type-row{grid-template-columns:1fr;align-items:start}
+  .type-row .meta{text-align:left}
+  .story-grid{grid-template-columns:1fr}
+  .story-sticky{height:52vh}
+  .story-step{min-height:auto;padding:64px var(--pad)}
+  .archive-row{grid-template-columns:70px 1fr auto;font-size:13px}
+  .archive-row>span:nth-child(3){display:none}
+}
+@media (max-width:640px){
+  .grid-4,.metrics-grid{grid-template-columns:1fr}
+  .ds-head h2{font-size:clamp(38px,10vw,60px)}
+  .hero-chip{display:none}
+  .final h2 span{margin-left:0}
+  .icon-grid{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none;filter:none}
+  .w-anim{opacity:1;filter:none;transform:none}
+  .amb{display:none}
+}
+</style>
+</head>
+<body class="is-loading">
+
+<!-- ===== overlays globais ===== -->
+<div class="preloader" id="preloader"><span>LUMEN</span><i></i><span>01</span></div>
+<div aria-hidden="true" class="noise"></div>
+<div aria-hidden="true" class="scroll-progress"><i id="progressFill"></i></div>
+<div aria-hidden="true" class="cursor-orb" id="cursorOrb"></div>
+
+<!-- ===== nav ===== -->
+<header class="nav" id="nav">
+  <div class="navin wrap">
+    <a aria-label="Início LUMEN" class="brand" href="#top"><span aria-hidden="true" class="brandmark"></span><span>LUMEN/01</span></a>
+    <nav aria-label="Navegação do sistema" class="navlinks">
+      <a href="#tipografia">Tipografia</a>
+      <a href="#cores">Cores</a>
+      <a href="#componentes">Componentes</a>
+      <a href="#icones">Ícones</a>
+      <a href="#animacoes">Animações</a>
+      <a class="reserve" href="#final">Usar o sistema <i></i></a>
+    </nav>
+    <button aria-expanded="false" aria-label="Abrir menu" class="menubtn" type="button"><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ==========================================================
+     01 · HERO — demonstração viva das capacidades do sistema
+     ========================================================== -->
+<section class="hero" data-light="warm" id="hero">
+  <div class="hero-media">
+    <img alt="Objeto escultural de luz ambiente sobre pedestal de pedra" src="echo-intelligence/assets/a6e0e616eb39aab6_8efb04ab-244e-4fe2-90b0-0f52d6.jpg"/>
+  </div>
+  <div aria-hidden="true" class="hero-night"></div>
+  <div aria-hidden="true" class="hero-beam"></div>
+  <div aria-hidden="true" class="hero-light"></div>
+  <div aria-hidden="true" class="hero-cast"></div>
+  <div aria-hidden="true" class="hero-word display">LUMEN</div>
+
+  <div class="hero-data mono">
+    <span>Sistema</span><span>LUMEN/01</span>
+    <span>Tokens</span><span>184</span>
+    <span>Luz</span><span id="heroClock">06:42</span>
+  </div>
+
+  <div aria-label="Controles de luz da cena" class="light-console">
+    <div class="light-console-top mono"><span>Luz da cena</span><span aria-live="polite" id="lightStatus">Quente</span></div>
+    <div aria-label="Escolha a iluminação" class="light-scenes" role="group">
+      <button aria-pressed="false" data-light="off" type="button">Desligada</button>
+      <button aria-pressed="true" class="active" data-light="warm" type="button">Quente</button>
+      <button aria-pressed="false" data-light="focus" type="button">Foco</button>
+    </div>
+  </div>
+
+  <div class="hero-panel" id="heroPanel">
+    <span class="mono">Paleta viva</span>
+    <ul>
+      <li><span>--amber</span><b style="background:#e7a94a"></b></li>
+      <li><span>--ember</span><b style="background:#c24f20"></b></li>
+      <li><span>--moss</span><b style="background:#3b4b34"></b></li>
+      <li><span>--bone</span><b style="background:#ede9df"></b></li>
+    </ul>
+    <div aria-hidden="true" class="hero-bars"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+
+  <div class="hero-chip float-slow" style="left:52%;top:26%">
+    <iconify-icon icon="solar:layers-minimalistic-linear"></iconify-icon> 6 famílias tipográficas
+  </div>
+  <div class="hero-chip float-slow" style="left:63%;top:47%;animation-delay:.9s">
+    <iconify-icon icon="solar:widget-4-linear"></iconify-icon> 42 componentes
+  </div>
+  <div class="hero-chip float-slow" style="left:47%;top:64%;animation-delay:1.7s">
+    <iconify-icon icon="solar:magic-stick-3-linear"></iconify-icon> 18 animações
+  </div>
+
+  <div class="hero-copy">
+    <div class="eyebrow mono"><i class="pulse"></i> Sistema de design de luz ambiente / edição 01</div>
+    <h1 aria-label="Menos ruído. Mais luz.">
+      <span class="hero-line">Menos ruído.</span>
+      <span class="hero-line accent">Mais luz.</span>
+    </h1>
+    <div class="hero-bottom">
+      <p>LUMEN/01 é um sistema editorial e cinético — tipografia com peso, cor com intenção e movimento que só aparece quando explica alguma coisa.</p>
+      <div class="hero-actions">
+        <a class="btn btn--amber btn--lg" href="#componentes">Explorar componentes <iconify-icon icon="solar:arrow-right-linear"></iconify-icon></a>
+        <a class="btn btn--glass" href="#tipografia">Tokens</a>
+        <a class="hero-cta" href="#animacoes">Ver a cinética <b>↘</b></a>
+      </div>
+    </div>
+  </div>
+
+  <div aria-hidden="true" class="hero-scroll mono"><span>Role</span><i></i></div>
+</section>
+
+<!-- ==========================================================
+     02 · TIPOGRAFIA
+     ========================================================== -->
+<section class="ds" id="tipografia">
+  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i><i class="amb-beam"></i><i class="amb-halo"></i></div>
+  <div class="wrap">
+
+    <div class="ds-head">
+      <div class="reveal">
+        <div class="section-tag mono">02 / Tipografia</div>
+        <h2>Seis vozes, <em>um</em> só sotaque.</h2>
+      </div>
+      <p class="reveal" data-d="1">Um grotesco para display, um sans humanista para leitura, um monoespaçado para metadados, uma serifada para citação e uma cursiva para o acento manual. Nenhuma delas concorre pela mesma função.</p>
+    </div>
+
+    <!-- famílias -->
+    <div class="grid-3">
+      <article class="font-card reveal">
+        <span class="mono" style="color:var(--ember)">Primária · display</span>
+        <div class="glyphs display">Space Grotesk</div>
+        <dl>
+          <dt>Uso</dt><dd>h1, h3, números</dd>
+          <dt>Pesos</dt><dd>400 · 600 · 700</dd>
+          <dt>Tracking</dt><dd>-0.065em</dd>
+          <dt>Fallback</dt><dd>Archivo, sans-serif</dd>
+          <dt>Token</dt><dd>--display</dd>
+        </dl>
+      </article>
+      <article class="font-card reveal" data-d="1">
+        <span class="mono" style="color:var(--ember)">Primária · texto</span>
+        <div class="glyphs" style="font-family:var(--sans);font-weight:400">DM Sans</div>
+        <dl>
+          <dt>Uso</dt><dd>h2, h4–h5, corpo</dd>
+          <dt>Pesos</dt><dd>400 · 500 · 600 · 700</dd>
+          <dt>Tracking</dt><dd>-0.07em → 0</dd>
+          <dt>Fallback</dt><dd>Inter, system-ui</dd>
+          <dt>Token</dt><dd>--sans</dd>
+        </dl>
+      </article>
+      <article class="font-card reveal" data-d="2">
+        <span class="mono" style="color:var(--ember)">Secundária · dado</span>
+        <div class="glyphs" style="font-family:var(--mono);font-size:30px">Space Mono</div>
+        <dl>
+          <dt>Uso</dt><dd>labels, tags, h6</dd>
+          <dt>Pesos</dt><dd>400 · 700</dd>
+          <dt>Tracking</dt><dd>+0.16em</dd>
+          <dt>Fallback</dt><dd>ui-monospace</dd>
+          <dt>Token</dt><dd>--mono</dd>
+        </dl>
+      </article>
+      <article class="font-card reveal" data-d="1">
+        <span class="mono" style="color:var(--ember)">Acento · editorial</span>
+        <div class="glyphs serif" style="font-style:italic">Cormorant Garamond</div>
+        <dl>
+          <dt>Uso</dt><dd>citações, ênfase</dd>
+          <dt>Pesos</dt><dd>400 · 500 · 600 + itálico</dd>
+          <dt>Tracking</dt><dd>-0.02em</dd>
+          <dt>Fallback</dt><dd>Georgia, serif</dd>
+          <dt>Token</dt><dd>--serif</dd>
+        </dl>
+      </article>
+      <article class="font-card reveal" data-d="2">
+        <span class="mono" style="color:var(--ember)">Acento · manual</span>
+        <div class="glyphs script" style="color:var(--ember)">Caveat</div>
+        <dl>
+          <dt>Uso</dt><dd>assinatura, kicker</dd>
+          <dt>Pesos</dt><dd>400 · 600 · 700</dd>
+          <dt>Tracking</dt><dd>0</dd>
+          <dt>Fallback</dt><dd>cursive</dd>
+          <dt>Token</dt><dd>--script</dd>
+        </dl>
+      </article>
+      <article class="font-card reveal grad-border" data-d="3">
+        <span class="mono" style="color:var(--ember)">Carregamento</span>
+        <div class="glyphs" style="font-size:22px;line-height:1.3">font-display:&nbsp;swap</div>
+        <p class="ds-note" style="font-size:12px">Folhas <code class="tok">css2</code> do Google Fonts capturadas em disco, com <code class="tok">.woff2</code> locais e <code class="tok">preconnect</code> para o fallback remoto. Nenhum bloqueio de render: o fallback métrico entra primeiro e troca sem salto perceptível.</p>
+      </article>
+    </div>
+
+    <!-- escala -->
+    <div class="ds-block">
+      <h3 class="ds-sub reveal">Escala completa — h1 → h6</h3>
+      <div class="reveal" data-d="1">
+        <div class="type-row"><div class="t-h1">Luz medida</div><div class="meta">h1 · <b>Space Grotesk 600</b><br/>clamp(56 → 128px)<br/>line-height .82<br/>tracking -.075em<br/>none</div></div>
+        <div class="type-row"><div class="t-h2">Ambiente e ritmo</div><div class="meta">h2 · <b>DM Sans 400</b><br/>clamp(44 → 92px)<br/>line-height .86<br/>tracking -.07em<br/>none</div></div>
+        <div class="type-row"><div class="t-h3">Cada camada explica</div><div class="meta">h3 · <b>Space Grotesk 600</b><br/>clamp(32 → 56px)<br/>line-height .94<br/>tracking -.055em<br/>none</div></div>
+        <div class="type-row"><div class="t-h4">Um sistema que envelhece bem</div><div class="meta">h4 · <b>DM Sans 500</b><br/>clamp(24 → 34px)<br/>line-height 1.08<br/>tracking -.04em<br/>none</div></div>
+        <div class="type-row"><div class="t-h5">Subtítulo de bloco e agrupamento</div><div class="meta">h5 · <b>DM Sans 600</b><br/>20px fixo<br/>line-height 1.25<br/>tracking -.02em<br/>none</div></div>
+        <div class="type-row"><div class="t-h6">Rótulo de seção</div><div class="meta">h6 · <b>Space Mono 700</b><br/>13px fixo<br/>line-height 1.4<br/>tracking +.14em<br/>uppercase</div></div>
+      </div>
+    </div>
+
+    <!-- corpo e auxiliares -->
+    <div class="ds-block">
+      <h3 class="ds-sub reveal">Corpo, legendas e auxiliares</h3>
+      <div class="reveal" data-d="1">
+        <div class="type-row"><p class="t-body-lg">Body LG — o parágrafo de abertura de uma seção, quando a frase precisa carregar a intenção inteira antes de qualquer detalhe.</p><div class="meta">body-lg · <b>DM Sans 400</b><br/>19px<br/>line-height 1.55<br/>tracking -.011em<br/>none</div></div>
+        <div class="type-row"><p class="t-body">Body — o texto padrão de leitura corrida. Medida ideal entre 62 e 74 caracteres; abaixo de 48 o ritmo quebra e acima de 80 o olho perde a linha de retorno.</p><div class="meta">body · <b>DM Sans 400</b><br/>16px<br/>line-height 1.65<br/>tracking 0<br/>none</div></div>
+        <div class="type-row"><p class="t-body-sm">Body SM — descrições dentro de cards, listas densas e colunas estreitas, onde 16px empurraria a caixa para fora do ritmo.</p><div class="meta">body-sm · <b>DM Sans 400</b><br/>14px<br/>line-height 1.6<br/>tracking +.004em<br/>none</div></div>
+        <div class="type-row"><p class="t-caption">Caption — crédito de imagem, nota de rodapé, timestamp.</p><div class="meta">caption · <b>DM Sans 400</b><br/>12px<br/>line-height 1.5<br/>tracking +.02em<br/>none</div></div>
+        <div class="type-row"><p class="t-label">Label de campo / eyebrow</p><div class="meta">label · <b>Space Mono 400</b><br/>10px<br/>line-height 1.4<br/>tracking +.16em<br/>uppercase</div></div>
+        <div class="type-row"><p class="t-helper">Helper text — instrução curta abaixo de um input, sempre em itálico para não competir com o label.</p><div class="meta">helper · <b>DM Sans 400 italic</b><br/>12px<br/>line-height 1.5<br/>tracking +.01em<br/>none</div></div>
+        <div class="type-row"><p class="t-quote">“A melhor interface muitas vezes não é mais uma superfície.”</p><div class="meta">quote · <b>Cormorant 500 italic</b><br/>clamp(28 → 52px)<br/>line-height 1.14<br/>tracking -.02em<br/>none</div></div>
+        <div class="type-row"><p class="t-script">para quem projeta com luz</p><div class="meta">script · <b>Caveat 600</b><br/>clamp(30 → 50px)<br/>line-height 1<br/>tracking 0<br/>none</div></div>
+      </div>
+    </div>
+
+    <div class="ds-block reveal">
+      <div class="table-scroll">
+        <table class="spec-table">
+          <thead><tr><th>Papel</th><th>Family</th><th>Weight</th><th>Size</th><th>Line-height</th><th>Letter-spacing</th><th>Transform</th></tr></thead>
+          <tbody>
+            <tr><td>h1</td><td>Space Grotesk</td><td>600</td><td>clamp(56px,8.4vw,128px)</td><td>0.82</td><td>-0.075em</td><td>none</td></tr>
+            <tr><td>h2</td><td>DM Sans</td><td>400</td><td>clamp(44px,6.2vw,92px)</td><td>0.86</td><td>-0.07em</td><td>none</td></tr>
+            <tr><td>h3</td><td>Space Grotesk</td><td>600</td><td>clamp(32px,3.8vw,56px)</td><td>0.94</td><td>-0.055em</td><td>none</td></tr>
+            <tr><td>h4</td><td>DM Sans</td><td>500</td><td>clamp(24px,2.4vw,34px)</td><td>1.08</td><td>-0.04em</td><td>none</td></tr>
+            <tr><td>h5</td><td>DM Sans</td><td>600</td><td>20px</td><td>1.25</td><td>-0.02em</td><td>none</td></tr>
+            <tr><td>h6</td><td>Space Mono</td><td>700</td><td>13px</td><td>1.4</td><td>+0.14em</td><td>uppercase</td></tr>
+            <tr><td>body-lg</td><td>DM Sans</td><td>400</td><td>19px</td><td>1.55</td><td>-0.011em</td><td>none</td></tr>
+            <tr><td>body</td><td>DM Sans</td><td>400</td><td>16px</td><td>1.65</td><td>0</td><td>none</td></tr>
+            <tr><td>body-sm</td><td>DM Sans</td><td>400</td><td>14px</td><td>1.6</td><td>+0.004em</td><td>none</td></tr>
+            <tr><td>caption</td><td>DM Sans</td><td>400</td><td>12px</td><td>1.5</td><td>+0.02em</td><td>none</td></tr>
+            <tr><td>label</td><td>Space Mono</td><td>400</td><td>10px</td><td>1.4</td><td>+0.16em</td><td>uppercase</td></tr>
+            <tr><td>helper</td><td>DM Sans italic</td><td>400</td><td>12px</td><td>1.5</td><td>+0.01em</td><td>none</td></tr>
+            <tr><td>quote</td><td>Cormorant Garamond</td><td>500 italic</td><td>clamp(28px,3.6vw,52px)</td><td>1.14</td><td>-0.02em</td><td>none</td></tr>
+            <tr><td>script</td><td>Caveat</td><td>600</td><td>clamp(30px,3.6vw,50px)</td><td>1.0</td><td>0</td><td>none</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================================
+     03 · SISTEMA DE CORES
+     ========================================================== -->
+<section class="ds on-dark" id="cores">
+  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i><i class="amb-beam"></i><i class="amb-halo"></i></div>
+  <div class="wrap">
+
+    <div class="ds-head">
+      <div class="reveal">
+        <div class="section-tag mono">03 / Sistema de cores</div>
+        <h2>A cor carrega <em>função</em>, não decoração.</h2>
+      </div>
+      <p class="reveal" data-d="1">Três neutros sustentam 90% da interface. O âmbar é o único gesto de luz — usado com escassez, ele continua significando alguma coisa. Cada valor abaixo traz hex, rgb, hsl, rampa de opacidade, papel semântico e a razão de contraste real medida contra o fundo em que ele pode aparecer.</p>
+    </div>
+
+    <!-- NEUTROS -->
+    <h3 class="ds-sub reveal">Neutros — a fundação</h3>
+    <div class="grid-4">
+      <article class="sw reveal">
+        <div class="sw-chip" style="background:#f6f3eb"><b>#F6F3EB</b></div>
+        <div class="sw-body">
+          <h4>Paper</h4><span class="sw-role">neutro · fundo base</span>
+          <dl><dt>RGB</dt><dd>246 243 235</dd><dt>HSL</dt><dd>44° 38% 94%</dd><dt>Token</dt><dd>--paper</dd></dl>
+          <div class="sw-alpha"><i style="background:rgba(246,243,235,1)"></i><i style="background:rgba(246,243,235,.72)"></i><i style="background:rgba(246,243,235,.44)"></i><i style="background:rgba(246,243,235,.2)"></i><i style="background:rgba(246,243,235,.08)"></i></div>
+          <p class="sw-use"><b>bg</b> corpo e seções claras · <b>text</b> sobre ink/moss · <b>border</b> nunca · nos gradientes entra só como ponto final.</p>
+          <span class="contrast-pill c-aaa">AAA · 16.5:1 sobre ink</span>
+        </div>
+      </article>
+      <article class="sw reveal" data-d="1">
+        <div class="sw-chip" style="background:#ede9df"><b>#EDE9DF</b></div>
+        <div class="sw-body">
+          <h4>Bone</h4><span class="sw-role">neutro · superfície elevada</span>
+          <dl><dt>RGB</dt><dd>237 233 223</dd><dt>HSL</dt><dd>43° 28% 90%</dd><dt>Token</dt><dd>--bone</dd></dl>
+          <div class="sw-alpha"><i style="background:rgba(237,233,223,1)"></i><i style="background:rgba(237,233,223,.72)"></i><i style="background:rgba(237,233,223,.44)"></i><i style="background:rgba(237,233,223,.22)"></i><i style="background:rgba(237,233,223,.08)"></i></div>
+          <p class="sw-use"><b>bg</b> cards e faixas alternadas · <b>text</b> corpo em seções escuras · <b>border</b> em <code class="tok">.22</code> sobre ink · <b>hover</b> de <code class="tok">.card</code>.</p>
+          <span class="contrast-pill c-aaa">AAA · 15.1:1 sobre ink</span>
+        </div>
+      </article>
+      <article class="sw reveal" data-d="2">
+        <div class="sw-chip" style="background:#171713"><b style="background:rgba(246,243,235,.9)">#171713</b></div>
+        <div class="sw-body">
+          <h4>Ink</h4><span class="sw-role">neutro · texto e âncora</span>
+          <dl><dt>RGB</dt><dd>23 23 19</dd><dt>HSL</dt><dd>60° 10% 8%</dd><dt>Token</dt><dd>--ink</dd></dl>
+          <div class="sw-alpha"><i style="background:rgba(23,23,19,1)"></i><i style="background:rgba(23,23,19,.6)"></i><i style="background:rgba(23,23,19,.3)"></i><i style="background:rgba(23,23,19,.17)"></i><i style="background:rgba(23,23,19,.06)"></i></div>
+          <p class="sw-use"><b>text</b> padrão · <b>bg</b> de seções invertidas e <code class="tok">.btn--solid</code> · <b>border</b> em <code class="tok">.17</code> = <code class="tok">--line</code> · <b>disabled</b> em <code class="tok">.3</code>.</p>
+          <span class="contrast-pill c-aaa">AAA · 16.5:1 sobre paper</span>
+        </div>
+      </article>
+      <article class="sw reveal" data-d="3">
+        <div class="sw-chip" style="background:#a5a197"><b>#A5A197</b></div>
+        <div class="sw-body">
+          <h4>Fog</h4><span class="sw-role">neutro · desativado</span>
+          <dl><dt>RGB</dt><dd>165 161 151</dd><dt>HSL</dt><dd>43° 7% 62%</dd><dt>Token</dt><dd>--fog</dd></dl>
+          <div class="sw-alpha"><i style="background:rgba(165,161,151,1)"></i><i style="background:rgba(165,161,151,.7)"></i><i style="background:rgba(165,161,151,.45)"></i><i style="background:rgba(165,161,151,.24)"></i><i style="background:rgba(165,161,151,.1)"></i></div>
+          <p class="sw-use"><b>text</b> só em placeholder e caption · <b>disabled</b> de ícones e labels. Nunca para texto que precise ser lido.</p>
+          <span class="contrast-pill c-deco">Decorativo · 2.3:1 sobre paper</span>
+        </div>
+      </article>
+    </div>
+
+    <!-- ACENTOS -->
+    <h3 class="ds-sub reveal" style="margin-top:56px">Acentos — luz, brasa e campo</h3>
+    <div class="grid-4">
+      <article class="sw reveal">
+        <div class="sw-chip" style="background:#e7a94a"><b>#E7A94A</b></div>
+        <div class="sw-body">
+          <h4>Amber</h4><span class="sw-role">primário · a luz</span>
+          <dl><dt>RGB</dt><dd>231 169 74</dd><dt>HSL</dt><dd>36° 77% 60%</dd><dt>Token</dt><dd>--amber</dd></dl>
+          <div class="sw-alpha"><i style="background:rgba(231,169,74,1)"></i><i style="background:rgba(231,169,74,.55)"></i><i style="background:rgba(231,169,74,.28)"></i><i style="background:rgba(231,169,74,.16)"></i><i style="background:rgba(231,169,74,.08)"></i></div>
+          <p class="sw-use"><b>bg</b> CTA principal, ticker, glow · <b>text</b> só sobre ink · <b>border</b> foco de input · <b>hover</b> clareia para <code class="tok">#F2BC65</code> · <b>active</b> escurece para <code class="tok">#D0913A</code>. Abre <code class="tok">--grad-dawn</code>.</p>
+          <span class="contrast-pill c-aaa">AAA · 8.9:1 sobre ink</span><br/>
+          <span class="contrast-pill c-deco">1.9:1 sobre paper — decorativo</span>
+        </div>
+      </article>
+      <article class="sw reveal" data-d="1">
+        <div class="sw-chip" style="background:#c24f20"><b style="background:rgba(246,243,235,.9)">#C24F20</b></div>
+        <div class="sw-body">
+          <h4>Ember</h4><span class="sw-role">secundário · ação editorial</span>
+          <dl><dt>RGB</dt><dd>194 79 32</dd><dt>HSL</dt><dd>17° 72% 44%</dd><dt>Token</dt><dd>--ember</dd></dl>
+          <div class="sw-alpha"><i style="background:rgba(194,79,32,1)"></i><i style="background:rgba(194,79,32,.6)"></i><i style="background:rgba(194,79,32,.34)"></i><i style="background:rgba(194,79,32,.16)"></i><i style="background:rgba(194,79,32,.08)"></i></div>
+          <p class="sw-use"><b>text</b> links e hover de título (≥18px) · <b>bg</b> de <code class="tok">.btn--ember</code> e <code class="tok">.badge--count</code> · <b>hover</b> vira rust. Meio de <code class="tok">--grad-dawn</code>.</p>
+          <span class="contrast-pill c-aa">AA Large · 4.3:1 sobre paper</span>
+        </div>
+      </article>
+      <article class="sw reveal" data-d="2">
+        <div class="sw-chip" style="background:#3b4b34"><b style="background:rgba(246,243,235,.9)">#3B4B34</b></div>
+        <div class="sw-body">
+          <h4>Moss</h4><span class="sw-role">terciário · profundidade</span>
+          <dl><dt>RGB</dt><dd>59 75 52</dd><dt>HSL</dt><dd>102° 18% 25%</dd><dt>Token</dt><dd>--moss</dd></dl>
+          <div class="sw-alpha"><i style="background:rgba(59,75,52,1)"></i><i style="background:rgba(59,75,52,.6)"></i><i style="background:rgba(59,75,52,.35)"></i><i style="background:rgba(59,75,52,.18)"></i><i style="background:rgba(59,75,52,.07)"></i></div>
+          <p class="sw-use"><b>bg</b> hover de <code class="tok">.btn--solid</code> e planos escuros · <b>text</b> corpo alternativo em paper · início de <code class="tok">--grad-field</code> e <code class="tok">--grad-ink</code>.</p>
+          <span class="contrast-pill c-aaa">AAA · 8.6:1 sobre paper</span>
+        </div>
+      </article>
+      <article class="sw reveal" data-d="3">
+        <div class="sw-chip" style="background:#8e9c75"><b>#8E9C75</b></div>
+        <div class="sw-body">
+          <h4>Sage</h4><span class="sw-role">decorativo · confirmação suave</span>
+          <dl><dt>RGB</dt><dd>142 156 117</dd><dt>HSL</dt><dd>82° 16% 54%</dd><dt>Token</dt><dd>--sage</dd></dl>
+          <div class="sw-alpha"><i style="background:rgba(142,156,117,1)"></i><i style="background:rgba(142,156,117,.6)"></i><i style="background:rgba(142,156,117,.35)"></i><i style="background:rgba(142,156,117,.18)"></i><i style="background:rgba(142,156,117,.07)"></i></div>
+          <p class="sw-use"><b>bg</b> auroras de fundo (<code class="tok">.amb-glow</code>) · ícones de check em listas de plano · nunca como cor de texto sobre paper.</p>
+          <span class="contrast-pill c-deco">Decorativo · 2.7:1 sobre paper</span>
+        </div>
+      </article>
+    </div>
+
+    <!-- FEEDBACK -->
+    <h3 class="ds-sub reveal" style="margin-top:56px">Feedback — quatro estados legíveis</h3>
+    <div class="grid-4">
+      <article class="sw reveal">
+        <div class="sw-chip" style="background:#5c7d4f"><b style="background:rgba(246,243,235,.9)">#5C7D4F</b></div>
+        <div class="sw-body">
+          <h4>Success</h4><span class="sw-role">feedback · ok</span>
+          <dl><dt>RGB</dt><dd>92 125 79</dd><dt>HSL</dt><dd>103° 23% 40%</dd><dt>Token</dt><dd>--ok</dd></dl>
+          <p class="sw-use"><b>border+text</b> de <code class="tok">.field.is-success</code>, <code class="tok">.badge--ok</code>. Fundo sempre em <code class="tok">.16</code>.</p>
+          <span class="contrast-pill c-aa">AA · 4.6:1 sobre paper</span>
+        </div>
+      </article>
+      <article class="sw reveal" data-d="1">
+        <div class="sw-chip" style="background:#e7a94a"><b>#E7A94A</b></div>
+        <div class="sw-body">
+          <h4>Warning</h4><span class="sw-role">feedback · atenção</span>
+          <dl><dt>RGB</dt><dd>231 169 74</dd><dt>HSL</dt><dd>36° 77% 60%</dd><dt>Token</dt><dd>--warn</dd></dl>
+          <p class="sw-use">Reusa o âmbar, mas o texto do aviso vai em <code class="tok">#8A6416</code> para atingir AA sobre o fundo <code class="tok">.16</code>.</p>
+          <span class="contrast-pill c-aa">AA · 4.9:1 (texto #8A6416)</span>
+        </div>
+      </article>
+      <article class="sw reveal" data-d="2">
+        <div class="sw-chip" style="background:#b3402a"><b style="background:rgba(246,243,235,.9)">#B3402A</b></div>
+        <div class="sw-body">
+          <h4>Danger</h4><span class="sw-role">feedback · erro</span>
+          <dl><dt>RGB</dt><dd>179 64 42</dd><dt>HSL</dt><dd>10° 62% 43%</dd><dt>Token</dt><dd>--err</dd></dl>
+          <p class="sw-use"><b>border+text</b> de <code class="tok">.field.is-error</code>. Nunca é o único sinal: sempre acompanha ícone e texto.</p>
+          <span class="contrast-pill c-aa">AA · 5.2:1 sobre paper</span>
+        </div>
+      </article>
+      <article class="sw reveal" data-d="3">
+        <div class="sw-chip" style="background:#6b7f8e"><b style="background:rgba(246,243,235,.9)">#6B7F8E</b></div>
+        <div class="sw-body">
+          <h4>Info</h4><span class="sw-role">feedback · neutro frio</span>
+          <dl><dt>RGB</dt><dd>107 127 142</dd><dt>HSL</dt><dd>206° 13% 49%</dd><dt>Token</dt><dd>--info</dd></dl>
+          <p class="sw-use">Única entrada fria da paleta — reservada a avisos do sistema, para não roubar o âmbar.</p>
+          <span class="contrast-pill c-aa">AA Large · 3.5:1 sobre paper</span>
+        </div>
+      </article>
+    </div>
+
+    <!-- GRADIENTES -->
+    <h3 class="ds-sub reveal" style="margin-top:56px">Participação em gradiente</h3>
+    <div class="grid-4 reveal" data-d="1">
+      <div class="grad-strip" style="background:var(--grad-dawn)"><span>--grad-dawn · amber → ember → 7A2D12</span></div>
+      <div class="grad-strip" style="background:var(--grad-field)"><span>--grad-field · moss → sage → amber</span></div>
+      <div class="grad-strip" style="background:var(--grad-ink)"><span>--grad-ink · 2A3322 → 11110F</span></div>
+      <div class="grad-strip" style="background:var(--grad-border)"><span>--grad-border · clay → sage → amber</span></div>
+    </div>
+
+    <!-- REGRAS CONTEXTUAIS -->
+    <div class="ds-block reveal">
+      <h3 class="ds-sub">Regras contextuais de uso</h3>
+      <div class="table-scroll">
+        <table class="spec-table">
+          <thead><tr><th>Contexto</th><th>Claro (paper/bone)</th><th>Escuro (ink/ash)</th><th>Proibido</th></tr></thead>
+          <tbody>
+            <tr><td>text</td><td>ink · smoke #656159 para secundário</td><td>bone · dust #969289 para secundário</td><td>amber ou sage como texto sobre paper</td></tr>
+            <tr><td>background</td><td>paper base · bone elevado</td><td>ink base · ash #0A0A09 imersivo</td><td>dois acentos saturados adjacentes</td></tr>
+            <tr><td>border</td><td>ink @ 17% (--line)</td><td>bone @ 22% (--line-light)</td><td>borda em cor de feedback sem texto</td></tr>
+            <tr><td>hover</td><td>ink → moss · amber → #F2BC65</td><td>bone @ 8% de fundo</td><td>mudar matiz e luminância ao mesmo tempo</td></tr>
+            <tr><td>active</td><td>escurece 12% + scale(.96)</td><td>escurece 12% + scale(.96)</td><td>estado ativo só por opacidade</td></tr>
+            <tr><td>disabled</td><td>opacity .4 + grayscale(.4)</td><td>opacity .4 + grayscale(.4)</td><td>fog como fundo de botão desativado</td></tr>
+            <tr><td>focus</td><td>ring amber @ 18%, offset 3px</td><td>ring amber @ 24%, offset 3px</td><td>remover outline sem substituto visível</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="ds-note" style="margin-top:20px">Intenção de contraste: todo texto de corpo atinge <b>AA</b> (≥4.5:1) e todos os pares de neutros atingem <b>AAA</b> (≥7:1). Acentos com razão abaixo de 3:1 estão marcados como <b>decorativos</b> e só aparecem como fundo, glow ou traço — nunca carregando informação sozinhos.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================================
+     04 · COMPONENTES
+     ========================================================== -->
+<section class="ds" id="componentes">
+  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i><i class="amb-beam"></i><i class="amb-halo"></i></div>
+  <div class="wrap">
+
+    <div class="ds-head">
+      <div class="reveal">
+        <div class="section-tag mono">04 / Componentes</div>
+        <h2>Cada peça sabe <em>se comportar.</em></h2>
+      </div>
+      <p class="reveal" data-d="1">Toda superfície interativa responde em três tempos: <b>hover</b> em 350ms com <code class="tok">--ease-out</code>, <b>active</b> comprimindo para .96 e <b>focus-visible</b> com anel âmbar de 3px. Nada se move mais de 6px — o movimento confirma, não anuncia.</p>
+    </div>
+
+    <!-- ============ BOTÕES ============ -->
+    <h3 class="ds-sub reveal">Buttons</h3>
+    <p class="ds-note reveal" data-d="1" style="margin-bottom:26px">Base <code class="tok">.btn</code> + variante + tamanho. O brilho que atravessa o botão no hover é o keyframe <code class="tok">sheen</code>, aplicado via <code class="tok">::before</code> — não existe elemento extra no markup.</p>
+    <div class="reveal" data-d="1">
+      <div class="btn-row" style="margin-bottom:14px">
+        <button class="btn btn--solid">Solid <iconify-icon icon="solar:arrow-right-linear"></iconify-icon></button>
+        <button class="btn btn--amber">Amber</button>
+        <button class="btn btn--ember">Ember</button>
+        <button class="btn btn--outline">Outline</button>
+        <button class="btn btn--ghost">Ghost</button>
+        <a class="btn btn--link" href="#componentes">Link inline ↘</a>
+      </div>
+      <div class="btn-row" style="margin-bottom:14px">
+        <button class="btn btn--solid btn--sm">Small 11px</button>
+        <button class="btn btn--solid">Default 13px</button>
+        <button class="btn btn--solid btn--lg">Large 15px</button>
+        <span class="tip" data-tip="Botão só de ícone: 44px"><button aria-label="Adicionar" class="btn btn--amber btn--icon"><iconify-icon icon="solar:add-circle-linear"></iconify-icon></button></span>
+        <span class="tip" data-tip="Variante compacta: 36px"><button aria-label="Buscar" class="btn btn--outline btn--icon btn--sm"><iconify-icon icon="solar:magnifer-linear"></iconify-icon></button></span>
+      </div>
+      <div class="btn-row" style="margin-bottom:14px">
+        <button class="btn btn--solid" disabled>Disabled</button>
+        <button class="btn btn--amber is-loading" id="loadingBtn">Carregando</button>
+        <button class="btn btn--outline" id="modalOpen">Abrir modal <iconify-icon icon="solar:maximize-square-linear"></iconify-icon></button>
+        <a class="cta-pill" href="#animacoes">Começar agora <span><iconify-icon icon="solar:arrow-right-up-linear"></iconify-icon></span></a>
+      </div>
+      <div class="btn-row">
+        <button class="filter-pill active">Destaques</button>
+        <button class="filter-pill">Novidades</button>
+        <button class="filter-pill">Arquivo</button>
+        <a aria-label="Ação circular" class="round-cta" href="#final" style="width:74px;font-size:22px">↗</a>
+      </div>
+    </div>
+
+    <div class="ds-block table-scroll reveal">
+      <table class="spec-table">
+        <thead><tr><th>Estado</th><th>Transform</th><th>Cor</th><th>Sombra</th><th>Duração</th></tr></thead>
+        <tbody>
+          <tr><td>rest</td><td>none</td><td>fundo da variante</td><td>nenhuma</td><td>—</td></tr>
+          <tr><td>hover</td><td>translateY(-2px) scale(1.03)</td><td>+12% de luminância + sheen</td><td>0 18px 34px -16px @ 70%</td><td>350ms ease-out</td></tr>
+          <tr><td>active</td><td>translateY(0) scale(.96)</td><td>-12% de luminância</td><td>0 6px 14px -8px</td><td>120ms</td></tr>
+          <tr><td>focus-visible</td><td>none</td><td>inalterada</td><td>outline 2px amber, offset 3px</td><td>instantâneo</td></tr>
+          <tr><td>disabled</td><td>none · pointer-events none</td><td>opacity .4 + grayscale(.4)</td><td>nenhuma</td><td>—</td></tr>
+          <tr><td>loading</td><td>none</td><td>texto transparente</td><td>spinner 15px, spin 700ms linear</td><td>infinito</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ds-rule"></div>
+
+    <!-- ============ INPUTS ============ -->
+    <h3 class="ds-sub reveal">Inputs</h3>
+    <p class="ds-note reveal" data-d="1" style="margin-bottom:26px">O foco é a única animação: a borda vira âmbar, um anel de 4px a 18% se abre, o campo sobe 1px e o ícone interno cresce 15%. Estados de validação nunca dependem só de cor — sempre trazem ícone e helper text.</p>
+    <div class="grid-2 reveal" data-d="1">
+      <div style="display:grid;gap:20px">
+        <div class="form-row">
+          <div class="field">
+            <label for="i-nome">Nome</label>
+            <input class="input" id="i-nome" placeholder="Como devemos te chamar" type="text"/>
+          </div>
+          <div class="field">
+            <label for="i-mail">E-mail</label>
+            <input class="input" id="i-mail" placeholder="voce@estudio.com" type="email"/>
+            <iconify-icon class="icon-in" icon="solar:letter-linear"></iconify-icon>
+          </div>
+        </div>
+        <div class="field">
+          <label for="i-tipo">Tipo de projeto</label>
+          <select class="select" id="i-tipo">
+            <option>Identidade</option><option>Campanha</option><option>Produto digital</option><option>Sistema completo</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="i-msg">Mensagem</label>
+          <textarea class="textarea" id="i-msg" placeholder="Conte o contexto, o público e o prazo."></textarea>
+          <p class="helper">Markdown simples é aceito.</p>
+        </div>
+        <div class="field">
+          <label for="i-news">Assinatura</label>
+          <div class="input-inline">
+            <input aria-label="E-mail para assinatura" id="i-news" placeholder="voce@estudio.com" type="email"/>
+            <button aria-label="Assinar" class="btn btn--amber btn--icon btn--sm"><iconify-icon icon="solar:arrow-right-up-linear"></iconify-icon></button>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;gap:20px;align-content:start">
+        <div class="field is-error">
+          <label for="i-err">Estado de erro</label>
+          <input class="input" id="i-err" type="text" value="estudio@"/>
+          <p class="helper">Endereço incompleto — falta o domínio.</p>
+        </div>
+        <div class="field is-success">
+          <label for="i-ok">Estado de sucesso</label>
+          <input class="input" id="i-ok" type="text" value="estudio@lumen.design"/>
+          <p class="helper">Endereço verificado.</p>
+        </div>
+        <div class="field">
+          <label for="i-off">Desativado</label>
+          <input class="input" disabled id="i-off" placeholder="Indisponível neste plano" style="opacity:.45" type="text"/>
+        </div>
+        <div style="display:grid;gap:14px;padding-top:6px">
+          <label class="switch"><input checked type="checkbox"/><i></i> Animações de fundo ativas</label>
+          <label class="switch"><input type="checkbox"/><i></i> Modo alto contraste</label>
+          <label class="check"><input checked type="checkbox"/><i></i> Aceito os termos do sistema</label>
+          <label class="check radio"><input checked name="r" type="radio"/><i></i> Tema claro</label>
+          <label class="check radio"><input name="r" type="radio"/><i></i> Tema escuro</label>
+          <div class="field" style="margin-top:6px">
+            <label>Intensidade da luz — 60%</label>
+            <div class="range" role="presentation"><i></i><b></b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-rule"></div>
+
+    <!-- ============ CARDS ============ -->
+    <h3 class="ds-sub reveal">Cards</h3>
+    <p class="ds-note reveal" data-d="1" style="margin-bottom:26px">Quatro tipos: <b>mídia</b> (imagem com zoom lento e ação que sobe no hover), <b>vidro</b> (blur 22px sobre fundo vivo), <b>plano</b> (preço e lista) e <b>modo</b> (glifo que se transforma). Todos entram com <code class="tok">.reveal</code> escalonado.</p>
+
+    <div class="grid-3 reveal" data-d="1">
+      <article class="media-card">
+        <div class="shot">
+          <img alt="Estúdio de design com referências de contexto" loading="lazy" src="aura-ai-landing-29/assets/b8ddae28b2959ce3_75c477f9-7736-4ffa-bfb3-3d9289.png"/>
+          <span class="badge badge--amber">Novo</span>
+          <button aria-label="Salvar" class="wish"><iconify-icon icon="solar:heart-linear"></iconify-icon></button>
+          <div class="quick"><button class="btn btn--solid" style="width:100%">Adicionar à biblioteca</button></div>
+        </div>
+        <div class="body">
+          <h3>Card de mídia</h3>
+          <p>Imagem em 16/10, zoom de 1.09 em 800ms, véu inferior para garantir contraste do texto sobreposto e ação secundária que sobe 56px no hover.</p>
+        </div>
+      </article>
+      <article class="media-card">
+        <div class="shot">
+          <img alt="Sala brutalista iluminada pela chuva" loading="lazy" src="echo-intelligence/assets/89459d92ff182991_e5a40a29-96b7-4449-936b-1019b7.jpg"/>
+          <span class="badge badge--ink">Editorial</span>
+          <button aria-label="Salvar" class="wish"><iconify-icon icon="solar:heart-linear"></iconify-icon></button>
+          <div class="quick"><button class="btn btn--amber" style="width:100%">Ver o caso</button></div>
+        </div>
+        <div class="body">
+          <h3>Variante escura</h3>
+          <p>Mesma anatomia, imagem de baixa luminância. O título troca para ember no hover do card inteiro, não só no próprio título.</p>
+        </div>
+      </article>
+      <article class="glass-card" style="display:flex;flex-direction:column;justify-content:space-between;min-height:100%">
+        <div>
+          <span class="mono" style="color:var(--ember)">Card de vidro</span>
+          <h3 style="font-family:var(--display);font-weight:600;letter-spacing:-.045em;font-size:26px;margin:14px 0 12px">Superfície flutuante</h3>
+          <p style="font-size:13px;line-height:1.65;color:var(--smoke)">Fundo <code class="tok">--grad-glass</code> com <code class="tok">backdrop-filter:blur(22px)</code> e borda branca a 50%. Só funciona sobre um fundo com textura — sobre cor chapada vira um retângulo cinza.</p>
+        </div>
+        <div class="btn-row" style="margin-top:22px">
+          <span class="badge badge--ghost badge--dot">ao vivo</span>
+          <span class="badge badge--ok">AA</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="ds-block grid-3 reveal">
+      <div class="plan">
+        <small>01 / Base</small>
+        <h3>Núcleo</h3>
+        <div class="price">Livre</div>
+        <ul>
+          <li><iconify-icon icon="solar:check-circle-linear"></iconify-icon> Tokens de cor e tipo</li>
+          <li><iconify-icon icon="solar:check-circle-linear"></iconify-icon> 12 componentes</li>
+          <li><iconify-icon icon="solar:check-circle-linear"></iconify-icon> Ícones solar + lucide</li>
+        </ul>
+        <button class="btn btn--outline">Usar o núcleo</button>
+      </div>
+      <div class="plan dark-card">
+        <span class="plan-flag">Recomendado</span>
+        <small>02 / Completo</small>
+        <h3>Sistema</h3>
+        <div class="price">$48</div>
+        <ul>
+          <li><iconify-icon icon="solar:check-circle-linear"></iconify-icon> Tudo do núcleo</li>
+          <li><iconify-icon icon="solar:check-circle-linear"></iconify-icon> 42 componentes</li>
+          <li><iconify-icon icon="solar:check-circle-linear"></iconify-icon> Timelines GSAP prontas</li>
+          <li><iconify-icon icon="solar:check-circle-linear"></iconify-icon> Campo de sinal em canvas</li>
+        </ul>
+        <button class="btn btn--amber">Adotar o sistema</button>
+      </div>
+      <div class="plan">
+        <small>03 / Estúdio</small>
+        <h3>Sob medida</h3>
+        <div class="price">Sob consulta</div>
+        <ul>
+          <li><iconify-icon icon="solar:check-circle-linear"></iconify-icon> Tema derivado da marca</li>
+          <li><iconify-icon icon="solar:check-circle-linear"></iconify-icon> Auditoria de contraste</li>
+          <li><iconify-icon icon="solar:check-circle-linear"></iconify-icon> Handoff para React</li>
+        </ul>
+        <button class="btn btn--outline">Falar com o estúdio</button>
+      </div>
+    </div>
+
+    <div class="ds-block">
+      <div class="cards reveal">
+        <article class="card"><span class="card-no">01 / OUVIR</span>
+          <div class="glyph"><i></i></div>
+          <h3>Perto</h3>
+          <p>Glifo circular com anel interno de 22px. No hover encolhe para .84 em 500ms.</p>
+        </article>
+        <article class="card"><span class="card-no">02 / FOCO</span>
+          <div class="glyph"><i></i></div>
+          <h3>Junto</h3>
+          <p>Pétala assimétrica a 45°. No hover gira até 135° e reduz 10%.</p>
+        </article>
+        <article class="card"><span class="card-no">03 / SUMIR</span>
+          <div class="glyph"><i></i></div>
+          <h3>Longe</h3>
+          <p>Barra âmbar de 3px com glow. No hover colapsa para 45% da altura.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="ds-rule"></div>
+
+    <!-- ============ NAVBARS ============ -->
+    <h3 class="ds-sub reveal">Navbars</h3>
+    <p class="ds-note reveal" data-d="1" style="margin-bottom:26px">A barra real desta página (<code class="tok">.nav</code>) começa transparente sobre a hero e ganha <code class="tok">.scrolled</code> depois de 40px: altura 72→62px, fundo paper a 82% com blur 18px e a cor do texto invertendo de branco para ink. Abaixo, as três variantes derivadas.</p>
+    <div class="reveal" data-d="1" style="display:grid;gap:14px">
+      <div class="demo-nav demo-nav--glass">
+        <a class="brand" href="#componentes" style="font-size:14px"><span aria-hidden="true" class="brandmark" style="width:22px;height:22px"></span> LUMEN/01</a>
+        <div class="lk"><a href="#tipografia">Tipografia</a><a href="#cores">Cores</a><a href="#icones">Ícones</a></div>
+        <button class="btn btn--solid btn--sm">Entrar</button>
+      </div>
+      <div class="demo-nav demo-nav--pill">
+        <a class="brand" href="#componentes" style="font-size:14px"><span aria-hidden="true" class="brandmark" style="width:22px;height:22px"></span> LUMEN/01</a>
+        <div class="lk"><a href="#componentes">Componentes</a><a href="#animacoes">Animações</a></div>
+        <div class="btn-row">
+          <span class="tip" data-tip="3 itens salvos"><button aria-label="Salvos" class="btn btn--ghost btn--icon btn--sm" style="position:relative"><iconify-icon icon="solar:bookmark-linear"></iconify-icon><span class="badge badge--count" style="position:absolute;top:-4px;right:-4px">3</span></button></span>
+          <button class="btn btn--amber btn--sm">Começar</button>
+        </div>
+      </div>
+      <div class="demo-nav demo-nav--dark">
+        <a class="brand" href="#componentes" style="font-size:14px"><span aria-hidden="true" class="brandmark" style="width:22px;height:22px"></span> LUMEN/01</a>
+        <div class="lk"><a href="#cores">Sistema</a><a href="#final">Contato</a></div>
+        <a class="reserve" href="#final" style="font-size:11px;padding:8px 14px">Solicitar acesso <i></i></a>
+      </div>
+    </div>
+
+    <div class="ds-rule"></div>
+
+    <!-- ============ SECTIONS ============ -->
+    <h3 class="ds-sub reveal">Sections — anatomia</h3>
+    <p class="ds-note reveal" data-d="1" style="margin-bottom:26px">Toda dobra é <code class="tok">.ds</code>: <code class="tok">position:relative</code>, padding vertical <code class="tok">clamp(90px,11vw,170px)</code>, <code class="tok">isolation:isolate</code> e uma camada <code class="tok">.amb</code> de fundo animado atrás do conteúdo. Alternam-se três fundos — paper, bone e ink (<code class="tok">.on-dark</code>) — para dar respiração ao scroll.</p>
+    <div class="grid-3 reveal" data-d="1">
+      <div class="anim-tile"><div class="stagepad"><div class="demo-square" style="border-color:var(--line);width:76px;height:44px;animation:none;position:relative"><i style="position:absolute;inset:6px;border:1px dashed var(--amber);display:block"></i></div></div><h4>Camada 0 · .amb</h4><p>Grade que desliza 120px em 34s, duas auroras radiais em blur 70px e um feixe diagonal de varredura. Sempre <code class="tok">pointer-events:none</code>.</p></div>
+      <div class="anim-tile"><div class="stagepad"><div style="width:120px;display:grid;gap:6px"><i style="height:6px;background:var(--ember);display:block;width:40%"></i><i style="height:16px;background:var(--ink);display:block"></i><i style="height:6px;background:var(--line);display:block;width:70%"></i></div></div><h4>Camada 1 · .ds-head</h4><p>Eyebrow <code class="tok">.section-tag</code> + h2 em até 12ch + parágrafo de apoio em 38ch, alinhados nas extremidades.</p></div>
+      <div class="anim-tile"><div class="stagepad"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;width:120px"><i style="height:44px;background:rgba(23,23,19,.1);display:block"></i><i style="height:44px;background:rgba(231,169,74,.5);display:block"></i><i style="height:44px;background:rgba(23,23,19,.1);display:block"></i></div></div><h4>Camada 2 · conteúdo</h4><p>Grid de 2, 3 ou 4 colunas com gap de 16px, sempre dentro de <code class="tok">.wrap</code> (máx. 1440px).</p></div>
+    </div>
+
+    <div class="ds-rule"></div>
+
+    <!-- ============ BADGES + TOOLTIPS ============ -->
+    <div class="grid-2">
+      <div class="reveal">
+        <h3 class="ds-sub">Badges</h3>
+        <p class="ds-note" style="margin-bottom:22px">Sempre Space Mono 9px, tracking .13em, caixa alta. Sobem 2px no hover. A variante <code class="tok">--dot</code> herda o keyframe <code class="tok">pulse</code>.</p>
+        <div class="btn-row">
+          <span class="badge badge--amber">Âmbar</span>
+          <span class="badge badge--ink">Ink</span>
+          <span class="badge badge--ok">Sucesso</span>
+          <span class="badge badge--warn">Atenção</span>
+          <span class="badge badge--err">Erro</span>
+          <span class="badge badge--info">Info</span>
+          <span class="badge badge--ghost">Ghost</span>
+          <span class="badge badge--ghost badge--dot">Ao vivo</span>
+          <span class="badge badge--count">12</span>
+        </div>
+      </div>
+      <div class="reveal" data-d="1">
+        <h3 class="ds-sub">Tooltips</h3>
+        <p class="ds-note" style="margin-bottom:22px">Puramente CSS via <code class="tok">data-tip</code> + <code class="tok">::after</code>. Sobem 6px e escalam de .96 a 1 em 300ms. Abrem também em <code class="tok">:focus-within</code>, então funcionam por teclado.</p>
+        <div class="btn-row">
+          <span class="tip" data-tip="Tooltip padrão · ink"><button class="btn btn--outline btn--sm">Passe o cursor</button></span>
+          <span class="tip tip--amber" data-tip="Variante âmbar"><button class="btn btn--outline btn--sm">Âmbar</button></span>
+          <span class="tip tip--right" data-tip="Alinhado à direita, para bordas de tela"><button class="btn btn--outline btn--sm">Borda</button></span>
+          <span class="tip" data-tip="Também funciona em ícones"><button aria-label="Informação" class="btn btn--ghost btn--icon btn--sm"><iconify-icon icon="solar:info-circle-linear"></iconify-icon></button></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-rule"></div>
+
+    <!-- ============ LISTA / ARQUIVO / FAQ ============ -->
+    <div class="grid-2">
+      <div class="reveal">
+        <h3 class="ds-sub">Lista de arquivo</h3>
+        <p class="ds-note" style="margin-bottom:22px">Linhas que deslizam 16px à direita no hover, revelando a miniatura. Vindo de <code class="tok">.archive-row</code>.</p>
+        <div class="archive-list">
+          <div class="archive-row"><span>2026</span><span>Console de luz</span><span>Componente</span><div class="archive-thumb"><img alt="" loading="lazy" src="echo-intelligence/assets/b8f26df5c76ad6c7_571119bb-f531-450b-a843-b5b9aa.jpg"/></div></div>
+          <div class="archive-row"><span>2026</span><span>Campo de sinal</span><span>Canvas</span><div class="archive-thumb"><img alt="" loading="lazy" src="echo-intelligence/assets/99a2b861af22b460_097b9d82-6fd2-4c7f-976d-900906.jpg"/></div></div>
+          <div class="archive-row"><span>2025</span><span>Palavras cinéticas</span><span>Timeline</span><div class="archive-thumb"><img alt="" loading="lazy" src="echo-intelligence/assets/af687c3fd4aab60c_99448953-a5c8-43cb-ade6-4a9783.jpg"/></div></div>
+          <div class="archive-row"><span>2025</span><span>Grade de ícones</span><span>Biblioteca</span><div class="archive-thumb"><img alt="" loading="lazy" src="echo-intelligence/assets/214e38e8d0c37561_2451b2b8-09b1-4532-83a4-27b4e1.jpg"/></div></div>
+        </div>
+      </div>
+      <div class="reveal" data-d="1">
+        <h3 class="ds-sub">Acordeão</h3>
+        <p class="ds-note" style="margin-bottom:22px">Altura animada por <code class="tok">max-height</code> calculado no clique; o chevron gira 180°. Só um painel aberto por vez.</p>
+        <div id="faq">
+          <div class="faq-item">
+            <button aria-expanded="false" class="faq-btn"><span>Como o sistema decide quando animar?</span><iconify-icon class="faq-icon" icon="solar:alt-arrow-down-linear"></iconify-icon></button>
+            <div class="faq-body"><p>Movimento só entra quando explica uma mudança de estado ou de hierarquia. Fundo animado é atmosfera de baixa amplitude; interação é resposta direta. Nada anima só porque é possível.</p></div>
+          </div>
+          <div class="faq-item">
+            <button aria-expanded="false" class="faq-btn"><span>O que acontece com prefers-reduced-motion?</span><iconify-icon class="faq-icon" icon="solar:alt-arrow-down-linear"></iconify-icon></button>
+            <div class="faq-body"><p>Todas as durações caem para 0,001ms, as camadas <code class="tok">.amb</code> somem, os <code class="tok">.reveal</code> nascem visíveis e as timelines GSAP nem chegam a ser criadas. A página continua completa, só imóvel.</p></div>
+          </div>
+          <div class="faq-item">
+            <button aria-expanded="false" class="faq-btn"><span>Dá para trocar o âmbar pela cor de outra marca?</span><iconify-icon class="faq-icon" icon="solar:alt-arrow-down-linear"></iconify-icon></button>
+            <div class="faq-body"><p>Sim — <code class="tok">--amber</code> aparece em glow, foco, ticker e CTA. Trocando o token, verifique só duas coisas: contraste ≥4.5:1 contra ink e luminância alta o bastante para o <code class="tok">mix-blend-mode:screen</code> da hero continuar visível.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-rule"></div>
+
+    <!-- ============ MÉTRICAS ============ -->
+    <h3 class="ds-sub reveal">Métricas</h3>
+    <div class="metrics-grid ds-block reveal" data-d="1" style="margin-top:24px">
+      <article class="metric"><small>Componentes documentados</small>
+        <div class="metric-value"><span data-count="42">0</span></div>
+        <p>Cada um com estados de rest, hover, active, focus e disabled definidos em token, não em valor solto.</p>
+        <i aria-hidden="true" class="metric-orbit"></i>
+      </article>
+      <article class="metric amber"><small>Tokens de design</small>
+        <div class="metric-value"><span data-count="184">0</span></div>
+        <p>Cor, tipo, raio, sombra e curva.</p>
+      </article>
+      <article class="metric"><small>Curva padrão</small>
+        <div class="metric-value">.2<span style="font-size:.4em">/</span>.8</div>
+        <p><code class="tok">cubic-bezier(.2,.8,.2,1)</code> em tudo que se move.</p>
+      </article>
+      <article class="metric"><small>Contraste mínimo</small>
+        <div class="metric-value"><span data-count="45">0</span></div>
+        <p>4,5:1 para corpo — AA garantido em toda a paleta de texto.</p>
+      </article>
+      <article class="metric"><small>Keyframes</small>
+        <div class="metric-value"><span data-count="14">0</span></div>
+        <p>Nenhum acima de 34s, nenhum abaixo de 120ms.</p>
+      </article>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================================
+     05 · ÍCONES
+     ========================================================== -->
+<section class="ds bone" id="icones">
+  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i><i class="amb-beam"></i></div>
+  <div class="wrap">
+    <div class="ds-head">
+      <div class="reveal">
+        <div class="section-tag mono">05 / Ícones</div>
+        <h2>Traço fino, <em>peso</em> constante.</h2>
+      </div>
+      <p class="reveal" data-d="1">Duas bibliotecas convivem: <b>Solar Linear</b> via <code class="tok">&lt;iconify-icon&gt;</code> para a interface de produto, e <b>Lucide</b> via <code class="tok">[data-lucide]</code> para marcadores editoriais. Ambas em traço 1.5px, cor <code class="tok">currentColor</code> e caixa quadrada — nunca misture as duas dentro do mesmo agrupamento.</p>
+    </div>
+
+    <h3 class="ds-sub reveal">Solar Linear — interface</h3>
+    <div class="icon-grid reveal" data-d="1">
+      <div class="icon-cell"><iconify-icon icon="solar:layers-minimalistic-linear"></iconify-icon><span>layers-minimalistic</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:widget-4-linear"></iconify-icon><span>widget-4</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:gallery-wide-linear"></iconify-icon><span>gallery-wide</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:export-linear"></iconify-icon><span>export</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:document-text-linear"></iconify-icon><span>document-text</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:notes-linear"></iconify-icon><span>notes</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:users-group-rounded-linear"></iconify-icon><span>users-group</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:check-circle-linear"></iconify-icon><span>check-circle</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:arrow-right-linear"></iconify-icon><span>arrow-right</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:arrow-left-linear"></iconify-icon><span>arrow-left</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:alt-arrow-down-linear"></iconify-icon><span>alt-arrow-down</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:play-circle-linear"></iconify-icon><span>play-circle</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:chat-round-line-linear"></iconify-icon><span>chat-round-line</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:code-square-linear"></iconify-icon><span>code-square</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:global-linear"></iconify-icon><span>global</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:folder-cloud-linear"></iconify-icon><span>folder-cloud</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:checklist-minimalistic-linear"></iconify-icon><span>checklist</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:notebook-linear"></iconify-icon><span>notebook</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:figma-file-linear"></iconify-icon><span>figma-file</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:layers-linear"></iconify-icon><span>layers</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:gallery-linear"></iconify-icon><span>gallery</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:hamburger-menu-linear"></iconify-icon><span>hamburger-menu</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:play-linear"></iconify-icon><span>play</span></div>
+      <div class="icon-cell"><iconify-icon icon="solar:chat-square-like-linear"></iconify-icon><span>chat-square-like</span></div>
+    </div>
+
+    <h3 class="ds-sub reveal" style="margin-top:52px">Lucide — editorial</h3>
+    <div class="icon-grid reveal" data-d="1">
+      <div class="icon-cell"><i data-lucide="mountain-snow"></i><span>mountain-snow</span></div>
+      <div class="icon-cell"><i data-lucide="asterisk"></i><span>asterisk</span></div>
+      <div class="icon-cell"><i data-lucide="arrow-up-right"></i><span>arrow-up-right</span></div>
+      <div class="icon-cell"><i data-lucide="heart"></i><span>heart</span></div>
+      <div class="icon-cell"><i data-lucide="star"></i><span>star</span></div>
+      <div class="icon-cell"><i data-lucide="search"></i><span>search</span></div>
+      <div class="icon-cell"><i data-lucide="shopping-bag"></i><span>shopping-bag</span></div>
+      <div class="icon-cell"><i data-lucide="menu"></i><span>menu</span></div>
+      <div class="icon-cell"><i data-lucide="type"></i><span>type</span></div>
+      <div class="icon-cell"><i data-lucide="palette"></i><span>palette</span></div>
+      <div class="icon-cell"><i data-lucide="sparkles"></i><span>sparkles</span></div>
+      <div class="icon-cell"><i data-lucide="compass"></i><span>compass</span></div>
+      <div class="icon-cell"><i data-lucide="arrow-right"></i><span>arrow-right</span></div>
+      <div class="icon-cell"><i data-lucide="arrow-left"></i><span>arrow-left</span></div>
+    </div>
+
+    <div class="ds-block grid-2 reveal">
+      <div>
+        <h3 class="ds-sub">Escala e alinhamento</h3>
+        <div class="icon-sizes">
+          <div><iconify-icon icon="solar:layers-linear" style="font-size:14px"></iconify-icon><span>14 · inline</span></div>
+          <div><iconify-icon icon="solar:layers-linear" style="font-size:16px"></iconify-icon><span>16 · botão</span></div>
+          <div><iconify-icon icon="solar:layers-linear" style="font-size:20px"></iconify-icon><span>20 · lista</span></div>
+          <div><iconify-icon icon="solar:layers-linear" style="font-size:26px"></iconify-icon><span>26 · card</span></div>
+          <div><iconify-icon icon="solar:layers-linear" style="font-size:38px"></iconify-icon><span>38 · destaque</span></div>
+        </div>
+        <p class="ds-note" style="margin-top:24px">O ícone herda <code class="tok">font-size</code> do container, então alinha por baseline junto com o texto. Em botões, a distância entre ícone e rótulo é 10px; no hover ele desliza 3px na direção da ação.</p>
+      </div>
+      <div class="table-scroll">
+        <table class="spec-table">
+          <thead><tr><th>Propriedade</th><th>Solar</th><th>Lucide</th></tr></thead>
+          <tbody>
+            <tr><td>Entrega</td><td>web component <code class="tok">iconify-icon</code></td><td>SVG inline via <code class="tok">createIcons()</code></td></tr>
+            <tr><td>Traço</td><td>1.5px (do próprio set)</td><td>1.5px (attrs stroke-width)</td></tr>
+            <tr><td>Dimensão</td><td>font-size, quadrado</td><td>width/height explícitos</td></tr>
+            <tr><td>Cor</td><td>currentColor</td><td>currentColor</td></tr>
+            <tr><td>Rede</td><td>zero — preload local</td><td>zero — bundle local</td></tr>
+            <tr><td>Uso</td><td>interface, ações, listas</td><td>marcadores, marquee, social</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     06 · ANIMAÇÕES — catálogo
+     ========================================================== -->
+<section class="ds on-dark" id="animacoes">
+  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i><i class="amb-beam"></i><i class="amb-halo"></i></div>
+  <div class="wrap">
+    <div class="ds-head">
+      <div class="reveal">
+        <div class="section-tag mono">06 / Animações</div>
+        <h2>Movimento que <em>explica.</em></h2>
+      </div>
+      <p class="reveal" data-d="1">Quatro categorias: <b>fundo</b> (contínuo, baixíssima amplitude), <b>surgimento</b> (uma vez, no scroll), <b>interação</b> (resposta direta ao ponteiro) e <b>cinética de scroll</b> (timeline presa ao progresso). Curva padrão <code class="tok">cubic-bezier(.2,.8,.2,1)</code>.</p>
+    </div>
+
+    <div class="anim-grid reveal" data-d="1">
+      <div class="anim-tile"><div class="stagepad"><div class="demo-ring"></div></div><h4>@keyframes pulse</h4><p>Anel que se expande e desaparece em 2,5s. Aplicado a <code class="tok">.pulse</code> e a <code class="tok">.badge--dot</code>. Fundo.</p></div>
+      <div class="anim-tile"><div class="stagepad"><div class="demo-bars"><i></i><i></i><i></i><i></i><i></i></div></div><h4>@keyframes barRise</h4><p>Escala vertical de .15 a 1, alternada, com delay progressivo de 150ms. Usada no painel da hero. Fundo.</p></div>
+      <div class="anim-tile"><div class="stagepad"><span class="demo-square" style="color:var(--amber)"></span></div><h4>@keyframes orbitSpin</h4><p>Rotação linear de 360°. Órbitas de <code class="tok">.amb-halo</code> (44s) e <code class="tok">.metric-orbit</code> (30s). Fundo.</p></div>
+      <div class="anim-tile"><div class="stagepad"><div class="demo-sheen"></div></div><h4>@keyframes sheen</h4><p>Brilho enviesado -18° cruzando o elemento. Dispara no hover de <code class="tok">.btn</code> e <code class="tok">.sw-chip</code>. Interação.</p></div>
+      <div class="anim-tile"><div class="stagepad"><span class="demo-blur">wordIn</span></div><h4>@keyframes wordIn</h4><p>De blur(8px) + Y16 + opacidade 0 até nítido em 800ms. Base de <code class="tok">.w-anim</code>, palavra a palavra. Surgimento.</p></div>
+      <div class="anim-tile"><div class="stagepad"><span class="demo-caret mono">Ticker infinito</span></div><h4>@keyframes tick</h4><p>translateX(-50%) em 28s linear sobre uma trilha duplicada — o loop é imperceptível. Fundo.</p></div>
+      <div class="anim-tile"><div class="stagepad"><i class="pulse" style="width:24px;height:24px;animation:breathe 2s ease-in-out infinite"></i></div><h4>@keyframes breathe</h4><p>Escala 1→1.35 com opacidade acompanhando. Pontos vivos, indicador de scroll e preloader. Fundo.</p></div>
+      <div class="anim-tile"><div class="stagepad"><div style="width:100%;height:56px;background:radial-gradient(40% 60% at 30% 50%,rgba(231,169,74,.6),transparent 70%),radial-gradient(40% 60% at 70% 50%,rgba(142,156,117,.5),transparent 70%);filter:blur(14px);animation:auroraDrift 8s ease-in-out infinite alternate"></div></div><h4>@keyframes auroraDrift</h4><p>Duas auroras radiais deslocando 5% e escalando até 1.14 em 26s. Coração de <code class="tok">.amb-glow</code>. Fundo.</p></div>
+      <div class="anim-tile"><div class="stagepad"><div style="width:100%;height:56px;background:linear-gradient(104deg,transparent 38%,rgba(255,231,181,.7) 50%,transparent 62%);animation:scanline 4s ease-in-out infinite"></div></div><h4>@keyframes scanline</h4><p>Feixe diagonal varrendo ±42% em 13s. Camada <code class="tok">.amb-beam</code>, sempre em blend overlay/screen. Fundo.</p></div>
+      <div class="anim-tile"><div class="stagepad"><div style="width:110px;height:56px;background:linear-gradient(90deg,transparent 49%,rgba(237,233,223,.35) 50%,transparent 51%),linear-gradient(0deg,transparent 49%,rgba(237,233,223,.25) 50%,transparent 51%);background-size:28px 28px;animation:gridPan 6s linear infinite"></div></div><h4>@keyframes gridPan</h4><p>Grade de 120px deslocando um módulo inteiro em 34s. Dá profundidade sem chamar atenção. Fundo.</p></div>
+      <div class="anim-tile"><div class="stagepad"><span class="float-slow" style="display:grid;place-items:center;width:46px;height:46px;border-radius:50%;border:1px solid var(--amber)"><iconify-icon icon="solar:layers-linear" style="font-size:20px;color:var(--amber)"></iconify-icon></span></div><h4>@keyframes floatY</h4><p>Flutuação de 10px em 5s. Chips da hero e ícones de integração, com delays quebrados para não sincronizar. Fundo.</p></div>
+      <div class="anim-tile"><div class="stagepad"><span class="btn btn--amber btn--sm" style="pointer-events:none">.btn-lift</span></div><h4>.btn-lift / .reveal</h4><p><code class="tok">.btn-lift</code> sobe 2px e escala 1.03 no hover; <code class="tok">.reveal</code> entra de Y28 + blur(10px) em 900ms quando cruza 12% do viewport. Interação e surgimento.</p></div>
+    </div>
+
+    <div class="ds-block table-scroll reveal">
+      <table class="spec-table">
+        <thead><tr><th>Categoria</th><th>Gatilho</th><th>Duração</th><th>Curva</th><th>Repetição</th></tr></thead>
+        <tbody>
+          <tr><td>Fundo</td><td>carregamento da página</td><td>5s – 44s</td><td>linear / ease-in-out</td><td>infinita</td></tr>
+          <tr><td>Surgimento</td><td>IntersectionObserver @ 12%</td><td>900ms (+90ms por escalonamento)</td><td>cubic-bezier(.2,.8,.2,1)</td><td>uma vez</td></tr>
+          <tr><td>Interação</td><td>hover / active / focus</td><td>120ms – 500ms</td><td>cubic-bezier(.22,1,.36,1)</td><td>por evento</td></tr>
+          <tr><td>Cinética de scroll</td><td>ScrollTrigger com scrub</td><td>presa ao progresso</td><td>none (linear ao scroll)</td><td>reversível</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== demo: campo de sinal em canvas (echo) ===== -->
+<section class="field" id="field">
+  <canvas aria-hidden="true" height="1080" id="signalCanvas" width="1920"></canvas>
+  <div class="field-corners mono">
+    <span class="live-dot">Campo ao vivo</span>
+    <span>Canvas 2D<br/>26 linhas</span>
+    <span>Mova o cursor<br/>pelo sinal</span>
+    <span>Sem shader<br/>Sem vídeo</span>
+  </div>
+  <div class="field-copy reveal">
+    <div class="section-tag mono" style="justify-content:center">06.1 / Fundo generativo</div>
+    <h2>Dá quase para ver o silêncio.</h2>
+    <p>Cada linha é desenhada a cada quadro em canvas 2D. A energia da onda cresce conforme a seção entra em cena, e o ponteiro puxa as linhas por proximidade exponencial.</p>
+  </div>
+</section>
+
+<!-- ===== demo: palavras cinéticas (echo) ===== -->
+<section class="kinetic" id="language">
+  <div class="kinetic-stage">
+    <div class="kinetic-meta">
+      <div class="section-tag mono">06.2 / Cinética de scroll</div>
+      <span class="mono">Surgir / Trocar / Recuar</span>
+    </div>
+    <div aria-label="Tokens. Ritmo. Luz." class="kinetic-words">
+      <div class="kinetic-word">TOKENS</div>
+      <div class="kinetic-word">RITMO</div>
+      <div class="kinetic-word">LUZ</div>
+    </div>
+    <i aria-hidden="true" class="kinetic-beam"></i>
+    <div class="kinetic-caption">
+      <p>Três palavras trocadas em rotação 3D presa ao scroll: a primeira sai por cima com blur, a segunda sobe do fundo, a terceira chega escalada de 1.5 com traço vazado. O feixe âmbar mede o progresso.</p>
+      <span class="kinetic-step" id="kineticStep">01 / 03</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== demo: story sticky (northtrail) ===== -->
+<section class="story" id="story">
+  <div class="story-grid">
+    <div class="story-sticky">
+      <img alt="Estudo matinal em madeira clara" class="story-img" data-step="0" loading="lazy" src="echo-intelligence/assets/b8f26df5c76ad6c7_571119bb-f531-450b-a843-b5b9aa.jpg"/>
+      <img alt="Alcova de terracota ao meio-dia" class="story-img" data-step="1" loading="lazy" src="echo-intelligence/assets/99a2b861af22b460_097b9d82-6fd2-4c7f-976d-900906.jpg"/>
+      <img alt="Sala índigo à noite" class="story-img" data-step="2" loading="lazy" src="echo-intelligence/assets/af687c3fd4aab60c_99448953-a5c8-43cb-ade6-4a9783.jpg"/>
+      <div aria-hidden="true" class="veil"></div>
+      <span class="story-counter">01</span>
+    </div>
+    <div>
+      <div class="story-step">
+        <p class="mono" style="color:var(--amber)">01 — Superfície</p>
+        <h3>A base define o resto.</h3>
+        <p>Paper e bone criam duas alturas de superfície. Tudo que flutua acima delas ganha sombra em três níveis — <code class="tok">--sh-1</code>, <code class="tok">--sh-2</code>, <code class="tok">--sh-3</code> — nunca uma quarta.</p>
+        <div class="story-tags"><span class="badge badge--ghost">--paper</span><span class="badge badge--ghost">--bone</span><span class="badge badge--ghost">--sh-1…3</span></div>
+      </div>
+      <div class="story-step">
+        <p class="mono" style="color:var(--amber)">02 — Luz</p>
+        <h3>O âmbar é escasso de propósito.</h3>
+        <p>Em uma tela cheia, o âmbar deve ocupar menos de 6% da área. Acima disso ele deixa de ser acento e vira fundo — e o sistema perde seu único sinal forte.</p>
+        <div class="story-tags"><span class="badge badge--ghost">--amber</span><span class="badge badge--ghost">glow</span><span class="badge badge--ghost">≤ 6%</span></div>
+      </div>
+      <div class="story-step">
+        <p class="mono" style="color:var(--amber)">03 — Recuo</p>
+        <h3>E depois some.</h3>
+        <p>Animação de fundo pausa fora do viewport, o canvas para de desenhar, os observers se desconectam depois de disparar. O sistema devolve o processador para a página.</p>
+        <div class="story-tags"><span class="badge badge--ghost">IntersectionObserver</span><span class="badge badge--ghost">unobserve</span><span class="badge badge--ghost">rAF</span></div>
+        <div style="margin-top:8px"><a class="cta-pill" href="#final">Ver o resumo <span><iconify-icon icon="solar:arrow-right-up-linear"></iconify-icon></span></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     07 · FINAL
+     ========================================================== -->
+<section class="final" id="final">
+  <div aria-hidden="true" class="amb"><i class="amb-halo" style="inset:auto auto -40% -20%"></i></div>
+  <div class="wrap final-top" style="position:relative;z-index:2"><span class="mono">LUMEN/01 · Sistema de design</span><span class="mono">Edição 2026</span></div>
+  <h2 class="wrap" style="position:relative;z-index:2">Faça luz.<span>Não ruído.</span></h2>
+  <div class="wrap final-bottom" style="position:relative;z-index:2">
+    <p>Todos os tokens, componentes e timelines desta página são o sistema — não uma imagem dele.</p>
+    <div class="btn-row">
+      <button class="btn btn--solid btn--lg" id="modalOpen2">Copiar tokens <iconify-icon icon="solar:copy-linear"></iconify-icon></button>
+      <a aria-label="Ir para o topo" class="round-cta" href="#top">↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== footer ===== -->
+<footer class="site">
+  <div aria-hidden="true" class="amb on-dark"><i class="amb-glow"></i></div>
+  <div class="wrap foot">
+    <a class="brand" href="#top"><span aria-hidden="true" class="brandmark"></span><span>LUMEN/01</span></a>
+    <nav>
+      <a href="#tipografia">Tipografia</a><a href="#cores">Cores</a><a href="#componentes">Componentes</a>
+      <a href="#icones">Ícones</a><a href="#animacoes">Animações</a>
+      <span>© <b id="year">2026</b> LUMEN Design System</span>
+    </nav>
+  </div>
+</footer>
+</main>
+
+<!-- ===== modal ===== -->
+<div aria-hidden="true" aria-labelledby="modalTitle" class="modal" id="modal" role="dialog">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <button aria-label="Fechar" class="modal-close" data-close><iconify-icon icon="solar:close-circle-linear"></iconify-icon></button>
+    <span class="badge badge--amber badge--dot">Componente · Modal</span>
+    <h3 id="modalTitle">Tokens do sistema</h3>
+    <p>O card entra de Y24 com escala .96 em 500ms, enquanto o backdrop faz blur de 10px em 400ms. O foco é movido para o botão de fechar e <kbd class="kbd">Esc</kbd> fecha o diálogo. O <code class="tok">body</code> trava o scroll enquanto o modal está aberto.</p>
+    <div class="btn-row" style="margin-top:20px">
+      <span class="badge badge--ghost">--amber</span><span class="badge badge--ghost">--ember</span><span class="badge badge--ghost">--moss</span><span class="badge badge--ghost">--ink</span><span class="badge badge--ghost">--paper</span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn--amber" data-close>Entendi</button>
+      <button class="btn btn--outline" data-close>Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================================
+   LUMEN/01 — interações
+   Mesma arquitetura dos arquivos de origem:
+   echo/js/interactions.js · echo/js/signal-field.js · echo/js/scroll-animations.js
+   aura/js/interactions.js · north-form/js/main-animations.js · northtrail/js/animations.js
+   ========================================================================== */
+const reduced = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const body = document.body;
+
+/* --- ícones lucide --- */
+if (window.lucide) lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+
+/* --- preloader (north-form) --- */
+const preloader = document.getElementById('preloader');
+const bootPage = () => { body.classList.remove('is-loading'); };
+const dropPreloader = () => { bootPage(); if (preloader.isConnected) preloader.remove(); };
+if (reduced || !window.gsap) dropPreloader();
+/* rede de segurança: a página nunca fica presa atrás do preloader,
+   mesmo que a timeline de entrada falhe ou o rAF seja estrangulado. */
+setTimeout(dropPreloader, 2600);
+
+/* --- header com estado .scrolled (echo) --- */
+const nav = document.getElementById('nav');
+const setNav = () => nav.classList.toggle('scrolled', scrollY > 40);
+setNav(); addEventListener('scroll', setNav, { passive: true });
+
+/* --- menu mobile (echo) --- */
+const menu = document.querySelector('.menubtn');
+menu.addEventListener('click', () => {
+  const open = body.classList.toggle('menu-open');
+  menu.setAttribute('aria-expanded', open);
+  menu.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+});
+document.querySelectorAll('.navlinks a').forEach(a => a.addEventListener('click', () => {
+  body.classList.remove('menu-open'); menu.setAttribute('aria-expanded', 'false');
+}));
+
+/* --- observer de .reveal (echo + aura) --- */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+}), { threshold: .12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* --- console de luz da hero (echo) --- */
+const hero = document.querySelector('.hero');
+const lightStatus = document.getElementById('lightStatus');
+const lightButtons = [...document.querySelectorAll('.light-scenes button')];
+const lightNames = { off: 'Desligada', warm: 'Quente', focus: 'Foco' };
+const heroClock = document.getElementById('heroClock');
+const clockByLight = { off: '23:06', warm: '06:42', focus: '13:18' };
+const resetLight = () => ['--lx', '--ly', '--title-x', '--title-y'].forEach(v => hero.style.removeProperty(v));
+lightButtons.forEach(btn => btn.addEventListener('click', () => {
+  const mode = btn.dataset.light;
+  hero.dataset.light = mode;
+  lightButtons.forEach(b => { const on = b === btn; b.classList.toggle('active', on); b.setAttribute('aria-pressed', on); });
+  lightStatus.textContent = lightNames[mode];
+  heroClock.textContent = clockByLight[mode];
+  resetLight();
+  if (window.gsap && !reduced) gsap.fromTo('.hero-char', { y: -3, filter: 'brightness(1.9)' }, { y: 0, filter: 'brightness(1)', duration: .55, stagger: .012, ease: 'power2.out' });
+}));
+hero.addEventListener('pointermove', e => {
+  if (reduced || innerWidth < 901 || hero.dataset.light === 'off') return;
+  const r = hero.getBoundingClientRect();
+  const x = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+  const y = Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
+  hero.style.setProperty('--lx', (x * 100).toFixed(1) + '%');
+  hero.style.setProperty('--ly', (y * 92).toFixed(1) + '%');
+  hero.style.setProperty('--title-x', ((.5 - x) * 20).toFixed(1) + 'px');
+  hero.style.setProperty('--title-y', ((.5 - y) * 18).toFixed(1) + 'px');
+});
+hero.addEventListener('pointerleave', resetLight);
+
+/* --- quebra do h1 da hero em letras .hero-char (echo) --- */
+document.querySelectorAll('.hero-line').forEach(line => {
+  const letters = [...line.textContent];
+  line.textContent = '';
+  letters.forEach(letter => {
+    const char = document.createElement('span');
+    char.className = 'hero-char';
+    char.textContent = letter === ' ' ? String.fromCharCode(160) : letter;
+    line.appendChild(char);
+  });
+});
+
+/* --- acordeão do FAQ (aura) --- */
+document.querySelectorAll('.faq-btn').forEach(btn => btn.addEventListener('click', () => {
+  const panel = btn.nextElementSibling;
+  const open = btn.getAttribute('aria-expanded') === 'true';
+  document.querySelectorAll('.faq-btn').forEach(b => {
+    b.setAttribute('aria-expanded', 'false');
+    b.nextElementSibling.style.maxHeight = '0';
+    b.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
+  });
+  if (!open) {
+    btn.setAttribute('aria-expanded', 'true');
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+    btn.querySelector('.faq-icon').style.transform = 'rotate(180deg)';
+  }
+}));
+
+/* --- micro-interação da wishlist (northtrail) --- */
+document.querySelectorAll('.wish').forEach(btn => btn.addEventListener('click', e => {
+  e.stopPropagation();
+  btn.classList.toggle('is-on');
+  if (window.gsap && !reduced) gsap.fromTo(btn, { scale: .7 }, { scale: 1, duration: .5, ease: 'back.out(3)' });
+}));
+
+/* --- pílulas de filtro (northtrail) --- */
+document.querySelectorAll('.filter-pill').forEach(p => p.addEventListener('click', () => {
+  document.querySelectorAll('.filter-pill').forEach(o => o.classList.remove('active'));
+  p.classList.add('active');
+}));
+
+/* --- botão em carregamento: demonstra o estado e volta --- */
+const loadingBtn = document.getElementById('loadingBtn');
+setInterval(() => {
+  loadingBtn.classList.toggle('is-loading');
+  loadingBtn.textContent = loadingBtn.classList.contains('is-loading') ? 'Carregando' : 'Concluído';
+}, 2600);
+
+/* --- modal --- */
+const modal = document.getElementById('modal');
+const openModal = () => {
+  modal.classList.add('is-open');
+  modal.setAttribute('aria-hidden', 'false');
+  body.classList.add('modal-open');
+  modal.querySelector('.modal-close').focus();
+};
+const closeModal = () => {
+  modal.classList.remove('is-open');
+  modal.setAttribute('aria-hidden', 'true');
+  body.classList.remove('modal-open');
+};
+document.getElementById('modalOpen').addEventListener('click', openModal);
+document.getElementById('modalOpen2').addEventListener('click', openModal);
+modal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal));
+addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal(); });
+
+/* --- ano do rodapé --- */
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+<script>
+/* ==========================================================================
+   CAMPO DE SINAL — canvas 2D reativo ao ponteiro (echo/js/signal-field.js)
+   ========================================================================== */
+const canvas = document.getElementById('signalCanvas');
+const ctx = canvas.getContext('2d');
+const fieldState = { energy: .22, x: .5, y: .5 };
+let fieldVisible = true;
+
+const sizeCanvas = () => {
+  const d = Math.min(devicePixelRatio || 1, 2), r = canvas.getBoundingClientRect();
+  canvas.width = Math.max(1, Math.floor(r.width * d));
+  canvas.height = Math.max(1, Math.floor(r.height * d));
+  ctx.setTransform(d, 0, 0, d, 0, 0);
+};
+sizeCanvas();
+new ResizeObserver(sizeCanvas).observe(canvas);
+
+document.getElementById('field').addEventListener('pointermove', e => {
+  const r = canvas.getBoundingClientRect();
+  fieldState.x = (e.clientX - r.left) / r.width;
+  fieldState.y = (e.clientY - r.top) / r.height;
+});
+new IntersectionObserver(([e]) => fieldVisible = e.isIntersecting, { rootMargin: '100px' }).observe(canvas);
+
+const drawField = t => {
+  if (fieldVisible) {
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    ctx.clearRect(0, 0, w, h);
+    for (let i = 0; i < 26; i++) {
+      const y = h * (i + 1) / 27;
+      ctx.beginPath();
+      for (let x = 0; x <= w + 8; x += 8) {
+        const pull = Math.exp(-Math.abs(x / w - fieldState.x) * 7) * (fieldState.y - .5) * 100;
+        const wave = Math.sin(x * .011 + t * .0007 + i * .42) * (6 + fieldState.energy * 18)
+                   + Math.cos(x * .004 - t * .0004 + i) * 5;
+        ctx.lineTo(x, y + wave + pull);
+      }
+      ctx.strokeStyle = i % 5 === 0
+        ? 'rgba(231,169,74,' + (.14 + fieldState.energy * .18) + ')'
+        : 'rgba(237,233,223,' + (.035 + fieldState.energy * .055) + ')';
+      ctx.lineWidth = i % 5 === 0 ? 1.15 : .75;
+      ctx.stroke();
+    }
+  }
+  requestAnimationFrame(drawField);
+};
+requestAnimationFrame(drawField);
+</script>
+
+<script>
+/* ==========================================================================
+   TIMELINES GSAP / SCROLLTRIGGER (echo/js/scroll-animations.js + enxertos)
+   ========================================================================== */
+if (window.gsap && window.ScrollTrigger && !reduced) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* preloader → hero (north-form) */
+  const boot = gsap.timeline();
+  boot.to('.preloader span', { y: -20, opacity: 0, duration: .5, ease: 'power3.in' })
+      .to('.preloader', { yPercent: -100, duration: .85, ease: 'power4.inOut', onComplete: dropPreloader }, '-=.1')
+      /* fromTo + clearProps: fixa os dois extremos e devolve o controle ao CSS
+         no fim. from() sozinho pode reinicializar e gravar o próprio estado
+         inicial como valor final, deixando o elemento preso em opacity:0. */
+      .fromTo('#nav', { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: .8, ease: 'power3.out', clearProps: 'opacity,transform' }, '-=.35')
+      .fromTo('.hero-copy .eyebrow', { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: .7, ease: 'power3.out', clearProps: 'opacity,transform' }, '-=.5')
+      .fromTo('.hero-char', { yPercent: 125, rotateX: -95, opacity: 0 }, { yPercent: 0, rotateX: 0, opacity: 1, duration: 1.05, stagger: .024, ease: 'power4.out', clearProps: 'opacity,transform' }, '-=.35')
+      .fromTo('.hero-bottom>*', { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: .8, stagger: .12, ease: 'power3.out', clearProps: 'opacity,transform' }, '-=.62')
+      .fromTo('.hero-data span', { x: 16, opacity: 0 }, { x: 0, opacity: 1, duration: .65, stagger: .06, ease: 'power2.out', clearProps: 'opacity,transform' }, '-=.72')
+      .fromTo('.light-console, .hero-panel', { x: 22, opacity: 0 }, { x: 0, opacity: 1, duration: .7, stagger: .1, ease: 'power3.out', clearProps: 'opacity,transform' }, '-=.65')
+      .fromTo('.hero-chip', { scale: .82, opacity: 0 }, { scale: 1, opacity: 1, duration: .7, stagger: .12, ease: 'back.out(1.7)', clearProps: 'opacity,transform' }, '-=.55')
+      .fromTo('.hero-scroll', { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .6, clearProps: 'opacity,transform' }, '-=.4');
+
+  /* parallax da hero (echo) */
+  gsap.to('.hero-media img', { scale: 1.18, yPercent: 7, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 } });
+  gsap.to('.hero-copy', { yPercent: -22, opacity: .32, ease: 'none', scrollTrigger: { trigger: '.hero', start: '28% top', end: 'bottom top', scrub: 1 } });
+  gsap.to('.hero-word', { xPercent: 9, letterSpacing: '-.09em', ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 } });
+
+  /* barra de progresso do scroll (echo) */
+  gsap.to('#progressFill', { scaleX: 1, ease: 'none', scrollTrigger: { start: 'top top', end: 'max', scrub: .15 } });
+
+  /* parallax das camadas de fundo de cada dobra */
+  gsap.utils.toArray('.amb').forEach(layer => {
+    const glow = layer.querySelector('.amb-glow'), halo = layer.querySelector('.amb-halo');
+    if (glow) gsap.to(glow, { yPercent: 14, ease: 'none', scrollTrigger: { trigger: layer.parentElement, start: 'top bottom', end: 'bottom top', scrub: 1.2 } });
+    if (halo) gsap.to(halo, { yPercent: -22, rotate: 40, ease: 'none', scrollTrigger: { trigger: layer.parentElement, start: 'top bottom', end: 'bottom top', scrub: 1.2 } });
+  });
+
+  /* escalonamento de cards e swatches */
+  gsap.utils.toArray('.grid-4, .grid-3, .grid-2, .icon-grid, .anim-grid').forEach(grid => {
+    /* immediateRender:false — em tweens .from() presos a um ScrollTrigger, evita
+       que o estado inicial seja aplicado antes do gatilho e que um refresh()
+       regrave esse estado como valor final. clearProps devolve tudo ao CSS. */
+    gsap.from(grid.children, {
+      y: 44, opacity: 0, filter: 'blur(8px)', duration: .85, ease: 'power3.out', stagger: .05,
+      immediateRender: false, clearProps: 'opacity,transform,filter',
+      scrollTrigger: { trigger: grid, start: 'top 86%', once: true }
+    });
+  });
+
+  /* linhas da escala tipográfica */
+  gsap.utils.toArray('.type-row').forEach(row => {
+    gsap.from(row.children, { y: 30, opacity: 0, filter: 'blur(6px)', duration: .8, stagger: .08, ease: 'power3.out', immediateRender: false, clearProps: 'opacity,transform,filter', scrollTrigger: { trigger: row, start: 'top 92%', once: true } });
+  });
+
+  /* campo de sinal: energia cresce conforme entra em cena (echo) */
+  gsap.to(fieldState, { energy: 1, ease: 'none', scrollTrigger: { trigger: '#field', start: 'top bottom', end: 'bottom top', scrub: 1 } });
+  gsap.fromTo('.field-copy', { scale: .72, opacity: .1 }, { scale: 1, opacity: 1, ease: 'none', scrollTrigger: { trigger: '#field', start: 'top 85%', end: 'center center', scrub: 1 } });
+
+  /* palavras cinéticas (echo) */
+  const kineticWords = gsap.utils.toArray('.kinetic-word');
+  const kineticStep = document.getElementById('kineticStep');
+  gsap.set(kineticWords.slice(1), { opacity: 0 });
+  gsap.timeline({ scrollTrigger: { trigger: '#language', start: 'top top', end: 'bottom bottom', scrub: 1,
+      onUpdate: s => kineticStep.textContent = String(Math.min(3, Math.floor(s.progress * 3) + 1)).padStart(2, '0') + ' / 03' } })
+    .to('.kinetic-beam', { scaleX: 1, duration: .65, ease: 'power2.inOut' })
+    .to(kineticWords[0], { yPercent: -38, rotateX: 72, z: 180, opacity: 0, filter: 'blur(10px)', duration: .8, ease: 'power2.in' }, .35)
+    .fromTo(kineticWords[1], { yPercent: 45, rotateX: -72, z: -180, opacity: 0, filter: 'blur(12px)' },
+            { yPercent: 0, rotateX: 0, z: 0, opacity: 1, filter: 'blur(0px)', duration: .9, ease: 'power3.out' }, .7)
+    .to(kineticWords[1], { scale: .62, rotateY: -32, z: 260, opacity: 0, filter: 'blur(8px)', duration: .8, ease: 'power2.in' }, 1.65)
+    .fromTo(kineticWords[2], { scale: 1.5, rotateY: 28, z: -260, opacity: 0, filter: 'blur(14px)' },
+            { scale: 1, rotateY: 0, z: 0, opacity: 1, filter: 'blur(0px)', duration: 1, ease: 'power3.out' }, 1.95)
+    .to('.kinetic-beam', { scaleX: .14, xPercent: 300, duration: .7, ease: 'power2.in' }, 2.2);
+
+  /* story sticky com troca de imagem (northtrail) */
+  const storyImgs = gsap.utils.toArray('.story-img');
+  const storyCounter = document.querySelector('.story-counter');
+  const setStoryStep = i => {
+    storyImgs.forEach((img, j) => gsap.to(img, { opacity: j === i ? 1 : 0, scale: j === i ? 1 : 1.06, duration: 1, ease: 'power2.inOut' }));
+    storyCounter.textContent = '0' + (i + 1);
+    gsap.fromTo(storyCounter, { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: 'power2.out' });
+  };
+  gsap.utils.toArray('.story-step').forEach((step, i) => {
+    gsap.from(step.children, { y: 46, opacity: 0, filter: 'blur(8px)', stagger: .1, duration: .9, ease: 'power3.out', immediateRender: false, clearProps: 'opacity,transform,filter', scrollTrigger: { trigger: step, start: 'top 74%', once: true } });
+    ScrollTrigger.create({ trigger: step, start: 'top center', end: 'bottom center', onEnter: () => setStoryStep(i), onEnterBack: () => setStoryStep(i) });
+  });
+  gsap.set(storyImgs[0], { scale: 1 });
+
+  /* contadores (echo/aura/north-form) */
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = +el.dataset.count, obj = { n: 0 };
+    gsap.to(obj, { n: target, duration: 1.6, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+      onUpdate: () => el.textContent = Math.round(obj.n) });
+  });
+
+  /* final: título entra deslizando */
+  gsap.from('.final h2 > *, .final h2', { yPercent: 24, opacity: 0, duration: 1.1, ease: 'power4.out', immediateRender: false, clearProps: 'opacity,transform', scrollTrigger: { trigger: '.final', start: 'top 72%', once: true } });
+
+  /* orbe do cursor (echo) */
+  const orb = document.getElementById('cursorOrb');
+  const qx = gsap.quickTo(orb, 'x', { duration: .35, ease: 'power3' });
+  const qy = gsap.quickTo(orb, 'y', { duration: .35, ease: 'power3' });
+  addEventListener('pointermove', e => { orb.style.opacity = '1'; qx(e.clientX); qy(e.clientY); }, { passive: true });
+  document.querySelectorAll('a, button, .archive-row, .media-card, .icon-cell').forEach(el => {
+    el.addEventListener('pointerenter', () => orb.classList.add('wide'));
+    el.addEventListener('pointerleave', () => orb.classList.remove('wide'));
+  });
+
+  addEventListener('load', () => ScrollTrigger.refresh());
+} else {
+  document.querySelectorAll('[data-count]').forEach(el => el.textContent = el.dataset.count);
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('on'));
+}
+</script>
+</body>
+</html>
