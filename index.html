@@ -583,6 +583,82 @@ body.menu-open .navlinks{
 .join-mark i{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 12px var(--amber);animation:breathe 2.4s ease-in-out infinite;flex:none}
 
 /* ==========================================================================
+   DOBRA 05 · PROTOCOLO VISUS
+   O componente .story do sistema — painel fixo à esquerda, etapas rolando à
+   direita. No lugar das fotos que o sistema usa, o painel carrega a própria
+   sigla: a letra da etapa acende em âmbar e as outras ficam em contorno, de
+   modo que VISUS se soletra conforme a leitura avança.
+   ========================================================================== */
+.visus{position:relative;background:var(--ash);color:var(--bone);overflow:hidden;isolation:isolate}
+.visus-head{position:relative;z-index:2;padding-block:clamp(80px,9.4vw,140px) clamp(38px,4.6vw,62px)}
+.visus .ds-head{margin-bottom:0}
+.visus .ds-head p{max-width:46ch;color:var(--dust)}
+.visus .ds-head p b{color:var(--bone);font-weight:500}
+
+/* a grade vive dentro do .wrap para que a borda esquerda do painel caia no
+   mesmo eixo do título e do fecho da dobra */
+.story-wrap{position:relative;z-index:2}
+.story-grid{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)}
+
+/* — painel fixo — */
+.story-sticky{
+  position:sticky;top:0;height:100svh;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;gap:clamp(20px,2.6vw,34px);
+  padding:clamp(96px,12vh,132px) clamp(20px,3vw,52px) clamp(34px,5vh,56px) 0
+}
+.visus-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dust);display:flex;align-items:center;gap:11px
+}
+.visus-word{
+  display:flex;font-family:var(--display);font-weight:600;
+  font-size:clamp(56px,9.9vw,168px);line-height:.84;letter-spacing:-.055em
+}
+.visus-word span{
+  color:transparent;-webkit-text-stroke:1px rgba(237,233,223,.3);
+  transition:color .6s var(--ease),-webkit-text-stroke-color .6s var(--ease),transform .6s var(--ease),text-shadow .6s var(--ease)
+}
+.visus-word span.on{
+  color:var(--amber);-webkit-text-stroke-color:transparent;
+  text-shadow:0 0 48px rgba(231,169,74,.5);transform:translateY(-5px)
+}
+.visus-meta{display:flex;align-items:baseline;gap:16px;border-top:1px solid var(--line-light);padding-top:20px}
+.story-counter{
+  font-family:var(--display);font-weight:600;font-size:clamp(34px,3.4vw,52px);
+  line-height:.8;letter-spacing:-.06em;color:var(--amber);flex:none
+}
+.visus-now{font-size:14.5px;line-height:1.35;color:var(--dust);transition:opacity .4s var(--ease)}
+
+/* — coluna das etapas — */
+.story-steps{border-left:1px solid var(--line-light)}
+.story-step{
+  min-height:92svh;display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(64px,9vh,96px) 0 clamp(64px,9vh,96px) clamp(24px,3.4vw,60px);
+  border-bottom:1px solid var(--line-light)
+}
+.story-step:last-child{border-bottom:0}
+.story-step .kicker{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--amber);display:flex;align-items:center;gap:11px
+}
+.story-step .kicker:after{content:"";height:1px;flex:1;max-width:64px;background:currentColor;opacity:.45}
+.story-step h3{
+  font-family:var(--display);font-weight:500;letter-spacing:-.05em;line-height:.98;
+  font-size:clamp(30px,3.6vw,54px);margin:20px 0 22px;max-width:15ch
+}
+.story-step p{color:var(--dust);font-size:15px;line-height:1.72;max-width:46ch}
+.story-step p b{color:var(--bone);font-weight:500}
+
+/* — fecho da dobra — */
+.visus-foot{position:relative;z-index:2;padding-block:clamp(46px,5.4vw,76px) clamp(80px,9.4vw,140px)}
+.visus-foot div{border-top:1px solid var(--line-light);padding-top:clamp(28px,3vw,40px);max-width:60ch}
+.visus-foot p{font-size:clamp(17px,1.5vw,22px);line-height:1.62;color:var(--dust)}
+.visus-foot em{
+  font-style:italic;font-family:var(--serif);font-weight:500;color:var(--amber);
+  font-size:1.14em;letter-spacing:-.015em
+}
+
+/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width:1180px){
@@ -629,6 +705,25 @@ body.menu-open .navlinks{
   .hero-lamp{opacity:.6}
   .hero-scroll{display:none}
   .hero-foot .wrap{padding-block:15px}
+  /* o painel do VISUS vira uma faixa fixa curta no topo; as etapas passam
+     por baixo dela e a sigla continua acendendo letra a letra */
+  .story-grid{grid-template-columns:1fr}
+  .story-sticky{
+    /* encosta logo abaixo da nav fixa, senão a barra pararia debaixo dela */
+    height:auto;flex-direction:row;align-items:center;justify-content:space-between;gap:16px;top:64px;
+    /* sangra até as bordas da seção, apesar de morar dentro do .wrap */
+    margin-inline:calc(var(--pad) * -1);padding:14px var(--pad);
+    background:rgba(10,10,9,.9);backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line-light)
+  }
+  .visus-label{display:none}
+  .visus-word{font-size:clamp(34px,9.6vw,54px)}
+  .visus-meta{border-top:0;padding-top:0;flex-direction:column;align-items:flex-end;gap:3px;text-align:right}
+  .story-counter{font-size:20px}
+  .visus-now{font-size:11.5px}
+  .story-steps{border-left:0}
+  .story-step{min-height:auto;padding:clamp(46px,7vh,72px) 0}
+  .story-step h3{max-width:none}
   /* a etiqueta do ticker sai da linha e vira cabeçalho da faixa */
   .cred-tech{flex-direction:column;align-items:stretch}
   .cred-tech-label{border-right:0;padding:14px 0 12px}
@@ -987,7 +1082,82 @@ body.menu-open .navlinks{
   </div>
 </section>
 
-<!-- próximas dobras entram aqui: #protocolo, #quiz, #sobre, #duvidas, #agendar -->
+<!-- ==========================================================
+     DOBRA 05 · PROTOCOLO VISUS
+     ========================================================== -->
+<section class="visus" id="protocolo">
+  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i><i class="amb-halo"></i></div>
+
+  <div class="wrap visus-head">
+    <div class="ds-head">
+      <div class="reveal">
+        <div class="section-tag mono">05 / Protocolo VISUS</div>
+        <h2>Antes de operar, <em>a gente entende.</em></h2>
+      </div>
+      <p class="reveal" data-d="1">O Protocolo VISUS é o processo de avaliação que antecede qualquer indicação. Ele responde a pergunta que nenhum exame responde sozinho: <b>qual tecnologia faz sentido para a sua vida?</b></p>
+    </div>
+  </div>
+
+  <div class="wrap story-wrap">
+  <div class="story-grid">
+
+    <!-- painel fixo: a sigla se soletra conforme as etapas passam -->
+    <aside aria-hidden="true" class="story-sticky" id="visusPanel">
+      <p class="visus-label"><i class="pulse"></i> Cinco etapas</p>
+      <div class="visus-word">
+        <span>V</span><span>I</span><span>S</span><span>U</span><span>S</span>
+      </div>
+      <div class="visus-meta">
+        <span class="story-counter">01</span>
+        <span class="visus-now">Visão de vida</span>
+      </div>
+    </aside>
+
+    <div class="story-steps">
+
+      <article class="story-step" data-letter="0" data-name="Visão de vida">
+        <p class="kicker">Etapa 01 / V</p>
+        <h3>Visão de vida</h3>
+        <p>Mapeamento estruturado da sua rotina: distâncias de trabalho, horas de tela, direção noturna, leitura, esportes, profissão e o que mais incomoda hoje. Também avaliamos expectativa e perfil de tolerância — dois pacientes com o mesmo exame podem precisar de lentes diferentes.</p>
+      </article>
+
+      <article class="story-step" data-letter="1" data-name="Investigação ocular">
+        <p class="kicker">Etapa 02 / I</p>
+        <h3>Investigação ocular</h3>
+        <p>Biometria óptica (IOLMaster 700), tomografia de córnea (Pentacam), OCT de mácula e nervo óptico, pupilometria, análise dos ângulos kappa e alfa e aberrometria. O OCT de mácula é obrigatório no nosso processo: alterações silenciosas da retina mudam completamente a indicação da lente.</p>
+      </article>
+
+      <article class="story-step" data-letter="2" data-name="Superfície preparada">
+        <p class="kicker">Etapa 03 / S</p>
+        <h3>Superfície preparada</h3>
+        <p>Avaliação do filme lacrimal e das glândulas meibomianas. Quando há alteração, tratamos e <b>refazemos as medidas</b>. Um cálculo feito sobre um olho seco é um cálculo errado — e essa é uma das causas mais comuns de insatisfação após cirurgia.</p>
+      </article>
+
+      <article class="story-step" data-letter="3" data-name="Um plano só seu">
+        <p class="kicker">Etapa 04 / U</p>
+        <h3>Um plano só seu</h3>
+        <p>Apresentamos dois ou três cenários viáveis, com os prós e as limitações de cada um: quais distâncias ficam cobertas, o que pode exigir óculos em situações específicas, o que esperar de halos e brilhos. Quando indicado, fazemos teste de tolerância antes de decidir. Você sai com um plano de tratamento por escrito.</p>
+      </article>
+
+      <article class="story-step" data-letter="4" data-name="Seguimento e refinamento">
+        <p class="kicker">Etapa 05 / S</p>
+        <h3>Seguimento e refinamento</h3>
+        <p>Plano cirúrgico definido com alvo refrativo, planejamento de lentes tóricas guiado por imagem e acompanhamento pós-operatório estruturado — incluindo a possibilidade de refinamento a laser quando houver indicação.</p>
+      </article>
+
+    </div>
+  </div>
+  </div>
+
+  <div class="wrap visus-foot">
+    <div class="reveal">
+      <p>Nenhuma indicação é feita antes das cinco etapas. <em>É mais demorado.</em> É também a razão pela qual conversamos sobre expectativa antes de conversar sobre lente.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- próximas dobras entram aqui: #quiz, #sobre, #duvidas, #agendar -->
 
 </main>
 
@@ -1041,6 +1211,32 @@ if (!reduced) {
     });
     delay += .05;
   });
+}
+
+/* --- Protocolo VISUS: a etapa que ocupa a faixa central do viewport acende
+   a sua letra no painel fixo. A faixa é estreita (10% da altura) porque as
+   etapas têm quase uma tela cada — só uma a cruza por vez. --- */
+const visusPanel = document.getElementById('visusPanel');
+if (visusPanel) {
+  const letters = [...visusPanel.querySelectorAll('.visus-word span')];
+  const counter = visusPanel.querySelector('.story-counter');
+  const nowName = visusPanel.querySelector('.visus-now');
+  const visusSteps = [...document.querySelectorAll('.story-step')];
+  let current = -1;
+
+  const setStep = i => {
+    if (i === current) return;
+    current = i;
+    letters.forEach((l, j) => l.classList.toggle('on', j === i));
+    counter.textContent = String(i + 1).padStart(2, '0');
+    nowName.textContent = visusSteps[i].dataset.name;
+  };
+
+  const stepObs = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) setStep(+e.target.dataset.letter);
+  }), { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+  visusSteps.forEach(s => stepObs.observe(s));
+  setStep(0);
 }
 
 /* --- luz de exame que segue o ponteiro sobre o retrato ---
