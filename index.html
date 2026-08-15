@@ -207,31 +207,34 @@ body.menu-open .navlinks{
              linear-gradient(180deg,rgba(17,17,15,.72) 0%,transparent 24%)
 }
 /* luz de exame: halo quente que acompanha o ponteiro.
-   É um disco de tamanho fixo movido só por transform — nada de interpolar
+   Vive na dobra inteira, não dentro do retrato — antes ele era filho da
+   figura e por isso a luz simplesmente sumia na metade esquerda da tela.
+   É um disco de tamanho fixo movido só por transform: nada de interpolar
    gradiente a cada frame, que era o que fazia o efeito engasgar.
    left/top dão o ponto de repouso; o JS escreve apenas o deslocamento. */
 .hero-lamp{
-  position:absolute;z-index:4;left:56%;top:32%;width:min(115%,1000px);aspect-ratio:1;border-radius:50%;
+  position:absolute;z-index:3;left:68%;top:30%;width:min(88%,1240px);aspect-ratio:1;border-radius:50%;
   pointer-events:none;mix-blend-mode:screen;
   background:radial-gradient(circle closest-side,
-    rgba(255,231,181,.46) 0%,rgba(238,185,95,.2) 24%,rgba(231,169,74,.06) 46%,transparent 70%);
+    rgba(255,231,181,.4) 0%,rgba(238,185,95,.17) 24%,rgba(231,169,74,.05) 46%,transparent 70%);
   transform:translate3d(var(--px,0px),var(--py,0px),0) translate(-50%,-50%);
   will-change:transform
 }
 
 /* — grade principal — */
 .hero-grid{position:relative;z-index:5;flex:1;display:flex;align-items:center;padding-block:clamp(120px,17vh,190px) clamp(40px,7vh,72px)}
-.hero-copy{width:min(660px,100%);color:#f4f0e6}
+.hero-copy{width:min(780px,100%);color:#f4f0e6}
 
 .hero-eyebrow{
   display:flex;align-items:center;gap:12px;margin-bottom:clamp(20px,3.2vh,34px);
   font-family:var(--mono);font-size:10px;line-height:1.7;letter-spacing:.16em;text-transform:uppercase;color:rgba(244,240,230,.72)
 }
-.hero-eyebrow b{font-weight:400;color:var(--amber)}
 
 .hero h1{
   font-family:var(--display);font-weight:500;
-  font-size:clamp(40px,5.2vw,82px);line-height:.94;letter-spacing:-.055em;
+  /* quatro linhas agora: o corpo diminui para a dobra continuar cabendo
+     numa tela sem empurrar os CTAs para fora */
+  font-size:clamp(34px,4.3vw,63px);line-height:.98;letter-spacing:-.055em;
   filter:drop-shadow(6px 8px 0 rgba(0,0,0,.24))
 }
 .hero h1 .hero-line{display:block;overflow:hidden;perspective:900px;padding:0 .04em .1em 0}
@@ -800,8 +803,8 @@ body.menu-open .navlinks{
   .hero-figure:before{background:linear-gradient(180deg,rgba(17,17,15,.66) 0%,rgba(17,17,15,.14) 20%,transparent 42%)}
   .hero-figure:after{background:linear-gradient(0deg,#11110f 0%,rgba(17,17,15,.72) 26%,rgba(17,17,15,.16) 52%,transparent 68%)}
   .hero-grid{align-items:flex-end;padding-block:clamp(140px,33svh,310px) clamp(22px,3.4vh,40px)}
-  .hero h1{font-size:clamp(38px,9.4vw,62px);filter:drop-shadow(0 3px 12px rgba(0,0,0,.55))}
-  .hero-lamp{opacity:.6}
+  .hero h1{font-size:clamp(27px,7.9vw,52px);filter:drop-shadow(0 3px 12px rgba(0,0,0,.55))}
+  .hero-lamp{opacity:.45}
   .hero-scroll{display:none}
   .hero-foot .wrap{padding-block:15px}
   /* o painel do VISUS vira uma faixa fixa curta no topo; as etapas passam
@@ -857,7 +860,7 @@ body.menu-open .navlinks{
 @media (max-width:900px) and (max-height:730px){
   .hero-figure{height:min(48svh,360px)}
   .hero-grid{padding-block:clamp(118px,29svh,240px) 18px}
-  .hero h1{font-size:clamp(30px,7.8vw,44px)}
+  .hero h1{font-size:clamp(25px,7.2vw,40px)}
   .hero-sub{font-size:14px;margin-top:16px;line-height:1.55}
   .hero-actions{margin-top:20px;gap:9px}
   .hero-actions .btn{padding-block:14px;font-size:13.5px}
@@ -909,8 +912,8 @@ body.menu-open .navlinks{
   <!-- retrato -->
   <figure class="hero-figure">
     <img alt="Dr. Lucas Cintra, cirurgião oftalmologista, em seu consultório em Brasília" src="assets/dr-lucas-cintra.jpg"/>
-    <span aria-hidden="true" class="hero-lamp"></span>
   </figure>
+  <span aria-hidden="true" class="hero-lamp"></span>
 
   <!-- cartão do protocolo -->
   <aside class="visus-card float-slow rise" style="--d:1.15s">
@@ -929,11 +932,12 @@ body.menu-open .navlinks{
 
         <p class="hero-eyebrow rise" style="--d:.1s">
           <i class="pulse" aria-hidden="true"></i>
-          <span>Catarata · Refrativa · Presbiopia <b>—</b> Brasília/DF</span>
+          <span>Catarata · Refrativa · Presbiopia</span>
         </p>
 
-        <h1 aria-label="A tecnologia certa para o seu olho. E para a sua vida.">
-          <span class="hero-line"><span>A tecnologia certa</span></span>
+        <h1 aria-label="Independência Visual, com a tecnologia certa para o seu olho. E para a sua vida.">
+          <span class="hero-line"><span>Independência Visual,</span></span>
+          <span class="hero-line"><span>com a tecnologia certa</span></span>
           <span class="hero-line"><span>para o seu olho.</span></span>
           <span class="hero-line accent"><span>E para a sua vida.</span></span>
         </h1>
@@ -1487,17 +1491,16 @@ if (visusPanel) {
   setStep(0);
 }
 
-/* --- luz de exame que segue o ponteiro sobre o retrato ---
-   O halo vive dentro do retrato, então o ponteiro é medido contra o retângulo
-   DO RETRATO — não o da dobra inteira. O que se escreve é só o deslocamento em
-   relação ao ponto de repouso (left:56% / top:32%), aplicado por transform e
+/* --- luz de exame que segue o ponteiro pela dobra inteira ---
+   O halo cobre toda a dobra, então o ponteiro é medido contra o retângulo da
+   própria dobra. O que se escreve é só o deslocamento em relação ao ponto de
+   repouso (left:68% / top:30%, sobre o retrato), aplicado por transform e
    suavizado por interpolação a cada quadro. */
 const hero = document.querySelector('.hero');
 const lamp = document.querySelector('.hero-lamp');
-const figure = document.querySelector('.hero-figure');
 
 if (!reduced) {
-  const ANCHOR_X = .56, ANCHOR_Y = .32, EASE = .12;
+  const ANCHOR_X = .68, ANCHOR_Y = .30, EASE = .12;
   let tx = 0, ty = 0, cx = 0, cy = 0, running = false, idle = 0;
 
   const frame = () => {
@@ -1513,7 +1516,7 @@ if (!reduced) {
 
   hero.addEventListener('pointermove', e => {
     if (e.pointerType === 'touch' || innerWidth < 901) return;
-    const r = figure.getBoundingClientRect();
+    const r = hero.getBoundingClientRect();
     if (!r.width) return;
     tx = (e.clientX - r.left) - r.width * ANCHOR_X;
     ty = (e.clientY - r.top) - r.height * ANCHOR_Y;
