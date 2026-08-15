@@ -659,6 +659,101 @@ body.menu-open .navlinks{
 }
 
 /* ==========================================================================
+   DOBRA 06 · TECNOLOGIA
+   Capítulo longo sobre osso. Três blocos com o cabeçalho preso (position:
+   sticky) enquanto o corpo rola, fechando na .spec-table do sistema com os
+   equipamentos. É a dobra de maior risco de exagero: os visuais descrevem
+   procedimento e previsibilidade, nunca desfecho.
+   ========================================================================== */
+.ds.bone{background:var(--bone);color:var(--ink)}
+.ds.bone .section-tag{color:var(--smoke)}
+
+/* — abertura do capítulo com índice dos três blocos — */
+.tech-open{
+  display:flex;align-items:baseline;justify-content:space-between;gap:26px;flex-wrap:wrap;
+  padding-bottom:clamp(20px,2.4vw,30px);border-bottom:1px solid var(--ink)
+}
+.tech-index{display:flex;gap:clamp(14px,2vw,30px);flex-wrap:wrap;font:9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.tech-index a{position:relative;color:var(--smoke);padding-bottom:4px;transition:color .3s var(--ease)}
+.tech-index a:after{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--ember);transition:width .35s var(--ease)}
+.tech-index a:hover{color:var(--ink)}
+.tech-index a:hover:after{width:100%}
+
+/* — bloco — */
+.tech-block{
+  display:grid;grid-template-columns:minmax(0,.44fr) minmax(0,.56fr);
+  gap:clamp(26px,3.6vw,68px);align-items:start;padding-top:clamp(44px,5.4vw,80px)
+}
+.tech-block+.tech-block{border-top:1px solid var(--line);margin-top:clamp(44px,5.4vw,80px)}
+.tech-lead{position:sticky;top:108px}
+.tech-kicker{
+  display:flex;align-items:center;gap:11px;margin-bottom:20px;
+  font:9px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ember)
+}
+.tech-kicker:after{content:"";height:1px;flex:1;max-width:56px;background:currentColor;opacity:.45}
+.tech-lead h2{
+  font-family:var(--display);font-weight:500;letter-spacing:-.05em;line-height:1.02;
+  font-size:clamp(27px,3.2vw,46px);max-width:15ch
+}
+.tech-lead h2 em{
+  font-style:italic;font-family:var(--serif);font-weight:500;color:var(--ember);
+  font-size:1.1em;letter-spacing:-.015em
+}
+.tech-body>p{font-size:15.5px;line-height:1.72;color:var(--smoke);max-width:58ch}
+.tech-body>p+p{margin-top:17px}
+.tech-body b{color:var(--ink);font-weight:600}
+.tech-close{
+  margin-top:clamp(24px,2.6vw,32px);padding-top:20px;border-top:1px solid var(--line);
+  font-size:14.5px;line-height:1.68;color:var(--smoke);max-width:58ch
+}
+.tech-close b{color:var(--ink);font-weight:600}
+
+/* — gráfico de faixas de visão (elemento visual pedido no bloco A) — */
+.ranges{
+  margin-top:clamp(26px,2.8vw,38px);padding:clamp(18px,2vw,26px);
+  border:1px solid var(--line);border-radius:var(--r-md);background:rgba(255,255,255,.44)
+}
+.ranges figcaption{font:9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--smoke);margin-bottom:20px}
+.ranges-grid{display:grid;grid-template-columns:minmax(0,1.35fr) repeat(3,minmax(0,1fr));gap:15px 10px;align-items:center}
+.ranges-grid .rh{font:8.5px/1.25 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--smoke);text-align:center}
+.ranges-grid .rl{font-size:13px;font-weight:500;letter-spacing:-.01em}
+.dot{width:15px;height:15px;border-radius:50%;border:1px solid var(--line);justify-self:center;flex:none}
+.dot--full{background:var(--amber);border-color:var(--amber);box-shadow:0 0 15px rgba(231,169,74,.55)}
+.dot--half{border-color:rgba(231,169,74,.85);background:linear-gradient(90deg,var(--amber) 50%,transparent 50%)}
+.ranges-key{
+  display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-top:18px;padding-top:15px;
+  border-top:1px solid var(--line);font:8.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--fog)
+}
+.ranges-key span{display:flex;align-items:center;gap:7px}
+.ranges-key .dot{width:11px;height:11px}
+.ranges-note{margin-top:14px;font-size:12px;line-height:1.55;color:var(--fog)}
+
+/* — desenho técnico (bloco B): o que o laser executa é planejado antes — */
+.blueprint{
+  margin-block:clamp(24px,2.8vw,34px);padding:clamp(16px,1.8vw,24px);
+  border:1px solid var(--line);border-radius:var(--r-md);background:rgba(255,255,255,.44)
+}
+.blueprint svg{display:block;width:100%;max-width:300px;margin:auto;color:var(--ink)}
+.blueprint text{font-family:var(--mono);font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;fill:var(--smoke)}
+
+/* — perfis de ablação (bloco C) — */
+.profiles{margin-top:clamp(22px,2.4vw,30px);border-top:1px solid var(--line)}
+.profile{padding:19px 0;border-bottom:1px solid var(--line);transition:padding-left .4s var(--ease)}
+.profile:hover{padding-left:12px}
+.profile h4{font-size:15px;font-weight:600;letter-spacing:-.015em;margin-bottom:7px}
+.profile p{font-size:14px;line-height:1.66;color:var(--smoke);max-width:56ch}
+
+/* — quadro de equipamentos — */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.spec-table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+.spec-table th,.spec-table td{text-align:left;padding:15px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+.spec-table th{font:9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--smoke);border-bottom-color:currentColor;padding-bottom:12px}
+.spec-table td:first-child{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ember);white-space:nowrap}
+.spec-table td:last-child{color:var(--smoke);line-height:1.6}
+.spec-table tbody tr{transition:background .3s}
+.spec-table tbody tr:hover{background:rgba(231,169,74,.08)}
+
+/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width:1180px){
@@ -685,6 +780,10 @@ body.menu-open .navlinks{
      em vez de flutuar no meio de uma caixa que ficou muito ampla */
   .glyph{justify-content:flex-start}
   .cards .card h3{font-size:clamp(21px,2.4vw,27px)}
+  /* uma coluna: o cabeçalho do bloco não tem mais corpo ao lado para acompanhar */
+  .tech-block{grid-template-columns:1fr;gap:24px}
+  .tech-lead{position:static}
+  .tech-lead h2{max-width:22ch}
 }
 @media (max-width:900px){
   .navlinks{display:none}
@@ -1153,6 +1252,157 @@ body.menu-open .navlinks{
     </div>
   </div>
 
+</section>
+
+<!-- ==========================================================
+     DOBRA 06 · TECNOLOGIA
+     ========================================================== -->
+<section class="ds bone on-light" id="tecnologia">
+  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i><i class="amb-halo"></i></div>
+  <div class="wrap">
+
+    <div class="tech-open reveal">
+      <div class="section-tag mono">06 / Tecnologia</div>
+      <nav class="tech-index" aria-label="Blocos desta seção">
+        <a href="#tec-lente">A — A lente</a>
+        <a href="#tec-lamina">B — Sem lâmina</a>
+        <a href="#tec-laser">C — O laser é ajustado ao seu olho</a>
+      </nav>
+    </div>
+
+    <!-- ————— BLOCO A · A LENTE ————— -->
+    <article class="tech-block" id="tec-lente">
+      <div class="tech-lead reveal">
+        <p class="tech-kicker">Bloco A / A lente</p>
+        <h2>Não existe a melhor lente. Existe a lente <em>certa para o seu olho.</em></h2>
+      </div>
+      <div class="tech-body reveal" data-d="1">
+        <p>Lentes intraoculares se diferenciam pelas faixas de visão que cobrem e pelo que cobram em troca — em qualidade de contraste, em halos noturnos, em dependência residual para perto. Não há escolha sem compromisso, e quem diz o contrário está vendendo, não indicando.</p>
+        <p>Trabalhamos com acesso às principais plataformas do mercado, incluindo lentes tóricas, de foco estendido, trifocais, fácicas e ICL. Isso significa que a indicação parte do seu exame — não do que está disponível na prateleira.</p>
+
+        <figure class="ranges">
+          <figcaption>Cobertura por faixa de visão</figcaption>
+          <div class="ranges-grid">
+            <span></span>
+            <span class="rh">Perto</span><span class="rh">Intermediária</span><span class="rh">Longe</span>
+
+            <span class="rl">Monofocal</span>
+            <i aria-hidden="true" class="dot"></i><i aria-hidden="true" class="dot"></i><i aria-hidden="true" class="dot dot--full"></i>
+
+            <span class="rl">Foco estendido</span>
+            <i aria-hidden="true" class="dot dot--half"></i><i aria-hidden="true" class="dot dot--full"></i><i aria-hidden="true" class="dot dot--full"></i>
+
+            <span class="rl">Trifocal</span>
+            <i aria-hidden="true" class="dot dot--full"></i><i aria-hidden="true" class="dot dot--full"></i><i aria-hidden="true" class="dot dot--full"></i>
+          </div>
+          <p class="ranges-key">
+            <span><i class="dot dot--full"></i> Cobre</span>
+            <span><i class="dot dot--half"></i> Parcial</span>
+            <span><i class="dot"></i> Não cobre</span>
+          </p>
+          <!-- TODO: conferir este esquema com a nomenclatura de bula antes de publicar -->
+          <p class="ranges-note">Esquema ilustrativo das categorias, sem nomes comerciais. A indicação parte do seu exame.</p>
+        </figure>
+      </div>
+    </article>
+
+    <!-- ————— BLOCO B · SEM LÂMINA ————— -->
+    <article class="tech-block" id="tec-lamina">
+      <div class="tech-lead reveal">
+        <p class="tech-kicker">Bloco B / Sem lâmina</p>
+        <h2>Nenhuma etapa de corte depende de <em>uma lâmina.</em></h2>
+      </div>
+      <div class="tech-body reveal" data-d="1">
+        <p>É a pergunta que quase ninguém faz em voz alta: alguém vai cortar o meu olho?</p>
+        <p>Nas nossas cirurgias, as etapas de corte são feitas por laser de femtossegundo — um laser que trabalha em pulsos ultracurtos e faz incisões planejadas no computador, com dimensões e posição definidas antes de você entrar na sala.</p>
+
+        <!-- o desenho entra depois da frase que ele ilustra, não antes -->
+        <figure class="blueprint">
+          <svg viewBox="0 0 260 262" role="img" aria-label="Esquema: abertura circular com diâmetro e posição definidos antes do procedimento">
+            <g fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
+              <!-- construção -->
+              <g opacity=".3" stroke-dasharray="3 5">
+                <path d="M18 110h224M130 14v192"/>
+              </g>
+              <circle cx="130" cy="110" r="90" opacity=".32"/>
+              <!-- abertura programada -->
+              <circle cx="130" cy="110" r="46" stroke="#e7a94a" stroke-width="1.5"/>
+              <!-- marcas de incisão: traçadas sobre a circunferência (r=90),
+                   de r=78 a r=102, para que cruzem a borda em vez de flutuar dentro -->
+              <g stroke-width="1.5">
+                <path d="M66 65 46 51M194 155l20 13"/>
+              </g>
+              <!-- cota do diâmetro -->
+              <g opacity=".55">
+                <path d="M84 168v56M176 168v56" stroke-dasharray="3 5"/>
+                <path d="M84 214h92M84 208v12M176 208v12"/>
+              </g>
+            </g>
+            <text x="130" y="240" text-anchor="middle">Ø programado</text>
+            <text x="16" y="42" text-anchor="start">Incisão</text>
+          </svg>
+        </figure>
+
+        <p><b>Na cirurgia de catarata</b>, o femtossegundo realiza as incisões, a abertura da cápsula que envolve o cristalino e a fragmentação do cristalino. A abertura circular feita por laser tem diâmetro e centralização programados, o que ajuda no posicionamento estável da lente intraocular — algo especialmente relevante quando a lente é tórica ou de foco estendido. A remoção do cristalino continua sendo feita por facoemulsificação.</p>
+        <p><b>Na cirurgia refrativa</b>, o femtossegundo cria a lamela corneana com espessura programada, sem uso de lâmina manual.</p>
+      </div>
+    </article>
+
+    <!-- ————— BLOCO C · O LASER É AJUSTADO AO SEU OLHO ————— -->
+    <article class="tech-block" id="tec-laser">
+      <div class="tech-lead reveal">
+        <p class="tech-kicker">Bloco C / O laser é ajustado ao seu olho</p>
+        <h2>Dois olhos com o mesmo grau não recebem <em>o mesmo tratamento.</em></h2>
+      </div>
+      <div class="tech-body reveal" data-d="1">
+        <p>Corrigir grau a laser não é aplicar uma receita padrão. A plataforma WaveLight EX500 permite escolher o perfil de ablação a partir do que a tomografia mostra sobre a sua córnea:</p>
+
+        <!-- TODO: confirmar a nomenclatura comercial dos perfis com o fabricante e o registro ANVISA -->
+        <div class="profiles">
+          <div class="profile">
+            <h4>Perfil otimizado</h4>
+            <p>Leva em conta a curvatura periférica da córnea, preservando o formato natural e ajudando a manter a qualidade da visão noturna.</p>
+          </div>
+          <div class="profile">
+            <h4>Ajuste de asfericidade (Custom-Q)</h4>
+            <p>Permite modular o formato final da córnea, com aplicação em casos selecionados e em estratégias para presbiopia.</p>
+          </div>
+          <div class="profile">
+            <h4>Perfis para presbiopia</h4>
+            <p>Quando indicado, o tratamento pode ser planejado para ampliar a faixa de visão de perto, com avaliação prévia de tolerância.</p>
+          </div>
+        </div>
+
+        <p class="tech-close">Qual perfil se aplica ao seu caso é uma decisão da etapa <b>U</b> do Protocolo VISUS — depois dos exames, nunca antes.</p>
+      </div>
+    </article>
+
+    <!-- ————— BLOCO DE APOIO · EQUIPAMENTOS ————— -->
+    <div class="tech-block">
+      <div class="tech-lead reveal">
+        <p class="tech-kicker">Bloco de apoio</p>
+        <h2>Equipamentos</h2>
+      </div>
+      <div class="tech-body reveal" data-d="1">
+      <div class="table-scroll">
+        <table class="spec-table">
+          <thead>
+            <tr><th scope="col">Equipamento</th><th scope="col">Função</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>IOLMaster 700</td><td>Biometria de alta precisão para o cálculo da lente</td></tr>
+            <tr><td>Pentacam</td><td>Tomografia de córnea: triagem de ectasia, astigmatismo e aberrações</td></tr>
+            <tr><td>OCT</td><td>Avaliação da mácula e do nervo óptico antes de qualquer indicação premium</td></tr>
+            <tr><td>Verion</td><td>Planejamento e orientação do implante de lentes tóricas por imagem</td></tr>
+            <tr><td>Laser de femtossegundo</td><td>Incisões, abertura da cápsula e fragmentação do cristalino na catarata; lamela corneana na refrativa</td></tr>
+            <tr><td>WaveLight EX500</td><td>Plataforma de laser excimer com perfis de ablação personalizáveis</td></tr>
+          </tbody>
+        </table>
+      </div>
+      </div>
+    </div>
+
+  </div>
 </section>
 
 <!-- próximas dobras entram aqui: #quiz, #sobre, #duvidas, #agendar -->

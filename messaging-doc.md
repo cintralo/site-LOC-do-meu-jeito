@@ -82,7 +82,7 @@ Sempre descrito como **processo de avaliação e cuidado**, jamais como técnica
 ### Versão longa (as cinco etapas)
 
 **V — Visão de vida**
-Mapeamento estruturado da sua rotina: distâncias de trabalho, horas de tela, direção noturna, leitura, esportes, profissão e o que mais incomoda hoje. Também avaliamos expectativa e perfil de tolerância — dois pacientes com o mesmo exame podem precisar de lentes diferentes.
+Mapeamento estruturado da sua rotina: distâncias de trabalho, horas de tela, direção noturna, leitura, esportes, profissão e o que mais incomoda hoje. Também avaliamos expectativa e perfil de tolerância — dois pacientes com exames parecidos podem precisar de abordagens diferentes.
 
 **I — Investigação ocular**
 Biometria óptica (IOLMaster 700), tomografia de córnea (Pentacam), OCT de mácula e nervo óptico, pupilometria, análise dos ângulos kappa e alfa e aberrometria. O OCT de mácula é obrigatório no nosso processo: alterações silenciosas da retina mudam completamente a indicação da lente.
