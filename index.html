@@ -239,6 +239,14 @@ body.menu-open .navlinks{
 }
 .hero h1 .hero-line{display:block;overflow:hidden;perspective:900px;padding:0 .04em .1em 0}
 .hero h1 .hero-line>span{display:block}
+/* a promessa central: mesma face de display das linhas seguintes, mas em
+   âmbar e um corpo acima — é o que precisa ser lido primeiro. O acento em
+   serifa da última linha continua âmbar, porém com traço bem mais leve,
+   então os dois não competem. */
+.hero h1 .lead{
+  color:var(--amber);font-size:1.15em;letter-spacing:-.062em;
+  text-shadow:0 0 42px rgba(231,169,74,.34)
+}
 .hero h1 .accent{
   color:var(--amber);font-family:var(--serif);font-weight:500;font-style:italic;letter-spacing:-.02em;
   font-size:1.06em;text-shadow:0 0 34px rgba(231,169,74,.35)
@@ -936,7 +944,7 @@ body.menu-open .navlinks{
         </p>
 
         <h1 aria-label="Independência Visual, com a tecnologia certa para o seu olho. E para a sua vida.">
-          <span class="hero-line"><span>Independência Visual,</span></span>
+          <span class="hero-line lead"><span>Independência Visual,</span></span>
           <span class="hero-line"><span>com a tecnologia certa</span></span>
           <span class="hero-line"><span>para o seu olho.</span></span>
           <span class="hero-line accent"><span>E para a sua vida.</span></span>
