@@ -765,55 +765,6 @@ body.menu-open .navlinks{
 .spec-table tbody tr:hover{background:rgba(231,169,74,.08)}
 
 /* ==========================================================================
-   DOBRA 07 · COMO FUNCIONA
-   Linha do tempo horizontal. A dobra 05 já usa sequência vertical para o
-   VISUS — repetir o mesmo eixo aqui faria as duas se confundirem, sendo que
-   uma descreve avaliação e a outra descreve logística.
-   O trilho se desenha da esquerda para a direita quando a dobra entra em
-   cena, um segmento por etapa, acendendo os nós em cascata.
-   ========================================================================== */
-.flow{
-  --gap:clamp(14px,1.8vw,28px);--dot:15px;
-  list-style:none;margin:0;padding:0;
-  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--gap)
-}
-.flow-step{position:relative;padding-top:calc(var(--dot) + 18px)}
-/* trilho: base apagada + segmento âmbar que cresce */
-.flow-step:before,.flow-step:after{
-  content:"";position:absolute;left:0;top:calc(var(--dot) / 2);height:1px;
-  width:calc(100% + var(--gap))
-}
-.flow-step:before{background:var(--line-light)}
-.flow-step:after{
-  background:var(--amber);box-shadow:0 0 14px rgba(231,169,74,.55);
-  transform:scaleX(0);transform-origin:left;
-  transition:transform .62s var(--ease);transition-delay:calc(var(--i) * .26s)
-}
-.flow-step:last-child:before,.flow-step:last-child:after{display:none}
-.flow.on .flow-step:after{transform:scaleX(1)}
-
-.flow-dot{
-  position:absolute;left:0;top:0;width:var(--dot);aspect-ratio:1;border-radius:50%;
-  border:1px solid var(--line-light);background:var(--ink)
-}
-.flow-dot:before{
-  content:"";position:absolute;inset:3px;border-radius:50%;background:var(--amber);
-  box-shadow:0 0 14px rgba(231,169,74,.8);
-  transform:scale(0);transition:transform .5s var(--ease-out);
-  transition-delay:calc(var(--i) * .26s)
-}
-.flow.on .flow-dot:before{transform:scale(1)}
-
-.flow-no{font:9px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dust)}
-.flow-step h3{
-  font-family:var(--display);font-weight:500;letter-spacing:-.038em;line-height:1.06;
-  font-size:clamp(18px,1.58vw,24px);margin:13px 0 11px
-}
-.flow-step p{font-size:13.5px;line-height:1.66;color:var(--dust)}
-
-.flow-cta{display:flex;justify-content:center;margin-top:clamp(44px,5.4vw,76px)}
-
-/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width:1180px){
@@ -841,18 +792,6 @@ body.menu-open .navlinks{
   .tech-block{grid-template-columns:1fr;gap:24px}
   .tech-lead{position:static}
   .tech-lead h2{max-width:22ch}
-  /* a linha do tempo gira 90°: o trilho passa a descer pela lateral */
-  .flow{grid-template-columns:1fr;gap:0}
-  .flow-step{padding:0 0 clamp(26px,4vw,38px) calc(var(--dot) + 20px)}
-  .flow-step:last-child{padding-bottom:0}
-  .flow-step:before,.flow-step:after{
-    left:calc(var(--dot) / 2);top:var(--dot);width:1px;height:calc(100% - var(--dot))
-  }
-  .flow-step:after{transform:scaleY(0);transform-origin:top}
-  .flow.on .flow-step:after{transform:scaleY(1)}
-  .flow-step h3{margin:9px 0 8px}
-  .flow-step p{max-width:52ch}
-  .flow-cta .btn{width:100%;max-width:420px}
 }
 @media (max-width:900px){
   .navlinks{display:none}
@@ -1465,71 +1404,6 @@ body.menu-open .navlinks{
         </table>
       </div>
       </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ==========================================================
-     DOBRA 07 · COMO FUNCIONA
-     ========================================================== -->
-<section class="ds on-dark" id="como-funciona">
-  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i><i class="amb-beam"></i><i class="amb-halo"></i></div>
-  <div class="wrap">
-
-    <div class="ds-head">
-      <div class="reveal">
-        <div class="section-tag mono">07 / Como funciona</div>
-        <h2>Do primeiro contato ao <em>pós-operatório</em></h2>
-      </div>
-    </div>
-
-    <ol class="flow reveal" data-d="1">
-
-      <li class="flow-step" style="--i:0">
-        <span aria-hidden="true" class="flow-dot"></span>
-        <span class="flow-no">01</span>
-        <h3>Primeiro contato</h3>
-        <p>Nossa equipe entende seu caso e organiza a agenda de avaliação.</p>
-      </li>
-
-      <li class="flow-step" style="--i:1">
-        <span aria-hidden="true" class="flow-dot"></span>
-        <span class="flow-no">02</span>
-        <h3>Avaliação VISUS</h3>
-        <p>Mapeamento de rotina e exames completos em uma sessão estruturada. Reserve pelo menos 1 hora.</p>
-      </li>
-
-      <li class="flow-step" style="--i:2">
-        <span aria-hidden="true" class="flow-dot"></span>
-        <span class="flow-no">03</span>
-        <h3>Plano de tratamento</h3>
-        <p>Você recebe por escrito os cenários possíveis, com prós e limitações de cada um.</p>
-      </li>
-
-      <li class="flow-step" style="--i:3">
-        <span aria-hidden="true" class="flow-dot"></span>
-        <span class="flow-no">04</span>
-        <h3>Cirurgia</h3>
-        <p>Procedimento ambulatorial, com anestesia local e alta no mesmo dia. Um olho por vez, na maioria dos casos.</p>
-      </li>
-
-      <li class="flow-step" style="--i:4">
-        <span aria-hidden="true" class="flow-dot"></span>
-        <span class="flow-no">05</span>
-        <h3>Acompanhamento</h3>
-        <p>Retornos programados em 24 horas, 7 dias, 30 dias e 6 meses. Refinamento a laser avaliado quando houver indicação.</p>
-      </li>
-
-    </ol>
-
-    <!-- TODO: apontar para a agenda real; o guia (§4.5) pede que o prazo de
-         retorno da equipe fique explícito — depende do campo [X] horas úteis -->
-    <div class="flow-cta reveal" data-d="2">
-      <a class="btn btn--amber" href="#agendar">
-        Agendar minha avaliação
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
-      </a>
     </div>
 
   </div>
