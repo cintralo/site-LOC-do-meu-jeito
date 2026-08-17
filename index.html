@@ -867,6 +867,84 @@ body.menu-open .navlinks{
 }
 
 /* ==========================================================================
+   DOBRA 09 · PROVA SOCIAL
+   A dobra mais restringida do site. O guia (§3.8) e o Art. 8º, §4º limitam
+   volume, tom e forma de coleta: poucos depoimentos, sóbrios, sem identificar
+   paciente e sem esquema sistemático. Por isso: três lugares fixos, nenhum
+   carrossel, nenhuma paginação — a contenção é parte do desenho, não uma
+   limitação a contornar. O peso principal fica na nota do Google, que é dado
+   de terceiro, verificável e auditável (§3.7).
+   ========================================================================== */
+.proof{
+  display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);
+  gap:clamp(22px,3.2vw,54px);align-items:start
+}
+
+/* — bloco de avaliações: o único número que não depende da nossa palavra — */
+.proof-score{
+  position:sticky;top:108px;padding:clamp(24px,2.4vw,32px);
+  border:1px solid var(--line-light);border-radius:var(--r-lg);
+  background:rgba(237,233,223,.045)
+}
+.proof-score .mono{display:flex;align-items:center;gap:9px;color:var(--dust);margin-bottom:20px}
+.proof-score .mono svg{width:14px;height:14px;color:var(--amber);flex:none}
+.proof-grade{
+  font-family:var(--display);font-weight:600;color:var(--amber);
+  font-size:clamp(44px,5vw,72px);line-height:.82;letter-spacing:-.07em
+}
+/* <small>, não span: um seletor de span venceria o .slot por especificidade
+   e encolheria o marcador de pendência junto com o "de 5" */
+.proof-grade small{font-size:.32em;font-weight:500;letter-spacing:-.02em;color:var(--dust);margin-left:.2em}
+.proof-count{margin-top:15px;font-size:13.5px;line-height:1.6;color:var(--dust)}
+.proof-link{
+  display:inline-flex;align-items:center;gap:9px;margin-top:20px;padding-top:18px;
+  border-top:1px solid var(--line-light);width:100%;
+  font-size:13px;font-weight:500;color:var(--bone);transition:color .3s var(--ease)
+}
+.proof-link svg{width:15px;height:15px;transition:transform .35s var(--ease)}
+.proof-link:hover{color:var(--amber)}
+.proof-link:hover svg{transform:translate(2px,-2px)}
+
+/* — depoimentos — */
+.proof-list{display:grid;gap:clamp(12px,1.3vw,17px)}
+.quote{
+  position:relative;padding:clamp(22px,2.1vw,30px) clamp(22px,2.1vw,30px) clamp(20px,1.9vw,26px);
+  border-radius:var(--r-lg);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);
+  transition:transform .5s var(--ease),border-color .5s var(--ease)
+}
+.quote:hover{transform:translateY(-3px);border-color:rgba(231,169,74,.42)}
+/* aspa pendurada acima do texto, em fluxo — como marca absoluta no canto ela
+   cruzava a primeira linha do depoimento */
+.quote:before{
+  content:"\201C";display:block;font-family:var(--serif);
+  font-size:clamp(56px,4.6vw,72px);line-height:.62;color:rgba(231,169,74,.34);
+  margin-bottom:10px
+}
+.quote p{position:relative;font-size:clamp(14.5px,1.15vw,16.5px);line-height:1.72;color:var(--bone);max-width:58ch}
+.quote footer{
+  margin-top:16px;font:9px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dust)
+}
+
+/* — aviso obrigatório: filete âmbar para não virar letra miúda de rodapé — */
+.proof-note{
+  display:flex;gap:15px;align-items:flex-start;max-width:78ch;
+  margin-top:clamp(28px,3.2vw,46px);padding:18px 22px;
+  border:1px solid var(--line-light);border-left:2px solid var(--amber);border-radius:var(--r-sm)
+}
+.proof-note svg{width:17px;height:17px;color:var(--amber);flex:none;margin-top:2px}
+.proof-note p{font-size:13.5px;line-height:1.65;color:var(--dust)}
+
+/* — conteúdo pendente —
+   Marca visual para o que ainda depende de dado do cliente. Precisa ser
+   impossível de confundir com informação real e impossível de publicar por
+   descuido: tracejado, âmbar e em monoespaçada. */
+.slot{
+  display:inline-block;padding:1px 8px;border-radius:4px;
+  border:1px dashed rgba(231,169,74,.5);background:rgba(231,169,74,.1);
+  font-family:var(--mono);font-size:.8em;line-height:1.5;letter-spacing:.06em;color:var(--dust)
+}
+
+/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width:1180px){
@@ -914,6 +992,13 @@ body.menu-open .navlinks{
      aproxima — que é o que uma seção "quem vai cuidar" precisa. */
   .bio-shot{aspect-ratio:1/1}
   .bio-text>p{max-width:none}
+  /* a nota do Google sobe para cima dos depoimentos e deixa de ser fixa:
+     em coluna única não há coluna vizinha para acompanhar */
+  /* minmax(0,1fr), não 1fr: o piso min-content deixaria conteúdo longo
+     esticar a coluna para além da viewport */
+  .proof{grid-template-columns:minmax(0,1fr);gap:clamp(18px,3vw,26px)}
+  .proof-score{position:static}
+  .quote p{max-width:none}
 }
 @media (max-width:900px){
   .navlinks{display:none}
@@ -1647,6 +1732,87 @@ body.menu-open .navlinks{
         </div>
 
       </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================================
+     DOBRA 09 · PROVA SOCIAL
+
+     ⚠️ FILTRO EDITORIAL — obrigatório para quem preencher os depoimentos.
+     Ao publicar, o depoimento passa a ser publicação do médico para todos
+     os efeitos (guia §3.8). Rejeitar qualquer texto que contenha:
+       · superlativo ("o melhor", "milagre")
+       · resultado refrativo ("voltei a enxergar 100%", "sem óculos")
+       · comparação com outros profissionais
+       · promessa implícita de resultado
+     Aceitar apenas relato de EXPERIÊNCIA DE ATENDIMENTO E PROCESSO.
+     Exemplo do próprio guia: "Fui bem atendida e todas as minhas dúvidas
+     foram respondidas."
+
+     Cada depoimento exige autorização por escrito arquivada, sem
+     identificação do paciente. O Art. 8º, §4º alcança até elogios que o
+     médico não repostou: NÃO montar campanha nem fluxo de coleta
+     sistemática de avaliações.
+     ========================================================== -->
+<section class="ds on-dark" id="depoimentos">
+  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i><i class="amb-halo"></i></div>
+  <div class="wrap">
+
+    <div class="ds-head">
+      <div class="reveal">
+        <div class="section-tag mono">09 / Prova social</div>
+        <h2>O que dizem <em>nossos pacientes</em></h2>
+      </div>
+    </div>
+
+    <div class="proof">
+
+      <!-- Avaliações do Google: dado de terceiro, verificável e auditável.
+           TODO: preencher nota, volume e URL do perfil. Sem estrelas
+           preenchidas enquanto não houver nota real — cinco estrelas cheias
+           seriam uma afirmação de 5,0 que ninguém conferiu. -->
+      <aside class="proof-score reveal">
+        <p class="mono">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.6 5.4 5.9.8-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>
+          Avaliações no Google
+        </p>
+        <p class="proof-grade"><span class="slot">[nota]</span><small>de 5</small></p>
+        <p class="proof-count">Com base em <span class="slot">[nº]</span> avaliações públicas, verificáveis no perfil.</p>
+        <!-- TODO: trocar por a URL real do perfil do Google Meu Negócio -->
+        <a class="proof-link" href="#" rel="noopener nofollow" target="_blank">
+          Ver o perfil no Google
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 6.75h8.75v8.75"/></svg>
+        </a>
+      </aside>
+
+      <!-- Três lugares fixos, sem carrossel. O limite é de desenho: volume
+           alto de depoimento é o que o Art. 8º, §4º trata como reiterado. -->
+      <div class="proof-list reveal" data-d="1">
+
+        <blockquote class="quote">
+          <p><span class="slot">[depoimento 1 — relato de atendimento e processo, autorizado por escrito]</span></p>
+          <footer><span class="slot">[identificação autorizada]</span></footer>
+        </blockquote>
+
+        <blockquote class="quote">
+          <p><span class="slot">[depoimento 2 — relato de atendimento e processo, autorizado por escrito]</span></p>
+          <footer><span class="slot">[identificação autorizada]</span></footer>
+        </blockquote>
+
+        <blockquote class="quote">
+          <p><span class="slot">[depoimento 3 — relato de atendimento e processo, autorizado por escrito]</span></p>
+          <footer><span class="slot">[identificação autorizada]</span></footer>
+        </blockquote>
+
+      </div>
+    </div>
+
+    <!-- Aviso obrigatório (messaging-doc, dobra 9). Não reduzir nem esconder. -->
+    <div class="proof-note reveal" data-d="2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.25"/><path d="M12 16.75V11.5"/><circle cx="12" cy="8.25" r=".9" fill="currentColor" stroke="none"/></svg>
+      <p>Depoimentos refletem experiências individuais. Resultados variam conforme as características de cada olho e não podem ser generalizados.</p>
     </div>
 
   </div>
