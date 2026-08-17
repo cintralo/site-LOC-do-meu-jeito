@@ -10,11 +10,11 @@
 <!-- ============================================================
      FONTES — mesma família do sistema LUMEN/01
      DM Sans (--sans) · Space Mono (--mono) · Space Grotesk (--display)
-     Cormorant Garamond (--serif)
+     Cormorant Garamond (--serif) · Caveat (--script)
      ============================================================ -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Caveat:wght@500;600&display=swap" rel="stylesheet"/>
 
 <style>
 /* ==========================================================================
@@ -36,6 +36,7 @@
   --mono:'Space Mono',ui-monospace,monospace;
   --display:'Space Grotesk','Archivo',sans-serif;
   --serif:'Cormorant Garamond',Georgia,serif;
+  --script:'Caveat',cursive;
 
   /* — ritmo e forma — */
   --pad:clamp(20px,4vw,64px);
@@ -814,6 +815,58 @@ body.menu-open .navlinks{
 .flow-cta{display:flex;justify-content:center;margin-top:clamp(44px,5.4vw,76px)}
 
 /* ==========================================================================
+   DOBRA 08 · SOBRE O CIRURGIÃO
+   Única dobra em primeira pessoa do singular (tom de voz, §0.6), então a
+   composição é de retrato editorial: foto real à esquerda, depoimento à
+   direita, assinatura na face --script do sistema e, ao pé, o bloco de
+   identificação no formato do Art. 4º — que o guia manda repetir também
+   na seção "Sobre" (§1.1) e na página do profissional (§4.3).
+   ========================================================================== */
+.bio{
+  display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);
+  gap:clamp(28px,4vw,72px);align-items:start
+}
+.bio-shot{
+  position:relative;border-radius:var(--r-lg);overflow:hidden;aspect-ratio:4/5;
+  background:var(--bone);box-shadow:var(--sh-3)
+}
+.bio-shot img{height:100%;object-fit:cover;object-position:47% center;filter:saturate(.94) contrast(1.03)}
+/* leve assentamento no rodapé da foto, para o cartão não flutuar solto */
+.bio-shot:after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,transparent 58%,rgba(23,23,19,.26))
+}
+
+.bio-text>p{font-size:clamp(15.5px,1.22vw,17.5px);line-height:1.76;color:var(--smoke);max-width:58ch}
+.bio-text>p+p{margin-top:20px}
+/* a frase que fecha o segundo parágrafo é a tese da prática inteira —
+   ganha a serifa itálica que carrega o registro humano no site todo */
+.bio-text em{
+  font-style:italic;font-family:var(--serif);font-weight:500;color:var(--ember);
+  font-size:1.18em;letter-spacing:-.01em
+}
+/* seletor com o mesmo peso de .bio-text>p, senão a regra de corpo do
+   parágrafo vence por especificidade e a assinatura sai em 17px */
+.bio-text>p.bio-sign{
+  margin-top:clamp(26px,3vw,38px);font-family:var(--script);font-weight:600;
+  font-size:clamp(32px,3.1vw,46px);line-height:1;color:var(--ink);max-width:none
+}
+
+/* — bloco de identificação (Art. 4º e 6º) —
+   O Manual proíbe diferença de fonte, tamanho ou cor entre as linhas: as três
+   saem de uma regra só, para que a uniformidade seja estrutural e não dependa
+   de quem editar depois. O retângulo com filete é o recurso que o próprio
+   Manual prevê quando o fundo pode dificultar a leitura. */
+.id-block{
+  display:inline-block;margin-top:clamp(22px,2.4vw,30px);padding:16px 20px;
+  border:1px solid var(--line);border-radius:var(--r-sm);background:rgba(255,253,248,.6)
+}
+.id-block p{
+  font-family:var(--sans);font-size:17px;line-height:1.52;font-weight:500;
+  letter-spacing:-.005em;color:var(--ink);margin:0
+}
+
+/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width:1180px){
@@ -853,6 +906,14 @@ body.menu-open .navlinks{
   .flow-step h3{margin:9px 0 8px}
   .flow-step p{max-width:52ch}
   .flow-cta .btn{width:100%;max-width:420px}
+  /* o retrato empilha acima do depoimento e encurta: em coluna única, um 4/5
+     ocuparia quase uma tela inteira antes da primeira linha de texto */
+  .bio{grid-template-columns:1fr;gap:clamp(24px,4vw,34px)}
+  /* quadrado, não paisagem: a foto original é 4:3, então uma caixa mais larga
+     cortaria topo e base e afastaria o rosto. O quadrado corta as laterais e
+     aproxima — que é o que uma seção "quem vai cuidar" precisa. */
+  .bio-shot{aspect-ratio:1/1}
+  .bio-text>p{max-width:none}
 }
 @media (max-width:900px){
   .navlinks{display:none}
@@ -1535,7 +1596,63 @@ body.menu-open .navlinks{
   </div>
 </section>
 
-<!-- próximas dobras entram aqui: #quiz, #sobre, #duvidas, #agendar -->
+<!-- ==========================================================
+     DOBRA 08 · SOBRE O CIRURGIÃO
+     ========================================================== -->
+<section class="ds paper on-light" id="sobre">
+  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i><i class="amb-halo"></i></div>
+  <div class="wrap">
+
+    <div class="ds-head">
+      <div class="reveal">
+        <div class="section-tag mono">08 / Sobre o cirurgião</div>
+        <h2>Quem vai cuidar dos <em>seus olhos</em></h2>
+      </div>
+    </div>
+
+    <div class="bio">
+
+      <!-- Art. 9º, I e III: imagem própria e do ambiente de trabalho são
+           permitidas, mas a Codame exige que retratem fielmente o local.
+           Esta é a foto real do consultório — nada de banco de imagens.
+           TODO: substituir pela sessão fotográfica dedicada (guia §3.3). -->
+      <figure class="bio-shot reveal">
+        <img alt="Dr. Lucas Oliveira Cintra em seu consultório, em Brasília" src="assets/dr-lucas-cintra.jpg"/>
+      </figure>
+
+      <div class="bio-text reveal" data-d="1">
+
+        <!-- ⚠️ CONFERIR ANTES DE PUBLICAR — o messaging-doc traz "Concluí
+             formação complementar", mas a própria nota de conformidade do
+             documento manda usar a forma em curso enquanto o fellowship não
+             estiver concluído. Como o status não foi confirmado, ficou a
+             versão que não pode gerar infração. Se já estiver concluído,
+             trocar a frase por:
+             "Concluí formação complementar (fellowship) em cirurgia de
+              catarata e refrativa na Oftalmed — Hospital da Visão." -->
+        <p>Sou o Dr. Lucas Oliveira Cintra, oftalmologista com atuação em cirurgia de catarata e cirurgia refrativa. Me formei em medicina na Pontifícia Universidade Católica de Goiás e fiz residência médica em oftalmologia no Hospital Oftalmológico de Brasília. Estou em formação complementar (fellowship) em cirurgia de catarata e refrativa na Oftalmed — Hospital da Visão.</p>
+
+        <p>Escolhi concentrar minha prática em independência visual porque é a área da oftalmologia onde a decisão técnica mais depende de entender a pessoa. <em>Duas córneas idênticas em um exame pertencem a duas vidas diferentes — e é isso que define a indicação.</em></p>
+
+        <p>Atendo pacientes de todas as idades, de jovens que querem se livrar da lente de contato a pacientes com catarata que querem voltar a dirigir à noite com segurança. O processo é o mesmo: entender, medir, explicar as opções e decidir junto.</p>
+
+        <p aria-hidden="true" class="bio-sign">Dr. Lucas Cintra</p>
+
+        <!-- Bloco de identificação: as três linhas compartilham uma única
+             regra CSS. Não alterar fonte, corpo ou cor de uma delas. -->
+        <div class="id-block">
+          <p>Dr. Lucas Oliveira Cintra</p>
+          <p>MÉDICO: CRM-DF 28.484</p>
+          <p>Oftalmologista: RQE 23.502</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- próximas dobras entram aqui: #quiz, #duvidas, #agendar -->
 
 </main>
 
