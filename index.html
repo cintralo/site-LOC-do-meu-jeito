@@ -1063,6 +1063,30 @@ body.menu-open .navlinks{
 .js .quiz-step.is-on{display:block}
 
 /* ==========================================================================
+   DOBRA 11 · FAQ
+   Acordeão .faq-item do sistema, em variante escura. São 14 perguntas: o
+   acordeão exclusivo (só um painel aberto por vez) mantém a lista navegável
+   sem virar parede de texto. Coluna única na medida de leitura — duas
+   colunas de acordeão saltariam o layout a cada abertura.
+   ========================================================================== */
+.faq{max-width:840px;margin-inline:auto}
+.faq-item{
+  margin-bottom:10px;border:1px solid var(--line-light);border-radius:var(--r-md);
+  overflow:hidden;background:rgba(255,255,255,.04);transition:border-color .4s var(--ease)
+}
+.faq-item:hover{border-color:rgba(231,169,74,.5)}
+.faq-btn{
+  width:100%;display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:19px 22px;text-align:left;background:none;border:0;
+  font-size:15.5px;font-weight:500;line-height:1.45;color:var(--bone)
+}
+.faq-btn:focus-visible{outline:2px solid var(--amber);outline-offset:-3px}
+.faq-icon{width:18px;height:18px;color:var(--dust);flex:none;transition:transform .35s var(--ease),color .3s}
+.faq-item:hover .faq-icon,.faq-btn[aria-expanded="true"] .faq-icon{color:var(--amber)}
+.faq-body{overflow:hidden;max-height:0;transition:max-height .45s var(--ease)}
+.faq-body p{padding:0 22px 20px;font-size:14.5px;line-height:1.72;color:var(--dust);max-width:68ch}
+
+/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width:1180px){
@@ -2120,7 +2144,104 @@ body.menu-open .navlinks{
   </div>
 </section>
 
-<!-- próximas dobras entram aqui: #duvidas, #agendar -->
+<!-- ==========================================================
+     DOBRA 11 · FAQ
+     Conteúdo educativo aberto (guia §3.6 e §4.4): sem gate, sem cadastro,
+     tudo legível por qualquer visitante e por buscador.
+     ========================================================== -->
+<section class="ds on-dark" id="duvidas">
+  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i><i class="amb-halo"></i></div>
+  <div class="wrap">
+
+    <div class="ds-head">
+      <div class="reveal">
+        <div class="section-tag mono">11 / FAQ</div>
+        <!-- o messaging-doc não define título para esta dobra; rótulo neutro -->
+        <h2>Dúvidas <em>frequentes</em></h2>
+      </div>
+    </div>
+
+    <div class="faq reveal" data-d="1" id="faq">
+
+      <div class="faq-item">
+        <button aria-expanded="false" class="faq-btn" type="button"><span>A cirurgia dói?</span><svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-body"><p>O procedimento é feito com anestesia em colírio e você fica acordado, mas sem sentir dor. É comum sentir pressão ou desconforto leve. Nas primeiras horas após a cirurgia, pode haver ardência e sensação de areia, que costuma ceder rapidamente.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button aria-expanded="false" class="faq-btn" type="button"><span>Quanto tempo dura a recuperação?</span><svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-body"><p>A maioria dos pacientes retoma atividades leves em 24 a 48 horas. A estabilização completa da visão leva de algumas semanas a alguns meses, dependendo do procedimento. As restrições específicas fazem parte do seu plano de tratamento.</p></div>
+      </div>
+
+      <!-- ⚠️ "e desconfie de quem garantir" endereça a conduta de colegas
+           (guia §2.10, Art. 11, §4º, "b"). Mantido literal como está no
+           messaging-doc. Se optar por suavizar, encerrar a frase em
+           "Nenhum resultado pode ser garantido." resolve sem perder força. -->
+      <div class="faq-item">
+        <button aria-expanded="false" class="faq-btn" type="button"><span>Vou ficar livre dos óculos?</span><svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-body"><p>Depende do procedimento, da tecnologia escolhida e das características do seu olho. O objetivo é reduzir ao máximo a dependência, e conversamos sobre expectativas realistas antes de decidir. Nenhum resultado pode ser garantido — e desconfie de quem garantir.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button aria-expanded="false" class="faq-btn" type="button"><span>O grau pode voltar?</span><svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-body"><p>Pode haver alteração refrativa residual em uma parcela dos casos. É por isso que trabalhamos com a possibilidade de refinamento a laser prevista no plano, quando houver indicação.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button aria-expanded="false" class="faq-btn" type="button"><span>Vão usar lâmina no meu olho?</span><svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-body"><p>Não. As etapas de corte são realizadas com laser de femtossegundo, tanto na cirurgia de catarata quanto na confecção da lamela corneana da cirurgia refrativa. As incisões existem — mas são feitas pelo laser, com dimensões e posição programadas antes do procedimento.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button aria-expanded="false" class="faq-btn" type="button"><span>Qual a diferença da cirurgia de catarata com femtossegundo?</span><svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-body"><p>O laser realiza as incisões, a abertura da cápsula que envolve o cristalino e a fragmentação do cristalino, etapas que na técnica convencional são feitas manualmente. A abertura da cápsula fica com diâmetro e centralização programados, o que contribui para o posicionamento estável da lente — relevante sobretudo em lentes tóricas e de foco estendido. A remoção do cristalino continua sendo feita por facoemulsificação. É uma diferença de método nas etapas de corte, e a indicação é avaliada caso a caso.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button aria-expanded="false" class="faq-btn" type="button"><span>Todo mundo faz o mesmo tratamento a laser?</span><svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-body"><p>Não. A plataforma que utilizamos permite escolher o perfil de tratamento conforme o formato da sua córnea, incluindo ajuste de asfericidade e, quando indicado, perfis voltados à visão de perto. Essa definição acontece depois dos exames, na etapa de planejamento.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button aria-expanded="false" class="faq-btn" type="button"><span>Li sobre microcerátomo e fiquei com medo. É isso que vocês usam?</span><svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-body"><p>Não utilizamos lâmina para essa etapa. A lamela corneana é criada por laser de femtossegundo, com espessura programada.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button aria-expanded="false" class="faq-btn" type="button"><span>E se eu já operei de catarata em um olho?</span><svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-body"><p>Isso não impede uma nova avaliação. Existem estratégias específicas para equilibrar os dois olhos.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button aria-expanded="false" class="faq-btn" type="button"><span>Já me disseram que não posso fazer laser. Adianta procurar?</span><svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-body"><p>Frequentemente sim. Córnea fina, grau elevado ou astigmatismo irregular podem contraindicar o laser, mas não necessariamente as lentes fácicas ou o implante de ICL.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button aria-expanded="false" class="faq-btn" type="button"><span>A cirurgia é coberta pelo convênio?</span><svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-body"><p>A cobertura varia conforme o plano e o tipo de procedimento. Nossa equipe verifica as condições do seu caso durante o atendimento.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button aria-expanded="false" class="faq-btn" type="button"><span>Quanto custa?</span><svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-body"><p>O valor depende do procedimento e da tecnologia indicada para o seu olho, e por isso só é definido após a avaliação. Nossa equipe apresenta as condições junto com o seu plano de tratamento.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button aria-expanded="false" class="faq-btn" type="button"><span>Quanto tempo dura a avaliação?</span><svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-body"><p>Reserve cerca de <span class="slot">[X]</span> horas. Como usamos colírio para dilatar a pupila, recomendamos que você não dirija na volta.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button aria-expanded="false" class="faq-btn" type="button"><span>Onde as cirurgias são realizadas?</span><svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="faq-body"><p>Em <span class="slot">[nome do centro cirúrgico / hospital parceiro]</span>, em Brasília, com estrutura completa para procedimentos oftalmológicos.</p></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- próximas dobras entram aqui: #agendar -->
 
 </main>
 
@@ -2174,6 +2295,60 @@ if (!reduced) {
     });
     delay += .05;
   });
+}
+
+/* --- FAQ (dobra 11): acordeão exclusivo do sistema --- */
+const faq = document.getElementById('faq');
+if (faq) {
+  const btns = [...faq.querySelectorAll('.faq-btn')];
+
+  const close = b => {
+    b.setAttribute('aria-expanded', 'false');
+    b.nextElementSibling.style.maxHeight = '0';
+    b.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
+  };
+  const open = b => {
+    b.setAttribute('aria-expanded', 'true');
+    b.nextElementSibling.style.maxHeight = b.nextElementSibling.scrollHeight + 'px';
+    b.querySelector('.faq-icon').style.transform = 'rotate(180deg)';
+  };
+
+  btns.forEach((btn, i) => {
+    /* ligação painel↔botão para leitor de tela */
+    const panel = btn.nextElementSibling;
+    panel.id = 'faq-p' + i;
+    panel.setAttribute('role', 'region');
+    btn.setAttribute('aria-controls', panel.id);
+    btn.addEventListener('click', () => {
+      const wasOpen = btn.getAttribute('aria-expanded') === 'true';
+      btns.forEach(close);
+      if (!wasOpen) open(btn);
+    });
+  });
+
+  /* max-height é calculado em pixels: ao mudar a largura o texto reflui e a
+     altura muda, então o painel aberto precisa ser remedido */
+  addEventListener('resize', () => {
+    const cur = btns.find(b => b.getAttribute('aria-expanded') === 'true');
+    if (cur) cur.nextElementSibling.style.maxHeight = cur.nextElementSibling.scrollHeight + 'px';
+  }, { passive: true });
+
+  /* Dados estruturados FAQPage gerados a partir do próprio DOM.
+     O Google exige que o structured data corresponda ao conteúdo visível —
+     manter um JSON escrito à mão seria uma segunda fonte de verdade, que
+     dessincroniza no primeiro ajuste de texto. Aqui não há como divergir. */
+  const faqLd = {
+    '@context':'https://schema.org','@type':'FAQPage',
+    mainEntity: btns.map(b => ({
+      '@type':'Question',
+      name: b.querySelector('span').textContent.trim(),
+      acceptedAnswer:{ '@type':'Answer', text: b.nextElementSibling.textContent.trim() }
+    }))
+  };
+  const ld = document.createElement('script');
+  ld.type = 'application/ld+json';
+  ld.textContent = JSON.stringify(faqLd);
+  document.head.appendChild(ld);
 }
 
 /* --- Quiz de elegibilidade (dobra 10) ---
