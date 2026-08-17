@@ -518,8 +518,13 @@ body.menu-open .navlinks{
 
 /* — rodapé da dobra — */
 .sit-foot{display:flex;justify-content:flex-end;padding-top:clamp(24px,3vw,36px)}
-.btn--outline{background:transparent;border-color:var(--line-light);color:var(--bone)}
-.btn--outline:hover{border-color:var(--bone);background:rgba(237,233,223,.08)}
+/* definição dupla do sistema: a variante clara é o padrão e o .on-dark
+   inverte. Antes só existia a versão escura, e a mesma classe usada numa
+   seção clara ficava osso sobre osso — invisível. */
+.btn--outline{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn--outline:hover{border-color:var(--ink);background:rgba(23,23,19,.05)}
+.on-dark .btn--outline{border-color:var(--line-light);color:var(--bone)}
+.on-dark .btn--outline:hover{border-color:var(--bone);background:rgba(237,233,223,.08)}
 
 /* ==========================================================================
    DOBRA 04 · CAMINHOS
@@ -945,6 +950,119 @@ body.menu-open .navlinks{
 }
 
 /* ==========================================================================
+   DOBRA 10 · QUIZ DE ELEGIBILIDADE
+   O §2.3 do guia (Art. 11, §4º, "a") mira exatamente esta estrutura: quiz
+   que condiciona a resposta à entrega de dado pessoal. O que mantém a dobra
+   em conformidade é uma regra só, e ela é arquitetural, não cosmética:
+   O RESULTADO APARECE INTEIRO ANTES DE QUALQUER PEDIDO DE CONTATO,
+   e o formulário que vem depois é declaradamente opcional.
+   Sem etapas sucessivas, sem escalada de dados, sem contador.
+   ========================================================================== */
+.quiz{
+  max-width:840px;margin-inline:auto;padding:clamp(24px,3vw,44px);
+  border:1px solid var(--line);border-radius:var(--r-lg);background:rgba(255,253,248,.55)
+}
+.quiz-bar{display:flex;align-items:center;gap:clamp(16px,2vw,26px);margin-bottom:clamp(22px,2.6vw,34px)}
+.quiz-bar .mono{color:var(--smoke);white-space:nowrap}
+.quiz-bar .mono b{color:var(--ink);font-weight:400}
+.range{position:relative;flex:1;height:3px;border-radius:var(--r-full);background:rgba(23,23,19,.14);overflow:hidden}
+.range i{
+  position:absolute;left:0;top:0;bottom:0;border-radius:inherit;background:var(--amber);
+  box-shadow:0 0 18px rgba(231,169,74,.7);transition:width .45s var(--ease)
+}
+
+.quiz-q{border:0;padding:0;margin:0}
+.quiz-q legend{
+  font-family:var(--display);font-weight:500;letter-spacing:-.04em;line-height:1.1;
+  font-size:clamp(21px,2.35vw,33px);margin-bottom:clamp(18px,2.1vw,26px);max-width:24ch
+}
+.quiz-opts{display:grid;gap:10px}
+.opt{
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+  padding:15px 18px;border:1px solid var(--line);border-radius:var(--r-md);
+  background:rgba(255,255,255,.5);font-size:15px;line-height:1.42;color:var(--ink);
+  transition:transform .3s var(--ease),border-color .3s var(--ease),background .3s var(--ease)
+}
+/* marcador redondo do sistema (.check.radio), embutido no botão */
+.opt i{
+  width:19px;aspect-ratio:1;border-radius:50%;border:1px solid var(--line);flex:none;
+  display:grid;place-items:center;transition:.3s var(--ease)
+}
+.opt i:after{content:"";width:9px;aspect-ratio:1;border-radius:50%;background:var(--amber);transform:scale(0);transition:transform .3s var(--ease)}
+.opt:hover{border-color:rgba(23,23,19,.4);transform:translateX(3px)}
+.opt:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+.opt[aria-checked="true"]{border-color:var(--amber);background:rgba(231,169,74,.1)}
+.opt[aria-checked="true"] i{border-color:var(--amber)}
+.opt[aria-checked="true"] i:after{transform:scale(1)}
+
+.quiz-nav{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  margin-top:clamp(20px,2.2vw,28px);padding-top:18px;border-top:1px solid var(--line)
+}
+.quiz-back{display:inline-flex;align-items:center;gap:9px;background:none;border:0;padding:0;font-size:13px;color:var(--smoke);transition:color .3s var(--ease)}
+.quiz-back svg{width:15px;height:15px}
+.quiz-back:hover{color:var(--ink)}
+.quiz-back[disabled]{opacity:.32;pointer-events:none}
+.quiz-hint{font:9px/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;color:var(--fog);text-align:right}
+
+/* — resultado — */
+.quiz-kicker{display:flex;align-items:center;gap:11px;font:9px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ember)}
+.quiz-kicker:after{content:"";height:1px;flex:1;max-width:60px;background:currentColor;opacity:.45}
+.quiz-result h3{
+  font-family:var(--display);font-weight:600;letter-spacing:-.045em;line-height:1.04;
+  font-size:clamp(26px,3vw,42px);margin:16px 0 16px
+}
+.quiz-result>p{font-size:clamp(15.5px,1.22vw,17.5px);line-height:1.72;color:var(--smoke);max-width:60ch}
+.quiz-disclaimer{
+  display:flex;gap:14px;align-items:flex-start;max-width:66ch;
+  margin-top:clamp(22px,2.4vw,30px);padding:16px 20px;
+  border:1px solid var(--line);border-left:2px solid var(--ember);border-radius:var(--r-sm)
+}
+.quiz-disclaimer svg{width:16px;height:16px;color:var(--ember);flex:none;margin-top:2px}
+.quiz-disclaimer p{font-size:13px;line-height:1.6;color:var(--smoke)}
+.quiz-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:clamp(24px,2.6vw,32px)}
+
+/* — contato: opcional, e depois do resultado. Nunca antes. — */
+.quiz-form{margin-top:clamp(28px,3vw,40px);padding-top:clamp(24px,2.6vw,32px);border-top:1px solid var(--line)}
+.quiz-form h4{font-size:16px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
+.quiz-form>p{font-size:13px;line-height:1.6;color:var(--smoke);margin-bottom:20px;max-width:56ch}
+.form-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.field{display:grid;gap:8px}
+.field>label{font:9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--smoke)}
+.input{
+  width:100%;padding:14px 16px;border-radius:var(--r-sm);border:1px solid var(--line);
+  background:rgba(255,255,255,.55);color:var(--ink);font-size:14px;line-height:1.4;
+  transition:border-color .3s,box-shadow .3s,background .3s
+}
+.input::placeholder{color:var(--fog)}
+.input:hover{border-color:rgba(23,23,19,.34)}
+.input:focus{
+  outline:none;border-color:var(--amber);background:rgba(255,255,255,.92);
+  box-shadow:0 0 0 4px rgba(231,169,74,.18)
+}
+.check{display:inline-flex;align-items:flex-start;gap:11px;cursor:pointer;font-size:13px;line-height:1.55;color:var(--smoke)}
+.check input{position:absolute;opacity:0;pointer-events:none}
+.check i{width:20px;aspect-ratio:1;border:1px solid var(--line);border-radius:5px;display:grid;place-items:center;transition:.3s var(--ease);flex:none;margin-top:1px}
+.check i:after{content:"";width:9px;aspect-ratio:1;border-radius:2px;background:var(--amber);transform:scale(0);transition:transform .3s var(--ease)}
+.check input:checked+i{border-color:var(--amber);background:rgba(231,169,74,.16)}
+.check input:checked+i:after{transform:scale(1)}
+.check input:focus-visible+i{outline:2px solid var(--amber);outline-offset:3px}
+.quiz-consent{margin-top:18px}
+.quiz-send{margin-top:20px}
+.quiz-done{
+  margin-top:20px;padding:16px 20px;border-radius:var(--r-sm);
+  border:1px solid rgba(92,125,79,.45);background:rgba(92,125,79,.1);
+  font-size:14px;line-height:1.6;color:#3f6b36
+}
+
+/* passos escondidos só existem sob .js — sem script, as sete perguntas
+   ficam visíveis e o conteúdo continua aberto, como o §2.3 pede */
+.js .quiz-step[hidden],.js .quiz-result[hidden],.js .quiz-done[hidden]{display:none}
+.quiz-step[hidden],.quiz-result[hidden],.quiz-done[hidden]{display:revert}
+.js .quiz-step{display:none}
+.js .quiz-step.is-on{display:block}
+
+/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width:1180px){
@@ -999,6 +1117,10 @@ body.menu-open .navlinks{
   .proof{grid-template-columns:minmax(0,1fr);gap:clamp(18px,3vw,26px)}
   .proof-score{position:static}
   .quote p{max-width:none}
+  .form-row{grid-template-columns:1fr}
+  .quiz-nav{flex-direction:column;align-items:flex-start;gap:12px}
+  .quiz-hint{text-align:left}
+  .quiz-actions .btn{width:100%;justify-content:center}
 }
 @media (max-width:900px){
   .navlinks{display:none}
@@ -1818,7 +1940,187 @@ body.menu-open .navlinks{
   </div>
 </section>
 
-<!-- próximas dobras entram aqui: #quiz, #duvidas, #agendar -->
+<!-- ==========================================================
+     DOBRA 10 · QUIZ DE ELEGIBILIDADE
+
+     ⚠️ REGRA QUE NÃO PODE SER ALTERADA (guia §2.3, Art. 11, §4º, "a"):
+     o resultado é exibido por inteiro ANTES de qualquer pedido de dado
+     pessoal, e o formulário de contato é opcional. Inverter essa ordem —
+     ou tornar o contato obrigatório para "liberar" o resultado —
+     configura o funil com gate que a norma trata como concorrência
+     desleal. Também não introduzir: etapas sucessivas com escalada de
+     dados, contador regressivo, ou linguagem de "revelação".
+     ========================================================== -->
+<section class="ds bone on-light" id="quiz">
+  <div aria-hidden="true" class="amb"><i class="amb-grid"></i><i class="amb-glow"></i><i class="amb-halo"></i></div>
+  <div class="wrap">
+
+    <div class="ds-head">
+      <div class="reveal">
+        <div class="section-tag mono">10 / Quiz de elegibilidade</div>
+        <h2>Será que eu <em>posso operar?</em></h2>
+      </div>
+      <p class="reveal" data-d="1">Responda 7 perguntas rápidas. Em menos de dois minutos você entende qual caminho de avaliação faz mais sentido para o seu caso.</p>
+    </div>
+
+    <!-- sem id aqui: #quiz é a âncora da <section>, e ID duplicado é HTML
+         inválido (o getElementById do script já resolve para a seção) -->
+    <div class="quiz reveal" data-d="2">
+
+      <!-- ————— PERGUNTAS ————— -->
+      <div id="quizStage">
+        <div class="quiz-bar">
+          <span class="mono">Pergunta <b id="quizNow">1</b> de 7</span>
+          <span aria-hidden="true" class="range"><i id="quizFill" style="width:14.28%"></i></span>
+        </div>
+
+        <fieldset class="quiz-step is-on quiz-q" data-q="0">
+          <legend>Qual a sua faixa de idade?</legend>
+          <div class="quiz-opts" role="radiogroup" aria-label="Faixa de idade">
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="0"><i aria-hidden="true"></i>18–39</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="1"><i aria-hidden="true"></i>40–54</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="2"><i aria-hidden="true"></i>55–64</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="3"><i aria-hidden="true"></i>65+</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="quiz-step quiz-q" data-q="1">
+          <legend>O que mais te incomoda hoje?</legend>
+          <div class="quiz-opts" role="radiogroup" aria-label="O que mais incomoda">
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="0"><i aria-hidden="true"></i>Depender de óculos ou lente para longe</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="1"><i aria-hidden="true"></i>Não conseguir ler de perto</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="2"><i aria-hidden="true"></i>Visão embaçada mesmo com óculos novos</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="3"><i aria-hidden="true"></i>Dificuldade para dirigir à noite</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="quiz-step quiz-q" data-q="2">
+          <legend>Você usa óculos ou lente de contato há quanto tempo?</legend>
+          <div class="quiz-opts" role="radiogroup" aria-label="Tempo de uso">
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="0"><i aria-hidden="true"></i>Menos de 2 anos</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="1"><i aria-hidden="true"></i>2 a 10 anos</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="2"><i aria-hidden="true"></i>Mais de 10 anos</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="3"><i aria-hidden="true"></i>Não uso</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="quiz-step quiz-q" data-q="3">
+          <legend>Seu grau mudou nos últimos 2 anos?</legend>
+          <div class="quiz-opts" role="radiogroup" aria-label="Mudança de grau">
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="0"><i aria-hidden="true"></i>Não mudou</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="1"><i aria-hidden="true"></i>Mudou pouco</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="2"><i aria-hidden="true"></i>Mudou muito</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="3"><i aria-hidden="true"></i>Não sei</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="quiz-step quiz-q" data-q="4">
+          <legend>Você já fez alguma cirurgia ocular?</legend>
+          <div class="quiz-opts" role="radiogroup" aria-label="Cirurgia ocular prévia">
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="0"><i aria-hidden="true"></i>Nunca</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="1"><i aria-hidden="true"></i>Cirurgia refrativa a laser</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="2"><i aria-hidden="true"></i>Catarata em um olho</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="3"><i aria-hidden="true"></i>Outra</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="quiz-step quiz-q" data-q="5">
+          <legend>Já te disseram que você não poderia fazer cirurgia refrativa?</legend>
+          <div class="quiz-opts" role="radiogroup" aria-label="Negativa anterior">
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="0"><i aria-hidden="true"></i>Sim</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="1"><i aria-hidden="true"></i>Não</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="2"><i aria-hidden="true"></i>Nunca perguntei</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="quiz-step quiz-q" data-q="6">
+          <legend>Sente olho seco, ardência ou vermelhidão com frequência?</legend>
+          <div class="quiz-opts" role="radiogroup" aria-label="Sintomas de superfície">
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="0"><i aria-hidden="true"></i>Sim, frequentemente</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="1"><i aria-hidden="true"></i>Às vezes</button>
+            <button class="opt" role="radio" aria-checked="false" type="button" data-o="2"><i aria-hidden="true"></i>Não</button>
+          </div>
+        </fieldset>
+
+        <div class="quiz-nav">
+          <button class="quiz-back" id="quizBack" type="button" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5M11 18l-6-6 6-6"/></svg>
+            Voltar
+          </button>
+          <span class="quiz-hint">Sem cadastro para ver o resultado</span>
+        </div>
+      </div>
+
+      <!-- ————— RESULTADO —————
+           Aparece completo, sem exigir nenhum dado. -->
+      <div class="quiz-result" hidden id="quizResult">
+        <p class="quiz-kicker">Resultado</p>
+        <h3 id="quizProfile"></h3>
+        <p id="quizText"></p>
+
+        <div class="quiz-disclaimer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.25"/><path d="M12 16.75V11.5"/><circle cx="12" cy="8.25" r=".9" fill="currentColor" stroke="none"/></svg>
+          <p>Este questionário é uma orientação inicial e não substitui consulta médica nem estabelece diagnóstico.</p>
+        </div>
+
+        <div class="quiz-actions">
+          <a class="btn btn--amber" href="#agendar">
+            Agendar minha avaliação
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+          </a>
+          <button class="quiz-back" id="quizRedo" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9M20 4v4.5h-4.5"/></svg>
+            Refazer o questionário
+          </button>
+        </div>
+
+        <!-- Contato opcional. O rótulo "Se quiser" não é enfeite: é o que
+             deixa explícito que o resultado acima não dependeu disto.
+             TODO: ligar a um endpoint real; hoje o envio só confirma na tela.
+             TODO: publicar a Política de Privacidade referida no consentimento
+             (guia §5 — sem ela o consentimento não tem para onde apontar). -->
+        <form class="quiz-form" id="quizForm" novalidate>
+          <h4>Se quiser, deixe seu contato</h4>
+          <p>Nossa equipe retorna em até <span class="slot">[X]</span> horas úteis para organizar a agenda de avaliação. Nada é enviado automaticamente.</p>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="qName">Nome</label>
+              <input class="input" id="qName" name="nome" type="text" autocomplete="name" placeholder="Como podemos te chamar?" required/>
+            </div>
+            <div class="field">
+              <label for="qPhone">WhatsApp</label>
+              <input class="input" id="qPhone" name="whatsapp" type="tel" autocomplete="tel" placeholder="Seu WhatsApp com DDD" required/>
+            </div>
+          </div>
+
+          <!-- e-mail opcional: o messaging-doc pede os três campos, mas o guia
+               (§4.5) e o princípio de minimização da LGPD pedem o mínimo.
+               Mantido como opcional em vez de removido. -->
+          <div class="field" style="margin-top:14px">
+            <label for="qMail">E-mail <span style="text-transform:none;letter-spacing:0">(opcional)</span></label>
+            <input class="input" id="qMail" name="email" type="email" autocomplete="email" placeholder="Para receber o plano por escrito"/>
+          </div>
+
+          <label class="check quiz-consent">
+            <input id="qConsent" name="consentimento" type="checkbox" required/>
+            <i aria-hidden="true"></i>
+            <span>Autorizo o contato e o tratamento dos meus dados conforme a Política de Privacidade.</span>
+          </label>
+
+          <div class="quiz-send">
+            <button class="btn btn--outline" type="submit">Enviar meu contato</button>
+          </div>
+
+          <p class="quiz-done" hidden id="quizDone">Recebemos seu contato. Nossa equipe retorna em até <span class="slot">[X]</span> horas úteis.</p>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- próximas dobras entram aqui: #duvidas, #agendar -->
 
 </main>
 
@@ -1871,6 +2173,108 @@ if (!reduced) {
       delay += .022;
     });
     delay += .05;
+  });
+}
+
+/* --- Quiz de elegibilidade (dobra 10) ---
+   O resultado é ROTEAMENTO, não diagnóstico: define qual caminho de avaliação
+   conversar, e os quatro textos exibidos são os do messaging-doc, escritos em
+   termos qualitativos.
+
+   Pesos por pergunta/opção. As duas primeiras perguntas (idade e queixa
+   dominante) carregam o sinal principal, espelhando a tabela de Públicos do
+   documento. A pergunta 6 é a única com peso de virada: uma negativa anterior
+   manda direto para "caso complexo".
+   A pergunta 7 (olho seco) não altera o roteamento — ela existe para a equipe,
+   e fingir que muda o perfil seria inventar critério clínico. */
+const QUIZ_SCORES = [
+  [{A:2}, {B:2}, {C:1,B:1}, {C:2}],            /* 1 · faixa de idade      */
+  [{A:3}, {B:3}, {C:3},     {C:3}],            /* 2 · queixa dominante    */
+  [{},    {A:1}, {A:1},     {C:1}],            /* 3 · tempo de uso        */
+  [{A:1}, {},    {D:2},     {}],               /* 4 · mudança de grau     */
+  [{},    {D:2}, {C:2,D:1}, {D:2}],            /* 5 · cirurgia prévia     */
+  [{D:4}, {},    {}],                          /* 6 · negativa anterior   */
+  [{},    {},    {}]                           /* 7 · superfície ocular   */
+];
+
+const QUIZ_PROFILES = {
+  A:['Cirurgia refrativa','Seu perfil sugere que vale investigar correção a laser ou lentes fácicas. A confirmação depende da tomografia de córnea e da espessura corneana, que fazem parte da avaliação VISUS.'],
+  B:['Presbiopia','Seu perfil sugere que vale avaliar estratégias de independência para perto e intermediário. A escolha entre elas depende do seu padrão de uso e dos exames.'],
+  C:['Catarata','Os sintomas que você descreveu são compatíveis com alteração do cristalino. A avaliação VISUS define se há indicação cirúrgica e qual tecnologia se aplica ao seu caso.'],
+  D:['Caso complexo','Seu caso pede uma investigação mais detalhada. Ter recebido uma negativa antes não significa que não exista solução — significa que a solução provavelmente não é a mais comum.']
+};
+
+const quiz = document.getElementById('quiz');
+if (quiz) {
+  const steps = [...quiz.querySelectorAll('.quiz-step')];
+  const stage = document.getElementById('quizStage');
+  const result = document.getElementById('quizResult');
+  const fill = document.getElementById('quizFill');
+  const now = document.getElementById('quizNow');
+  const back = document.getElementById('quizBack');
+  const answers = new Array(steps.length).fill(null);
+  let step = 0;
+
+  const show = i => {
+    step = i;
+    steps.forEach((s, j) => s.classList.toggle('is-on', j === i));
+    now.textContent = i + 1;
+    fill.style.width = ((i + 1) / steps.length * 100).toFixed(2) + '%';
+    back.disabled = i === 0;
+  };
+
+  const finish = () => {
+    const total = { A:0, B:0, C:0, D:0 };
+    answers.forEach((o, q) => {
+      if (o === null) return;
+      const w = QUIZ_SCORES[q][o] || {};
+      for (const k in w) total[k] += w[k];
+    });
+    /* Desempate deliberadamente conservador: entre perfis com a mesma
+       pontuação vence o que pede mais investigação. Encaminhar alguém para
+       uma avaliação mais detalhada erra para o lado seguro; encaminhar para
+       um procedimento específico, não. */
+    const winner = ['D','C','B','A'].reduce((a, k) => total[k] > total[a] ? k : a, 'D');
+    const [title, text] = QUIZ_PROFILES[winner];
+    document.getElementById('quizProfile').textContent = title;
+    document.getElementById('quizText').textContent = text;
+    stage.hidden = true;
+    result.hidden = false;
+    result.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' });
+  };
+
+  /* Um único avanço pendente por vez: trocar de opção antes dos 260ms — ou
+     clicar duas vezes — cancelaria o anterior em vez de empilhar saltos. */
+  let pending = null;
+  quiz.querySelectorAll('.opt').forEach(btn => btn.addEventListener('click', () => {
+    const q = +btn.closest('.quiz-step').dataset.q;
+    answers[q] = +btn.dataset.o;
+    btn.closest('.quiz-opts').querySelectorAll('.opt')
+      .forEach(o => o.setAttribute('aria-checked', String(o === btn)));
+    clearTimeout(pending);
+    /* pequena pausa para a marcação ser vista antes de avançar */
+    pending = setTimeout(() => { step < steps.length - 1 ? show(step + 1) : finish(); }, reduced ? 0 : 260);
+  }));
+
+  back.addEventListener('click', () => show(Math.max(0, step - 1)));
+
+  document.getElementById('quizRedo').addEventListener('click', () => {
+    answers.fill(null);
+    quiz.querySelectorAll('.opt').forEach(o => o.setAttribute('aria-checked', 'false'));
+    document.getElementById('quizForm').reset();
+    document.getElementById('quizDone').hidden = true;
+    result.hidden = true;
+    stage.hidden = false;
+    show(0);
+  });
+
+  /* O envio é opcional e só existe depois do resultado. TODO: endpoint real. */
+  document.getElementById('quizForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    document.getElementById('quizDone').hidden = false;
+    form.querySelector('button[type="submit"]').disabled = true;
   });
 }
 
