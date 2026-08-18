@@ -863,9 +863,15 @@ body.menu-open .navlinks{
    de quem editar depois. O retângulo com filete é o recurso que o próprio
    Manual prevê quando o fundo pode dificultar a leitura. */
 .id-block{
-  display:inline-block;margin-top:clamp(22px,2.4vw,30px);padding:16px 20px;
+  display:inline-block;padding:16px 20px;
   border:1px solid var(--line);border-radius:var(--r-sm);background:rgba(255,253,248,.6)
 }
+/* a margem pertence ao contexto do depoimento, não ao componente — no rodapé
+   ela desalinhava a placa em relação à coluna legal */
+.bio-text .id-block{margin-top:clamp(22px,2.4vw,30px)}
+/* sobre fundo escuro o Manual pede retângulo branco com filete: translúcido
+   viraria cinza e comprometeria o contraste do bloco obrigatório */
+footer.site .id-block{background:var(--paper);border-color:transparent}
 .id-block p{
   font-family:var(--sans);font-size:17px;line-height:1.52;font-weight:500;
   letter-spacing:-.005em;color:var(--ink);margin:0
@@ -1087,6 +1093,61 @@ body.menu-open .navlinks{
 .faq-body p{padding:0 22px 20px;font-size:14.5px;line-height:1.72;color:var(--dust);max-width:68ch}
 
 /* ==========================================================================
+   DOBRA 12 · CTA FINAL + RODAPÉ INSTITUCIONAL
+   Par de fechamento do sistema: .final em âmbar (o único bloco do site em
+   que o acento vira superfície) seguido de footer.site em tinta. Depois de
+   onze dobras contidas, a inversão é o que sinaliza fim.
+   O rodapé carrega a camada obrigatória do Art. 4º/6º e da LGPD.
+   ========================================================================== */
+.final{
+  position:relative;overflow:hidden;isolation:isolate;
+  background:var(--amber);color:var(--ink);
+  min-height:88svh;display:flex;flex-direction:column;justify-content:space-between;
+  padding-block:clamp(26px,3.4vw,40px)
+}
+.final>.wrap{position:relative;z-index:2}
+.final .amb-halo{border-color:rgba(23,23,19,.22);opacity:.5}
+.final .amb-halo:before{border-color:rgba(23,23,19,.22)}
+.final .amb-halo:after{border-color:rgba(23,23,19,.3);box-shadow:none}
+.final-top{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:rgba(23,23,19,.62)}
+.final h2{
+  font-family:var(--display);font-weight:500;
+  font-size:clamp(44px,9.2vw,138px);line-height:.84;letter-spacing:-.075em;
+  margin:auto 0 0
+}
+.final h2 span{display:block;margin-left:11vw}
+.final-bottom{
+  display:flex;justify-content:space-between;align-items:end;gap:clamp(24px,3vw,40px);flex-wrap:wrap;
+  border-top:1px solid var(--ink);padding-top:clamp(20px,2.4vw,28px)
+}
+.final-bottom p{max-width:38ch;line-height:1.6;font-size:clamp(14.5px,1.15vw,16.5px)}
+.btn--solid{background:var(--ink);color:var(--paper)}
+.btn--solid:hover{background:var(--moss);box-shadow:0 18px 34px -16px rgba(23,23,19,.7)}
+.final .btn--outline{border-color:rgba(23,23,19,.45);color:var(--ink)}
+.final .btn--outline:hover{border-color:var(--ink);background:rgba(23,23,19,.07)}
+
+/* — rodapé institucional — */
+footer.site{position:relative;overflow:hidden;background:var(--ink);color:var(--bone);padding-block:clamp(40px,4.6vw,64px)}
+.foot{
+  display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);
+  gap:clamp(26px,3.4vw,60px);align-items:start
+}
+.foot-contact{display:grid;gap:9px;margin-top:clamp(20px,2.2vw,26px)}
+.foot-contact a,.foot-contact span{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--dust);transition:color .3s var(--ease)}
+.foot-contact a:hover{color:var(--amber)}
+.foot-contact svg{width:15px;height:15px;color:var(--amber);flex:none}
+.foot-legal p{font-size:13px;line-height:1.7;color:var(--dust);max-width:60ch}
+.foot-legal p+p{margin-top:10px}
+.foot-links{
+  display:flex;gap:clamp(16px,2vw,26px);flex-wrap:wrap;margin-top:clamp(22px,2.4vw,30px);
+  padding-top:clamp(18px,2vw,24px);border-top:1px solid var(--line-light);
+  font:9px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase
+}
+.foot-links a{color:var(--dust);transition:color .3s var(--ease)}
+.foot-links a:hover{color:var(--amber)}
+.foot-links span{color:var(--fog);margin-left:auto;text-align:right}
+
+/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width:1180px){
@@ -1145,6 +1206,13 @@ body.menu-open .navlinks{
   .quiz-nav{flex-direction:column;align-items:flex-start;gap:12px}
   .quiz-hint{text-align:left}
   .quiz-actions .btn{width:100%;justify-content:center}
+  /* o recuo da segunda linha do fecho some: em tela estreita ele empurraria
+     "o seu caso." para fora antes de ajudar a composição */
+  .final h2 span{margin-left:0}
+  .final-bottom{align-items:flex-start}
+  .final-bottom .btn-row .btn{width:100%;justify-content:center}
+  .foot{grid-template-columns:minmax(0,1fr)}
+  .foot-links span{margin-left:0;text-align:left;width:100%}
 }
 @media (max-width:900px){
   .navlinks{display:none}
@@ -2241,7 +2309,105 @@ body.menu-open .navlinks{
   </div>
 </section>
 
-<!-- próximas dobras entram aqui: #agendar -->
+<!-- ==========================================================
+     DOBRA 12 · CTA FINAL
+     ========================================================== -->
+<section class="final" id="agendar">
+  <div aria-hidden="true" class="amb"><i class="amb-halo" style="inset:auto auto -42% -18%"></i></div>
+
+  <div class="wrap final-top mono">
+    <span>12 / Agendar avaliação</span>
+    <span>Brasília — Distrito Federal</span>
+  </div>
+
+  <h2 class="wrap">Vamos entender<span>o seu caso.</span></h2>
+
+  <div class="wrap final-bottom">
+    <p>A avaliação VISUS é o ponto de partida. Ela não obriga você a operar — ela mostra, com dados, quais são as suas opções reais.</p>
+    <div class="btn-row" style="display:flex;flex-wrap:wrap;gap:12px">
+      <!-- TODO: apontar para a agenda real -->
+      <a class="btn btn--solid" href="#agendar">
+        Agendar minha avaliação
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+      </a>
+      <!-- TODO: trocar 55DDDNUMERO pelo WhatsApp real. A mensagem
+           pré-preenchida é a microcopy do messaging-doc. -->
+      <a class="btn btn--outline" href="https://wa.me/55DDDNUMERO?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." rel="noopener" target="_blank">
+        Falar no WhatsApp
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5l1.3-4.2A8.4 8.4 0 1 1 8 19.4l-4.5 1.1Z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     RODAPÉ INSTITUCIONAL — camada obrigatória (Art. 4º e 6º)
+     Estes dados precisam existir na página principal. Não remover.
+     ========================================================== -->
+<footer class="site">
+  <div class="wrap foot">
+
+    <div>
+      <!-- Bloco de identificação: as três linhas compartilham uma regra CSS
+           só, para que fonte, corpo e cor não possam divergir (Manual §1.1).
+           Sobre fundo escuro o Manual admite a placa clara com filete. -->
+      <div class="id-block">
+        <p>Dr. Lucas Oliveira Cintra</p>
+        <p>MÉDICO: CRM-DF 28.484</p>
+        <p>Oftalmologista: RQE 23.502</p>
+      </div>
+
+      <!-- ================================================================
+           BLOCO DE ESTABELECIMENTO (Art. 5º) — AINDA NÃO SE APLICA.
+           Só passa a ser obrigatório quando existir PJ com CNPJ e registro
+           no CRM-DF. Publicar "Registro: [ ]" hoje sugeriria um
+           estabelecimento que não existe, então o espaço fica reservado
+           aqui, pronto para ser descomentado:
+
+           <div class="id-block" style="margin-top:12px">
+             <p>[Nome da clínica]</p>
+             <p>Registro: [nº no CRM-DF]</p>
+             <p>Diretor Técnico-Médico: Dr. Lucas Oliveira Cintra</p>
+             <p>MÉDICO: CRM-DF 28.484</p>
+             <p>Oftalmologista: RQE-DF 23.502</p>
+           </div>
+           ================================================================ -->
+
+      <div class="foot-contact">
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+          <span class="slot">[endereço de atendimento]</span>
+        </span>
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 5.5c0 8 6 14 14 14l1.8-2.8-4-2.4-1.9 1.9a12 12 0 0 1-4.6-4.6l1.9-1.9-2.4-4z"/></svg>
+          <span class="slot">[telefone]</span>
+        </span>
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.75" y="4.75" width="18.5" height="14.5" rx="3"/><path d="m3.5 8.25 7 4.6a2.75 2.75 0 0 0 3 0l7-4.6"/></svg>
+          <span class="slot">[e-mail]</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="foot-legal">
+      <p>O conteúdo deste site tem caráter informativo e não substitui consulta médica.</p>
+      <!-- Segunda linha vem do template do guia (§4.6) e não do messaging-doc:
+           é a que protege contra o CDC art. 14, §4º, deixando explícito que a
+           medicina é obrigação de meio. -->
+      <p>Resultados variam conforme cada caso; a medicina é atividade-meio e não comporta garantia de resultado.</p>
+
+      <nav class="foot-links" aria-label="Links legais">
+        <!-- TODO: publicar as três páginas. A Política de Privacidade é
+             pré-requisito do consentimento do quiz (dobra 10). -->
+        <a href="#politica-de-privacidade">Política de Privacidade</a>
+        <a href="#termos-de-uso">Termos de Uso</a>
+        <a href="#lgpd">LGPD</a>
+        <span>Tratamento de dados conforme a Lei 13.709/2018</span>
+      </nav>
+    </div>
+
+  </div>
+</footer>
 
 </main>
 
