@@ -129,7 +129,8 @@ Faixa horizontal, texto curto, sem adjetivos.
 
 > Dr. Lucas Oliveira Cintra · CRM-DF 28.484 · RQE 23.502 — Oftalmologia
 > 6 anos de atuação · Centenas de procedimentos realizados
-> Pentacam · IOLMaster 700 · OCT · Verion · WaveLight EX500 · Laser de femtossegundo
+
+**Nota:** a lista de equipamentos saiu desta dobra. Ela é tratada na Dobra 6, no bloco de apoio, onde cada aparelho aparece com a sua função — repeti-la aqui só antecipava a mesma informação sem contexto.
 
 ---
 
@@ -140,11 +141,11 @@ Faixa horizontal, texto curto, sem adjetivos.
 
 **Card 1 — Refrativa jovem**
 > **Sua rotina não cabe mais no óculos.**
-> Treino, viagem, tela o dia inteiro, lente de contato que arde no fim do dia. Você já pensou em cirurgia, mas nunca soube se poderia fazer.
+> Treino, viagem, tela o dia inteiro, lente de contato que incomoda no fim do dia. Você já pensou em cirurgia, mas nunca soube se poderia fazer.
 
 **Card 2 — Presbiopia**
 > **O braço ficou curto.**
-> Você afasta o celular para ler, tem um óculos para cada distância e percebe que trocar de óculos virou parte do dia.
+> Você afasta o celular para ler, tem um óculos para cada distância ou procura o foco nas lentes multifocais… a dependência dos óculos é uma realidade.
 
 **Card 3 — Catarata**
 > **As cores perderam força e a noite ficou difícil.**
